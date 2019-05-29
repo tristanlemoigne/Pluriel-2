@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="163px" height="125px" viewBox="0 0 163 125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="01.Parcours-Debut-XP" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="08-Connexion" transform="translate(-640.000000, -394.000000)" stroke="#FFFFFF">
+            <g id="Group-2" transform="translate(642.000000, 396.000000)">
+                <path d="M45,121 L113.787692,121" id="Stroke-1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M86.1284408,98.2719698 L95.2263518,118.111631" id="Stroke-3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M73.1314252,98.2719698 L64.0335142,118.111631" id="Stroke-5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M158.873328,36.2529742 L158.873328,90.0022734 C158.873328,94.0594077 155.249097,97.348832 150.778252,97.348832 L8.09507588,97.348832 C3.62423115,97.348832 -5.68434189e-14,94.0594077 -5.68434189e-14,90.0022734 L-5.68434189e-14,7.34762485 C-5.68434189e-14,3.28942427 3.62423115,1.42108547e-14 8.09507588,1.42108547e-14 L150.778252,1.42108547e-14 C155.249097,1.42108547e-14 158.873328,3.28942427 158.873328,7.34762485 L158.873328,25.5903347" id="Stroke-1" stroke-width="4" stroke-linecap="round"></path>
+                <circle id="Oval-2" stroke-width="3" cx="79" cy="20" r="4"></circle>
+                <path d="M89.0837023,25.1950468 L92.9100807,27.083683" id="Stroke-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M89,15.1606061 L92.8263784,13.2719698 L89,15.1606061 Z" id="Stroke-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M65.0837023,25.1950468 L68.9100807,27.083683" id="Stroke-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(67.038743, 26.233508) scale(-1, 1) translate(-67.038743, -26.233508) "></path>
+                <path d="M65,15.1606061 L68.8263784,13.2719698 L65,15.1606061 Z" id="Stroke-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(66.913189, 14.216288) scale(-1, 1) translate(-66.913189, -14.216288) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

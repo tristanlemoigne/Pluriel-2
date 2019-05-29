@@ -1,0 +1,181 @@
+// Fonts
+// Roboto
+@font-face {
+    font-family: "Roboto";
+    src: url("/assets/fonts/roboto/regular/Roboto-Regular.woff2")
+            format("woff2"),
+        url("/assets/fonts/roboto/regular/Roboto-Regular.woff") format("woff"),
+        url("/assets/fonts/roboto/regular/Roboto-Regular.eot") format("eot"),
+        url("/assets/fonts/roboto/regular/Roboto-Regular.ttf") format("ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/assets/fonts/roboto/bold/Roboto-Bold.woff2") format("woff2"),
+        url("/assets/fonts/roboto/bold/Roboto-Bold.woff") format("woff"),
+        url("/assets/fonts/roboto/bold/Roboto-Bold.eot") format("eot"),
+        url("/assets/fonts/roboto/bold/Roboto-Bold.ttf") format("ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/assets/fonts/roboto/black/Roboto-Black.woff2") format("woff2"),
+        url("/assets/fonts/roboto/black/Roboto-Black.woff") format("woff"),
+        url("/assets/fonts/roboto/black/Roboto-Black.eot") format("eot"),
+        url("/assets/fonts/roboto/black/Roboto-Black.ttf") format("ttf");
+    font-weight: bolder;
+}
+
+// Poppins
+@font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/regular/Poppins-Regular.woff2")
+            format("woff2"),
+        url("/assets/fonts/poppins/regular/Poppins-Regular.woff") format("woff"),
+        url("/assets/fonts/poppins/regular/Poppins-Regular.eot") format("eot"),
+        url("/assets/fonts/poppins/regular/Poppins-Regular.ttf") format("ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/light/Poppins-Light.woff2")
+            format("woff2"),
+        url("/assets/fonts/poppins/light/Poppins-Light.woff") format("woff"),
+        url("/assets/fonts/poppins/light/Poppins-Light.eot") format("eot"),
+        url("/assets/fonts/poppins/light/Poppins-Light.ttf") format("ttf");
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/semi-bold/Poppins-SemiBold.woff2")
+            format("woff2"),
+        url("/assets/fonts/poppins/semi-bold/Poppins-SemiBold.woff")
+            format("woff"),
+        url("/assets/fonts/poppins/semi-bold/Poppins-SemiBold.eot")
+            format("eot"),
+        url("/assets/fonts/poppins/semi-bold/Poppins-SemiBold.ttf")
+            format("ttf");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/bold/Poppins-Bold.woff2") format("woff2"),
+        url("/assets/fonts/poppins/bold/Poppins-Bold.woff") format("woff"),
+        url("/assets/fonts/poppins/bold/Poppins-Bold.eot") format("eot"),
+        url("/assets/fonts/poppins/bold/Poppins-Bold.ttf") format("ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("/assets/fonts/poppins/italic/Poppins-Italic.woff2")
+            format("woff2"),
+        url("/assets/fonts/poppins/italic/Poppins-Italic.woff") format("woff"),
+        url("/assets/fonts/poppins/italic/Poppins-Italic.eot") format("eot"),
+        url("/assets/fonts/poppins/italic/Poppins-Italic.ttf") format("ttf");
+    font-style: italic;
+}
+
+// Colors
+$white: #fff;
+$black: #000000;
+$grey: #e3e3e3;
+
+$cyan: #00ffff;
+$pink: #ff00ff;
+$blue: #0000ff;
+$red: #ff0000;
+
+// Responsive
+// @include mobile { }
+@mixin mobile() {
+    @media screen and (max-width: 640px) {
+        @content;
+    }
+}
+
+// @include tablet { }
+@mixin tablet() {
+    @media screen and (max-width: 950px) {
+        @content;
+    }
+}
+
+// @include desktop { }
+@mixin desktop() {
+    @media screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+// Other
+@mixin flexCenter($direction) {
+    display: flex;
+    flex-flow: $direction;
+    align-items: center;
+    justify-content: center;
+}
+
+// GLOBAL STYLES
+button,
+form {
+    // pointer-events: all;
+    cursor: pointer;
+    font-size: inherit;
+    border: none;
+    background: none;
+    padding: 0;
+    outline: none;
+    display: inline-block;
+}
+
+h2 {
+    margin: 80px auto 5px;
+    font-weight: lighter;
+    font-size: 24px;
+    text-align: center;
+}
+
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+
+a, button {
+    color: $white;
+    transition: text-shadow 0.25s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    &:hover {
+        @extend .textGlow;
+    }
+}
+
+.textGlow {
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.7);
+}
+
+.svgGlow {
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.7));
+    -webkit-filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.7));
+}
+
+:export {
+    white: $white;
+    black: $black;
+    grey: $grey;
+    cyan: $cyan;
+    pink: $pink;
+    blue: $blue;
+    red: $red;
+}
