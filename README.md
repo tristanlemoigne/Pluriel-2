@@ -11,6 +11,11 @@ MacOS :
 brew install heroku
 ```
 
+## Install dependencies
+```
+npm install
+```
+
 ## Running local dev version
 http://localhost:8080/
 ```
