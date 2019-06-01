@@ -37,7 +37,7 @@ function Trial1(scene, camera, assets) {
         canvas: false
     }
 
-    const easingFactor = 0.125
+    const easingFactor = 0.225
 
     // Conditions de victoire (seconds)
     const defaultScaleDuration = 5

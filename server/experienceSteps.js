@@ -1,5 +1,5 @@
 function toRadians(angle) {
-    return angle * (Math.PI / 180)
+    return angle * (Math.PI / 180);
 }
 
 module.exports = [
@@ -90,7 +90,7 @@ module.exports = [
     {
         name: "trial_1_game",
         cameraTransition: {
-            camPos: { path: "NurbsPath01", delay: 0, time: 12, easing: null },
+            camPos: { path: "NurbsPath01", delay: 0, time: 15, easing: null },
             camTarget: { point: "Target02", delay: 0, time: 6, easing: null }
         }
     },
@@ -98,7 +98,7 @@ module.exports = [
     {
         name: "trial_1_end",
         cameraTransition: {
-            camPos: { path: "NurbsPath02", delay: 0, time: 15, easing: null }
+            camPos: { path: "NurbsPath02", delay: 0, time: 20, easing: null }
         }
     }
-]
+];

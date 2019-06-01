@@ -19,9 +19,12 @@ export default function CameraGroup(
         color: 0xffff00,
         wireframe: true,
         transparent: true,
-        depthTest: true,
-        depthWrite: true,
-        opacity: 1
+        // depthTest: true,
+        // depthWrite: true,
+        // opacity: 1
+        depthTest: false,
+        depthWrite: false,
+        opacity: 0
     })
     const raycastShapeDistFromCam = 10 // specific number that matches with the default camera fov and stuff
     raycastShape.position.z = -raycastShapeDistFromCam
