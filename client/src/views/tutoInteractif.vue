@@ -10,7 +10,11 @@
             <h2 class="textGlow">Faites à présent usage de vos amulettes</h2>
 
             <div class="explanationContainer">
-                <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
+                <TrackerVideo
+                    v-if="!isMobile"
+                    :hasStarted="camIsActive"
+                    v-show="this.uiDatas.isDebugMode"
+                />
 
                 <div>
                     <p>Orientez l’écran de vos téléphones face à la webcam</p>
@@ -22,9 +26,9 @@
 </template>
 
 <script>
-import TrackerVideo from "@/components/TrackerVideo.vue"
-import { TweenMax, Power2, TimelineLite } from "gsap/TweenMax"
-import { threeBus } from "@/main"
+import TrackerVideo from "@/components/TrackerVideo.vue";
+import { TweenMax, Power2, TimelineLite } from "gsap/TweenMax";
+import { threeBus } from "@/main";
 
 export default {
     name: "experience",
@@ -47,34 +51,37 @@ export default {
     methods: {},
     mounted() {
         //  Check if user has activated his camera
-        const checkCameraIsActivated = setInterval(() => {
-            navigator.getMedia =
-                navigator.getUserMedia ||
-                navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia ||
-                navigator.msGetUserMedia
+        if (!this.isMobile) {
+            const checkCameraIsActivated = setInterval(() => {
+                navigator.getMedia =
+                    navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia ||
+                    navigator.msGetUserMedia;
 
-            navigator.getMedia(
-                { video: true },
-                () => {
-                    if (
-                        this.$props.roomState.currentStep.activatesCam === true
-                    ) {
-                        // Start tracking
-                        console.log("we can start tracking")
-                        this.$data.camIsActive = true
-                        clearInterval(checkCameraIsActivated)
+                navigator.getMedia(
+                    { video: true },
+                    () => {
+                        if (
+                            this.$props.roomState.currentStep.activatesCam ===
+                            true
+                        ) {
+                            // Start tracking
+                            console.log("we can start tracking");
+                            this.$data.camIsActive = true;
+                            clearInterval(checkCameraIsActivated);
+                        }
+                    },
+                    function() {
+                        console.error("webcam is not available");
                     }
-                },
-                function() {
-                    console.error("webcam is not available")
-                }
-            )
-        }, 500)
+                );
+            }, 500);
+        }
 
         // bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
     }
-}
+};
 </script>
 
 <style scoped lang="scss">

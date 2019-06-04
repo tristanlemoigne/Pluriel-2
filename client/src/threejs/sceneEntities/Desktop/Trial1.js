@@ -74,7 +74,7 @@ function Trial1(scene, camera, assets) {
 
         // MODELS
         // TOUR1
-        const tour = assets.islands
+        // const tour = assets.islands
         // const tourMaterial = new THREE.MeshPhongMaterial()
         // Replace all materials by default
         // tour.traverse(child => {
@@ -84,12 +84,12 @@ function Trial1(scene, camera, assets) {
         // })
 
         // Get tour base
-        tour.traverse(child => {
+        assets.islands.traverse(child => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
         // Get all holes
-        tour.traverse(child => {
+        assets.islands.traverse(child => {
             if (child.name.includes("HoleFill")) holesArr.push(child)
         })
         holesArr.forEach(hole => {
@@ -105,7 +105,7 @@ function Trial1(scene, camera, assets) {
             hole.scaleMin = hole.scale.clone()
         })
 
-        scene.add(tour)
+        scene.add(assets.islands)
 
         // LISTENERS
         threeBus.$on("track", refreshTrackedDatas)
@@ -216,7 +216,6 @@ function Trial1(scene, camera, assets) {
 
             raycaster.setFromCamera(normalizedBlob, camera)
             const intersects = raycaster.intersectObject(camera.raycastShape)
-            console.log(camera, intersects)
 
             if (intersects[0]) {
                 projectedTargPos = intersects[0].point
@@ -231,11 +230,21 @@ function Trial1(scene, camera, assets) {
 
     function raycastedPosFromSpot(spot) {
         if (spot) {
-            const normalizedPos = spot.position.clone()
-            const normalizedTarget = spot.target.position.clone().normalize()
+            let spotPos = new THREE.Vector3()
+            spot.getWorldPosition(spotPos)
 
-            spotLightRaycaster.set(normalizedPos, normalizedTarget)
-            const intersects = spotLightRaycaster.intersectObject(baseTour)
+            let normalizedTarget = new THREE.Vector3()
+            spot.target.getWorldPosition(normalizedTarget)
+            normalizedTarget.normalize()
+
+            spotLightRaycaster.set(spotPos, normalizedTarget)
+            const intersects = spotLightRaycaster.intersectObjects(
+                baseTour.children
+            )
+
+            // if (intersects.length > 0) {
+            // console.log({ intersects }, baseTour)
+            // }
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -249,16 +258,18 @@ function Trial1(scene, camera, assets) {
     }
 
     function checkVictoryHole(cyanRaycastPos, pinkRaycastPos) {
+        console.log(holesArr)
         holesArr.forEach((hole, index) => {
             if (hole.progress < hole.progressMax) {
                 // HOLE IS NOT COMPLETLY FILLED > FILL IT
                 let distanceHoleToCyan, distanceHoleToPink
 
                 // Get cyan / pink distances
-                if (cyanRaycastPos)
-                    distanceHoleToCyan = cyanRaycastPos.distanceTo(
-                        hole.position
-                    )
+                if (cyanRaycastPos) {
+                    let holeWorldPos = new THREE.Vector3()
+                    hole.getWorldPosition(holeWorldPos)
+                    distanceHoleToCyan = cyanRaycastPos.distanceTo(holeWorldPos)
+                }
 
                 if (pinkRaycastPos)
                     distanceHoleToPink = pinkRaycastPos.distanceTo(

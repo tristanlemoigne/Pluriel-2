@@ -55,6 +55,7 @@ function SceneManagerMob(canvas, assets) {
         threeBus.$on("change to step", changeToStep)
         threeBus.$on("animate perso", perso => {
             character = perso
+            console.log({ character }, { perso })
         })
     }
 

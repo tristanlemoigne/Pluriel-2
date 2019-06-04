@@ -1,12 +1,12 @@
 <template>
     <div>
         JE SUIS LA PAGE EXPERIENCE
-        <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
+        <TrackerVideo v-if="!isMobile" :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
     </div>
 </template>
 
 <script>
-import TrackerVideo from "@/components/TrackerVideo.vue"
+import TrackerVideo from "@/components/TrackerVideo.vue";
 
 export default {
     name: "experience",
@@ -26,7 +26,7 @@ export default {
         users: Array,
         roomState: Object
     }
-}
+};
 </script>
 
 <style scoped lang="scss">

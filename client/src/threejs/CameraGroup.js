@@ -1,5 +1,4 @@
 import * as THREE from "three"
-const fisrtStep = require("../../../server/experienceSteps.js")[0]
 
 /**
  * Factory that adds a raycastShape and a target to a camera, and returns it. /!\ This needs to be added to the scene.
@@ -53,7 +52,7 @@ function buildDefaultCamera() {
     const cameraSettings = {
         ratio: window.innerWidth / window.innerHeight,
         fov: 40,
-        near: 1,
+        near: 0.1,
         far: 10000
     }
     const camera = new THREE.PerspectiveCamera(
