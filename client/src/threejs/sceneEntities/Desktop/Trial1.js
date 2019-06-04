@@ -264,17 +264,15 @@ function Trial1(scene, camera, assets) {
                 // HOLE IS NOT COMPLETLY FILLED > FILL IT
                 let distanceHoleToCyan, distanceHoleToPink
 
+                let holeWorldPos = new THREE.Vector3()
+                hole.getWorldPosition(holeWorldPos)
                 // Get cyan / pink distances
                 if (cyanRaycastPos) {
-                    let holeWorldPos = new THREE.Vector3()
-                    hole.getWorldPosition(holeWorldPos)
                     distanceHoleToCyan = cyanRaycastPos.distanceTo(holeWorldPos)
                 }
-
-                if (pinkRaycastPos)
-                    distanceHoleToPink = pinkRaycastPos.distanceTo(
-                        hole.position
-                    )
+                if (pinkRaycastPos) {
+                    distanceHoleToPink = pinkRaycastPos.distanceTo(holeWorldPos)
+                }
 
                 // Check superposition, then cyan / pink
                 if (
