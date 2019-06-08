@@ -124,7 +124,6 @@ function Trial1(scene, camera, assets) {
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         cyanSpotLight.target.add(targetSphere)
         cyanSpotLight.add(cyanSpotLight.target)
-        // scene.add(cyanSpotLight)
         camera.add(cyanSpotLight)
 
         cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
@@ -146,13 +145,11 @@ function Trial1(scene, camera, assets) {
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         pinkSpotLight.target.add(targetSphere)
         pinkSpotLight.add(pinkSpotLight.target)
-        // scene.add(pinkSpotLight)
         camera.add(pinkSpotLight)
 
         pinkSpotLightHelper = new THREE.SpotLightHelper(pinkSpotLight)
         pinkSpotLightHelper.visible = true
         scene.add(pinkSpotLightHelper)
-        scene.add(pinkSpotLight)
     }
 
     // /* ----------------------- REFRESH AND APPLY TRACKER ----------------------- */
@@ -325,7 +322,7 @@ function Trial1(scene, camera, assets) {
                 }
             }
         } else {
-            console.log("Restart bitch")
+            console.log("Restart bitch (need more FilledHoles)")
         }
     }
 
@@ -365,15 +362,18 @@ function Trial1(scene, camera, assets) {
 
             if (mobileQuaternions.pink) {
                 pinkQuaternion.set(
-                    mobileQuaternions.cyan._x,
-                    mobileQuaternions.cyan._y,
-                    mobileQuaternions.cyan._z,
-                    mobileQuaternions.cyan._w
+                    mobileQuaternions.pink._x,
+                    mobileQuaternions.pink._y,
+                    mobileQuaternions.pink._z,
+                    mobileQuaternions.pink._w
                 )
 
+                const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
                 pinkSpotLight.quaternion
-                    .copy(camera.quaternion)
-                    .multiply(pinkQuaternion)
+                    .copy(pinkQuaternion)
+                    .slerp(neutralQuaternion, 0.5)
+                // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
+                // TODO: maybe use camera.target.position.length here
             }
         }
 
