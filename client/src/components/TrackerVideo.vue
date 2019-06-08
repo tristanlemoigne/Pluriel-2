@@ -35,6 +35,9 @@ export default {
         if (this.hasStarted === true) {
             this.startTracker()
         }
+    },
+    beforeDestroy() {
+        this.tracker.stop();
     }
 }
 </script>

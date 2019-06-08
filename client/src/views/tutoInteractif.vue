@@ -67,7 +67,6 @@ export default {
                             true
                         ) {
                             // Start tracking
-                            console.log("we can start tracking");
                             this.$data.camIsActive = true;
                             clearInterval(checkCameraIsActivated);
                         }
