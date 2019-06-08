@@ -19,6 +19,7 @@ function AssetsLoader() {
 
     this.load = function(path, ref, childArr) {
         const extension = path.substr(path.indexOf("."))
+        console.log('chemin', path)
 
         if (extension === ".gltf" || extension === ".glb") {
             this._promises.push(this._loadGLTF(path, ref, childArr))

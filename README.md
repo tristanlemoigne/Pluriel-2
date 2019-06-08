@@ -39,6 +39,7 @@ heroku open
 
 ## Socket.js
 `socket.js` file in `/client/src/`
+! DON'T FORGET TO CHANGE YOUR IP IN DEV MODE ! 
 ```
 import io from "socket.io-client"
 let url
