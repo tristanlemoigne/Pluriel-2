@@ -6,7 +6,7 @@ import SVGLoader from "three-svg-loader"
 import * as THREE from "three"
 
 // const FBXLoader = require('three-fbx-loader');
-const FBXLoader = require('three-fbxloader-offical');
+const FBXLoader = require("three-fbxloader-offical")
 
 function AssetsLoader() {
     this.assets = {}
@@ -19,7 +19,7 @@ function AssetsLoader() {
 
     this.load = function(path, ref, childArr) {
         const extension = path.substr(path.indexOf("."))
-        console.log('chemin', path)
+        // console.log('chemin', path)
 
         if (extension === ".gltf" || extension === ".glb") {
             this._promises.push(this._loadGLTF(path, ref, childArr))
@@ -49,7 +49,7 @@ function AssetsLoader() {
                     } else {
                         this.assets[ref] = gltf
                     }
-
+                    console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -63,6 +63,7 @@ function AssetsLoader() {
             if (path && ref) {
                 this._OBJLoader.load(path, obj => {
                     this.assets[ref] = obj
+                    console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -76,6 +77,7 @@ function AssetsLoader() {
             if (path && ref) {
                 this._FBXLoader.load(path, fbx => {
                     this.assets[ref] = fbx
+                    console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -89,7 +91,7 @@ function AssetsLoader() {
             return new Promise(resolve => {
                 const texture = this._TextureLoader.load(path)
                 this.assets[ref] = texture
-
+                console.log("resolved:", ref)
                 resolve()
             })
         } else {
@@ -125,6 +127,7 @@ function AssetsLoader() {
                     }
 
                     this.assets[ref] = group
+                    console.log("resolved:", ref)
                     resolve()
                 })
             } else {
