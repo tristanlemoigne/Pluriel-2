@@ -54,8 +54,12 @@ function SceneManagerMob(canvas, assets) {
         // controls.target = camera.target.position
         threeBus.$on("change to step", changeToStep)
         threeBus.$on("animate perso", perso => {
+            if (character !== undefined) {
+                console.warn(
+                    "RE-assigning a character (rewrited over previous choice)"
+                )
+            }
             character = perso
-            console.log({ character }, { perso })
         })
     }
 

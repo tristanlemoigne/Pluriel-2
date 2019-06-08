@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import { TweenMax, Power2 } from "gsap/TweenMax"
-import socket from "@/socket"
-import { bus } from "@/main"
-import { threeBus } from "@/main"
+import { TweenMax, Power2 } from "gsap/TweenMax";
+import socket from "@/socket";
+import { bus } from "@/main";
+import { threeBus } from "@/main";
 
 export default {
     name: "room",
@@ -44,12 +44,12 @@ export default {
         "roomState.lamar": {
             handler: function(currentLamar, oldLamar) {
                 if (currentLamar !== oldLamar && currentLamar !== undefined) {
-                    threeBus.$emit("animate perso", "lamar")
+                    threeBus.$emit("animate perso", "lamar");
                     this.$data.lamarPlayer =
                         currentLamar === this.$props.roomState.player1
                             ? "Joueur 1"
-                            : "Joueur 2"
-                    this.$refs.player1.style.opacity = 1
+                            : "Joueur 2";
+                    this.$refs.player1.style.opacity = 1;
                 }
             },
             deep: true
@@ -57,21 +57,25 @@ export default {
         "roomState.zanit": {
             handler: function(currentZanit, oldZanit) {
                 if (currentZanit !== oldZanit && currentZanit !== undefined) {
-                    threeBus.$emit("animate perso", "zanit")
+                    threeBus.$emit("animate perso", "zanit");
                     this.$data.zanitPlayer =
                         currentZanit === this.$props.roomState.player1
                             ? "Joueur 1"
-                            : "Joueur 2"
-                    this.$refs.player2.style.opacity = 1
+                            : "Joueur 2";
+                    this.$refs.player2.style.opacity = 1;
                 }
             },
             deep: true
         },
-        "roomState": {
+        roomState: {
             handler: function(currentRoomState, oldRoomState) {
-                if (currentRoomState.currentStep.name === "selection_perso" && currentRoomState.zanit !== undefined && currentRoomState.lamar !== undefined) {
-                    console.log("NEXTT", currentRoomState)
-                    this.setRoomState({currentStep: {name:'dioramas'}})
+                if (
+                    currentRoomState.currentStep.name === "selection_perso" &&
+                    currentRoomState.zanit !== undefined &&
+                    currentRoomState.lamar !== undefined
+                ) {
+                    console.log("NEXT", currentRoomState);
+                    this.setRoomState({ currentStep: { name: "dioramas" } });
                 }
             },
             deep: true
@@ -79,22 +83,22 @@ export default {
     },
     methods: {
         choosePerso(e) {
-            const perso = e.target.innerText
+            const perso = e.target.innerText;
 
             if (perso === "LAMAR") {
-                e.target.style.opacity = "0.2"
-                this.setRoomState({ lamar: socket.id })
+                e.target.style.opacity = "0.2";
+                this.setRoomState({ lamar: socket.id });
             } else if (perso === "ZANIT") {
-                e.target.style.opacity = "0.2"
-                this.setRoomState({ zanit: socket.id })
+                e.target.style.opacity = "0.2";
+                this.setRoomState({ zanit: socket.id });
             }
         },
 
         setRoomState(stateObj) {
-            bus.$emit("setRoomState", stateObj)
+            bus.$emit("setRoomState", stateObj);
         }
     }
-}
+};
 </script>
 
 <style scoped lang="scss">
