@@ -146,7 +146,7 @@ body {
         height: 100%;
 
         .page {
-            // DECOMMENTER POUR ORBIT CONTROL
+            // DECOMMENTER POUR ORBIT CONTROL OU DEBUG
             // pointer-events: none;
             position: relative;
             z-index: 10;

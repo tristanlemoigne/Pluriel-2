@@ -11,7 +11,7 @@ import { threeBus } from "../../../main.js"
 function CrystalSceneEntity(assets, character) {
     /* ----------------------- DECLARATIONS + ASSIGNATIONS ----------------------- */
     const scenes = []
-    let characterColor = character === "zanit" ? "cyan" : "lamar"
+    let characterColor = character === "zanit" ? "pink" : "cyan"
     let sceneCyan, scenePink
     let meshCyan, meshPink
     const GyroObject3D = new THREE.Object3D()

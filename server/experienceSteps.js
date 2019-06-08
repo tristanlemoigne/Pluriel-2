@@ -1,5 +1,5 @@
 function toRadians(angle) {
-    return angle * (Math.PI / 180);
+    return angle * (Math.PI / 180)
 }
 
 module.exports = [
@@ -101,4 +101,4 @@ module.exports = [
             camPos: { path: "NurbsPath02", delay: 0, time: 20, easing: null }
         }
     }
-];
+]

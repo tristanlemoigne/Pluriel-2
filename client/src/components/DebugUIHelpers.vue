@@ -14,6 +14,12 @@
         <button
             class="debugButton"
             v-if="isDebugMode"
+            @click="setRoomState({currentStep: {name:'trial_1_intro'}})"
+        >TRIAL1 STEP</button>
+
+        <button
+            class="debugButton"
+            v-if="isDebugMode"
             @click="logTrial1Victorious()"
         >TRIAL1 VICTORIOUS</button>
 

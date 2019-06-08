@@ -318,8 +318,6 @@ function SceneManager(canvas, assets) {
         requestAnimationFrame(update)
         updateTime()
 
-        currentSceneEntity.update(mobileQuaternions)
-
         if (isMovingCamera) {
             camera.position.copy(
                 currentCameraPath.getPointAt(globalTweenedVars.camPosPercentage)
@@ -331,7 +329,10 @@ function SceneManager(canvas, assets) {
 
         let camTargetGlobalPos = new THREE.Vector3()
         camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
+        // camTargetGlobalPos.y += Math.sin(time) * 30 // for debug
         camera.lookAt(camTargetGlobalPos)
+
+        currentSceneEntity.update(time, mobileQuaternions)
 
         // customRenderer.render(currentSceneEntity.scenes, camera)
         // customRenderer.render(
