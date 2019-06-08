@@ -11,54 +11,54 @@ function ThreeEntryPointDsk(canvas) {
 
     const loader = new AssetLoader()
     // GLOBAL SCENE
-    loader.load("/assets/models/SceneGlobal.glb", "globalScene", ["scene"])
+    loader.load("./assets/models/SceneGlobal.glb", "globalScene", ["scene"])
 
     // HOME
-    loader.load("/assets/models/home/pinkStone.glb", "pinkStone", [
+    loader.load("./assets/models/home/pinkStone.glb", "pinkStone", [
         "scene",
         "children",
         "0"
     ])
-    loader.load("/assets/models/home/cyanStone.glb", "cyanStone", [
+    loader.load("./assets/models/home/cyanStone.glb", "cyanStone", [
         "scene",
         "children",
         "0"
     ])
-    loader.load("/assets/models/home/stoneLights.glb", "stoneLights", ["scene"])
+    loader.load("./assets/models/home/stoneLights.glb", "stoneLights", ["scene"])
     // loader.load("/assets/models/home/nuages3.gltf", "nuages", ["scene"])
-    loader.load("/assets/models/nuages.glb", "nuages", ["scene"])
-    loader.load("/assets/models/nuagesLights.glb", "nuagesLights", ["scene"])
+    loader.load("./assets/models/nuages.glb", "nuages", ["scene"])
+    loader.load("./assets/models/nuagesLights.glb", "nuagesLights", ["scene"])
 
     // SELECTION PERSO
     // loader.load("/assets/models/home/persos.glb", "persos", ["scene"])
-    loader.load("/assets/models/home/persosLights.glb", "persosLights", [
+    loader.load("./assets/models/home/persosLights.glb", "persosLights", [
         "scene"
     ])
-    loader.load("/assets/models/home/lamarRigged.fbx", "lamarRigged")
-    loader.load("/assets/models/home/zanitRigged.fbx", "zanitRigged")
+    loader.load("./assets/models/home/lamarRigged.fbx", "lamarRigged")
+    loader.load("./assets/models/home/zanitRigged.fbx", "zanitRigged")
     loader.load(
-        "/assets/models/home/lamarReadyAnimation.fbx",
+        "./assets/models/home/lamarReadyAnimation.fbx",
         "lamarReadyAnimation"
     )
     loader.load(
-        "/assets/models/home/zanitReadyAnimation.fbx",
+        "./assets/models/home/zanitReadyAnimation.fbx",
         "zanitReadyAnimation"
     )
-    loader.load("/assets/img/zanit.svg", "zanitSVG")
-    loader.load("/assets/img/lamar.svg", "lamarSVG")
+    loader.load("./assets/img/zanit.svg", "zanitSVG")
+    loader.load("./assets/img/lamar.svg", "lamarSVG")
 
     // ISLANDS
-    loader.load("/assets/models/Islands.glb", "islands", ["scene"])
+    loader.load("./assets/models/Islands.glb", "islands", ["scene"])
 
     // TRIAL 1
-    loader.load("/assets/models/raycastShape.gltf", "raycastShape", [
+    loader.load("./assets/models/raycastShape.gltf", "raycastShape", [
         "scene",
         "children",
         "0"
     ])
-    loader.load("/assets/models/Interaction13.glb", "tour1")
-    loader.load("/assets/campaths/CamPaths.obj", "camPaths")
-    loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [
+    loader.load("./assets/models/Interaction13.glb", "tour1")
+    loader.load("./assets/campaths/CamPaths.obj", "camPaths")
+    loader.load("./assets/campaths/TargetPoints.glb", "camTargetPoints", [
         "scene"
     ])
 

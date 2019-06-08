@@ -5,9 +5,10 @@ var env = process.env.NODE_ENV
 console.log("port", port, process, env)
 
 // DEV
-const ip = "192.168.1.16"
+const ip = "192.168.1.14"
 export default io("http://" + ip + ":5000/")
 
 // PROD
 // const ip = "pluriel.herokuapp.com"
 // export default io("https://" + ip)
+
