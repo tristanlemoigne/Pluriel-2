@@ -1,5 +1,5 @@
 <template>
-    <video ref="video" width="341" height="256" autoplay muted/>
+    <video ref="video" width="170" height="128" autoplay muted/>
 </template>
 
 <script>
@@ -35,6 +35,9 @@ export default {
         if (this.hasStarted === true) {
             this.startTracker()
         }
+    },
+    beforeDestroy() {
+        this.tracker.stop();
     }
 }
 </script>

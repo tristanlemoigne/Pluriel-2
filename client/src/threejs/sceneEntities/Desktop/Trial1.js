@@ -13,17 +13,14 @@ function Trial1(scene, camera, assets) {
     }, 0)
 
     let cyanSpotLight, pinkSpotLight, cyanSpotLightHelper, pinkSpotLightHelper
-    let cyanQuaternion = new THREE.Quaternion()
-    let pinkQuaternion = new THREE.Quaternion()
 
-    let mobileQuaternionHelper, mobileQuaternionHelperDir
+    const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
 
-    let cyanPosToLerp, pinkPosToLerp, raycastedCyanSpot, raycastedPinkSpot
+    let cyanPosToLerp, pinkPosToLerp
     let baseTour
     let holesArr = []
 
     // Racyaster
-    const raycaster = new THREE.Raycaster()
     const spotLightRaycaster = new THREE.Raycaster()
 
     const colors = {
@@ -59,14 +56,6 @@ function Trial1(scene, camera, assets) {
         // Helpers
         const axesHelper = new THREE.AxesHelper(50)
         scene.add(axesHelper)
-        mobileQuaternionHelper = new THREE.Mesh(
-            new THREE.ConeGeometry(0.8, 2.2, 4),
-            new THREE.MeshLambertMaterial({ color: 0x999900 })
-        )
-        mobileQuaternionHelper.position.set(3, 4, 0)
-        mobileQuaternionHelper.scale.set(1, 1, 0.35)
-        mobileQuaternionHelperDir = new THREE.Vector3()
-        scene.add(mobileQuaternionHelper)
 
         // Get tour base
         assets.islands.traverse(child => {
@@ -109,7 +98,6 @@ function Trial1(scene, camera, assets) {
         // const spotLightPos = new THREE.Vector3(0, 0, 0)
 
         // CYAN
-        // Cyan projected position on raycastShape (to Lerp to), reassigned onTrack
         cyanSpotLight = new THREE.SpotLight(
             colors.cyan,
             ...Object.values(spotLightParams)
@@ -171,25 +159,25 @@ function Trial1(scene, camera, assets) {
 
     function applyLastTrackedDatas() {
         if (cyanSpotLight.lastTrackedBlob) {
-            const raycastedPosFromCyanBlob = raycastedPosFromBlob(
+            const projectedPosFromCyanBlob = projectedPosFromBlob(
                 cyanSpotLight.lastTrackedBlob
             )
-            if (raycastedPosFromCyanBlob) {
-                cyanPosToLerp = raycastedPosFromCyanBlob
+            if (projectedPosFromCyanBlob) {
+                cyanPosToLerp = projectedPosFromCyanBlob
             }
         }
         if (pinkSpotLight.lastTrackedBlob) {
-            const raycastedPosFromPinkBlob = raycastedPosFromBlob(
+            const projectedPosFromPinkBlob = projectedPosFromBlob(
                 pinkSpotLight.lastTrackedBlob
             )
-            if (raycastedPosFromPinkBlob) {
-                pinkPosToLerp = raycastedPosFromPinkBlob
+            if (projectedPosFromPinkBlob) {
+                pinkPosToLerp = projectedPosFromPinkBlob
             }
         }
     }
 
     /* ----------------------- RAYCAST ----------------------- */
-    function raycastedPosFromBlob(blob) {
+    function projectedPosFromBlob(blob) {
         if (!blob) {
             console.warn("blob is falsy")
             return
@@ -336,17 +324,13 @@ function Trial1(scene, camera, assets) {
             cyanSpotLightHelper.update()
 
             if (mobileQuaternions.cyan) {
-                cyanQuaternion.set(
-                    mobileQuaternions.cyan._x,
-                    mobileQuaternions.cyan._y,
-                    mobileQuaternions.cyan._z,
-                    mobileQuaternions.cyan._w
-                )
-                mobileQuaternionHelper.quaternion.copy(cyanQuaternion)
-
-                const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
                 cyanSpotLight.quaternion
-                    .copy(cyanQuaternion)
+                    .set(
+                        mobileQuaternions.cyan._x,
+                        mobileQuaternions.cyan._y,
+                        mobileQuaternions.cyan._z,
+                        mobileQuaternions.cyan._w
+                    )
                     .slerp(neutralQuaternion, 0.5)
                 // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
                 // TODO: maybe use camera.target.position.length here
@@ -361,16 +345,13 @@ function Trial1(scene, camera, assets) {
             pinkSpotLightHelper.update()
 
             if (mobileQuaternions.pink) {
-                pinkQuaternion.set(
-                    mobileQuaternions.pink._x,
-                    mobileQuaternions.pink._y,
-                    mobileQuaternions.pink._z,
-                    mobileQuaternions.pink._w
-                )
-
-                const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
                 pinkSpotLight.quaternion
-                    .copy(pinkQuaternion)
+                    .set(
+                        mobileQuaternions.pink._x,
+                        mobileQuaternions.pink._y,
+                        mobileQuaternions.pink._z,
+                        mobileQuaternions.pink._w
+                    )
                     .slerp(neutralQuaternion, 0.5)
                 // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
                 // TODO: maybe use camera.target.position.length here
@@ -401,12 +382,6 @@ function Trial1(scene, camera, assets) {
         spotLightHelpers.add(pinkSpotLightHelper, "visible").name("Pink")
         spotLightHelpers.add(cyanSpotLightHelper, "visible").name("Cyan")
         spotLightHelpers.open()
-
-        const raycastShapeFolder = gui.addFolder("Raycast shape")
-        raycastShapeFolder.add(camera.raycastShape.material, "opacity", 0, 1)
-        raycastShapeFolder.add(camera.raycastShape.position, "x", -10, 10)
-        raycastShapeFolder.add(camera.raycastShape.position, "y", -10, 10)
-        raycastShapeFolder.add(camera.raycastShape.position, "z", -15, 5)
 
         gui.add(camera, "logCamera")
 

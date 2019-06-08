@@ -67,7 +67,6 @@ export default {
                             true
                         ) {
                             // Start tracking
-                            console.log("we can start tracking");
                             this.$data.camIsActive = true;
                             clearInterval(checkCameraIsActivated);
                         }
@@ -137,8 +136,8 @@ export default {
             justify-content: space-between;
 
             video {
-                width: 800px;
-                height: 535px;
+                width: 40vw;
+                height: auto;
                 // filter: grayscale(100%);
             }
 

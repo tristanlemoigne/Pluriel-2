@@ -51,11 +51,6 @@ function ThreeEntryPointDsk(canvas) {
     loader.load("/assets/models/Islands.glb", "islands", ["scene"])
 
     // TRIAL 1
-    loader.load("/assets/models/raycastShape.gltf", "raycastShape", [
-        "scene",
-        "children",
-        "0"
-    ])
     loader.load("/assets/models/Interaction13.glb", "tour1")
     loader.load("/assets/campaths/CamPaths.obj", "camPaths")
     loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [

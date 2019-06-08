@@ -1,9 +1,11 @@
 function Tracker(video) {
     const tracker = new tracking.ColorTracker(["cyan", "magenta"])
+    let trackingTask
     let cyanBlob, pinkBlob
 
     function onTrack(callback) {
-        tracking.track(video, tracker, { camera: true })
+        console.log("started tracking")
+        trackingTask = tracking.track(video, tracker, { camera: true })
         tracker.on("track", event => {
             if (event.data.length > 0) {
                 const cyanBlobs = event.data.filter(
@@ -53,8 +55,14 @@ function Tracker(video) {
         return averageBlob
     }
 
+    function stop() {
+        console.log("stop tracking")
+        trackingTask.stop()
+    }
+
     return {
-        onTrack
+        onTrack,
+        stop
     }
 }
 

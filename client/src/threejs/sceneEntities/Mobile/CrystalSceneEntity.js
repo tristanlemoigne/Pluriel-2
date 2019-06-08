@@ -27,7 +27,6 @@ function CrystalSceneEntity(assets, character) {
     //         hasGyro = true
     // })
     let usingGyro = true
-    let frameCount = 0
 
     init()
 
@@ -71,11 +70,10 @@ function CrystalSceneEntity(assets, character) {
         meshPink.rotation.x += 0.001
 
         controls.update()
-        frameCount++
 
         console.log("crystalSceneEntity")
 
-        if (hasGyro && usingGyro && frameCount % 2 === 0) {
+        if (hasGyro && usingGyro) {
             socket.emit(`gyro ${characterColor}`, GyroObject3D.quaternion)
         }
     }
