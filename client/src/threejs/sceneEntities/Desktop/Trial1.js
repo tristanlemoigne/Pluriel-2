@@ -44,7 +44,7 @@ function Trial1(scene, camera, assets) {
     const defaultScaleDuration = 5
     const fusionScaleDuration = 2
 
-    const maxDistanceFromHole = 0.45
+    const maxDistanceFromHole = 0.65
 
     // If a color scaled the shape more than this value, it win the hole
     // Both win between (1 - 0.7) and 0.7
