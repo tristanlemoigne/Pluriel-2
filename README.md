@@ -10,6 +10,10 @@ MacOS :
 ```
 brew install heroku
 ```
+Si ça marche pas, test : 
+```
+brew install heroku/brew/heroku
+```
 
 ## Install dependencies
 ```
