@@ -26,6 +26,11 @@ http://localhost:8080/
 npm run client
 npm run server
 ```
+## Add heroku remote
+```
+heroku git:remote -a pluriel
+```
+And then login to your heroku account 
 
 ## Deploying to Heroku
 https://pluriel.herokuapp.com/
