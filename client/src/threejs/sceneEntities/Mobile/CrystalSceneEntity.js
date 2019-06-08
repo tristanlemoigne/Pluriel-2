@@ -11,6 +11,7 @@ import { threeBus } from "../../../main.js"
 function CrystalSceneEntity(assets, character) {
     /* ----------------------- DECLARATIONS + ASSIGNATIONS ----------------------- */
     const scenes = []
+    
     let characterColor = character === "zanit" ? "pink" : "cyan"
     let sceneCyan, scenePink
     let meshCyan, meshPink
@@ -37,6 +38,8 @@ function CrystalSceneEntity(assets, character) {
 
         scenePink = new THREE.Scene()
         scenePink.background = new THREE.Color(0x551199)
+
+        console.log(characterColor)
 
         if (characterColor === "cyan") {
             scenes.push(sceneCyan)
