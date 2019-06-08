@@ -24,16 +24,16 @@
 </template>
 
 <script>
-import socket from "./socket.js"
-import { bus } from "@/main"
-import { findIp } from "./utils"
-import { checkIfMobile } from "./utils"
-import experienceSteps from "../../server/experienceSteps.js" // this is reference a file outside client folder, so it's the same as the server's
+import socket from "./socket.js";
+import { bus } from "@/main";
+import { findIp } from "./utils";
+import { checkIfMobile } from "./utils";
+import experienceSteps from "../../server/experienceSteps.js"; // this is reference a file outside client folder, so it's the same as the server's
 
-import DebugUIHelpers from "./components/DebugUIHelpers"
-import ThreeContainerDsk from "./components/ThreeContainer/ThreeContainerDsk.vue"
-import ThreeContainerMob from "./components/ThreeContainer/ThreeContainerMob.vue"
-import { threeBus } from "@/main"
+import DebugUIHelpers from "./components/DebugUIHelpers";
+import ThreeContainerDsk from "./components/ThreeContainer/ThreeContainerDsk.vue";
+import ThreeContainerMob from "./components/ThreeContainer/ThreeContainerMob.vue";
+import { threeBus } from "@/main";
 
 export default {
     name: "app",
@@ -51,79 +51,79 @@ export default {
             roomId: "",
             isMobile: checkIfMobile(),
             isAudioActive: true
-        }
+        };
     },
     mounted() {
         // Listen for server events
-        socket.on("joined room", this.showRoom)
-        socket.on("cant join room", this.showCantJoin)
-        socket.on("update users", users => this.setUsersData(users))
+        socket.on("joined room", this.showRoom);
+        socket.on("cant join room", this.showCantJoin);
+        socket.on("update users", users => this.setUsersData(users));
         socket.on("set user room state", newRoomState =>
             this.setOwnState(newRoomState)
-        )
+        );
 
-        bus.$on("setRoomState", this.setRoomState)
+        bus.$on("setRoomState", this.setRoomState);
     },
     methods: {
         userCreateRoom() {
-            socket.emit("create room", this.$data.isMobile)
+            socket.emit("create room", this.$data.isMobile);
         },
         userJoinRoom(requestedRoom) {
             socket.emit("join room", {
                 isMobile: this.$data.isMobile,
                 requestedRoom
-            })
+            });
         },
         showRoom(roomId) {
-            this.$router.push({ name: "room" })
-            this.$data.roomId = roomId
+            this.$router.push({ name: "room" });
+            this.$data.roomId = roomId;
         },
         showCantJoin(roomId) {
-            console.error(`La salle ${roomId} demandée n'existe pas`)
+            console.error(`La salle ${roomId} demandée n'existe pas`);
         },
         setRoomState(changedState) {
-            socket.emit("set server room state", changedState)
+            socket.emit("set server room state", changedState);
         },
         setOwnState(roomState) {
-            this.$data.roomState = roomState
+            this.$data.roomState = roomState;
         },
         setUsersData(newUsers) {
-            this.$data.users = newUsers
+            this.$data.users = newUsers;
 
             if (typeof this.$data.users[0] !== "undefined") {
                 const user = this.$data.users.find(
                     user => user.id === socket.id
-                )
+                );
             }
         },
         toggleAudio() {
-            this.$data.isAudioActive = !this.$data.isAudioActive
+            this.$data.isAudioActive = !this.$data.isAudioActive;
         }
     },
     watch: {
         roomState: function(roomState) {
             if (roomState.currentStep.name.slice(0, 4) === "room") {
-                this.$router.push({ name: "room" })
+                this.$router.push({ name: "room" });
             }
             if (roomState.currentStep.name === "selection_perso") {
-                this.$router.push({ name: "selectionPersos" })
+                this.$router.push({ name: "selectionPersos" });
             }
             if (roomState.currentStep.name === "dioramas") {
-                this.$router.push({ name: "dioramas" })
+                this.$router.push({ name: "dioramas" });
             }
             if (roomState.currentStep.name === "tuto_interactif") {
-                this.$router.push({ name: "tutoInteractif" })
+                this.$router.push({ name: "tutoInteractif" });
             }
             if (roomState.currentStep.name === "trial_1_intro") {
-                this.$router.push({ name: "experience" })
+                this.$router.push({ name: "experience" });
             }
         },
         users: function() {
-            const user = this.$data.users.find(user => user.id === socket.id)
-            this.$data.myCharacter = user.character
+            const user = this.$data.users.find(user => user.id === socket.id);
+            this.$data.myCharacter = user.character;
         }
     }
-}
+};
 </script>
 
 <style lang="scss">
