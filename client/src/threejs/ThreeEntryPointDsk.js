@@ -26,7 +26,7 @@ function ThreeEntryPointDsk(canvas) {
     ])
     loader.load("/assets/models/home/stoneLights.glb", "stoneLights", ["scene"])
     // loader.load("//assets/models/home/nuages3.gltf", "nuages", ["scene"])
-    loader.load("/assets/models/nuages.glb", "nuages", ["scene"])
+    loader.load("/assets/models/Nuages.glb", "nuages", ["scene"])
     loader.load("/assets/models/nuagesLights.glb", "nuagesLights", ["scene"])
 
     // SELECTION PERSO
