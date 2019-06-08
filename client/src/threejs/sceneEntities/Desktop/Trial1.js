@@ -44,7 +44,7 @@ function Trial1(scene, camera, assets) {
     const defaultScaleDuration = 5
     const fusionScaleDuration = 2
 
-    const maxDistanceFromHole = 1.8
+    const maxDistanceFromHole = 0.65
 
     // If a color scaled the shape more than this value, it win the hole
     // Both win between (1 - 0.7) and 0.7
@@ -207,7 +207,7 @@ function Trial1(scene, camera, assets) {
         projectedTargPos = new THREE.Vector3(
             normalizedBlob.x, // TODO: use camera.target.position.length or somthing here
             normalizedBlob.y,
-            -0.1
+            -3 // negative = in front of camera, positive = behind
         )
         return projectedTargPos
     }
@@ -347,14 +347,12 @@ function Trial1(scene, camera, assets) {
                 )
                 mobileQuaternionHelper.quaternion.copy(cyanQuaternion)
 
-                cyanSpotLight.quaternion.copy(cyanQuaternion)
-
-                // let camWorldDirection = new THREE.Vector3()
-                // camera.getWorldDirection(camWorldDirection)
-                // cyanSpotLight.quaternion.setFromUnitVectors(
-                //     camWorldDirection,
-                //     new THREE.Vector3(0, 0, -1)
-                // )
+                const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
+                cyanSpotLight.quaternion
+                    .copy(cyanQuaternion)
+                    .slerp(neutralQuaternion, 0.5)
+                // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
+                // TODO: maybe use camera.target.position.length here
             }
         }
 
