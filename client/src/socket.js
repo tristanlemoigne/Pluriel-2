@@ -1,12 +1,12 @@
 import io from "socket.io-client"
-let ip
+let url
 
 if(process.env.NODE_ENV === "development"){
     // DEV
-    ip = "192.168.1.14:5000/"
+    url = "http://192.168.1.14:5000/"
 } else {
     // PROD
-    ip = "pluriel.herokuapp.com"
+    url = "https://pluriel.herokuapp.com"
 }
 
-export default io("http://" + ip)
+export default io(url)
