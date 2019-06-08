@@ -5,7 +5,8 @@ import CameraGroup from "./CameraGroup"
 import CrystalSceneEntity from "./sceneEntities/Mobile/CrystalSceneEntity"
 import HomeMobSceneEntity from "./sceneEntities/Mobile/HomeMobSceneEntity"
 import CanvasRotator from "./CanvasRotator"
-import { threeBus } from "../main"
+import { bus, threeBus } from "../main"
+import socket from "../socket.js";
 
 import * as THREE from "three"
 
@@ -51,13 +52,16 @@ function SceneManagerMob(canvas, assets) {
         // controls = new OrbitControls(camera, canvas)
         // controls.target = camera.target.position
         threeBus.$on("change to step", changeToStep)
-        threeBus.$on("animate perso", perso => {
-            if (character === undefined) {
-                console.warn(
-                    "RE-assigning a character (rewrited over previous choice)"
-                )
-                character = perso
-                console.log("the character is", character)
+
+        bus.$on("setRoomState", stateObj => {
+            if(stateObj.lamar || stateObj.zanit){
+                if(stateObj.lamar === socket.id) {
+                    character = "lamar"
+                } else if (stateObj.zanit === socket.id) {
+                    character = "zanit"
+                } else {
+                    character = undefined
+                }
             }
         })
     }
