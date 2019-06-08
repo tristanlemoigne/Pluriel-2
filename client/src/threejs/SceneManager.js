@@ -61,6 +61,7 @@ function SceneManager(canvas, assets) {
 
         // Shape to raycast
         const raycastShape = assets.raycastShape
+        console.log("i pass it ", raycastShape)
         camera = CameraGroup(raycastShape)
         camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
         const initialTarget = assets.camTargetPoints.children.find(Object3D =>

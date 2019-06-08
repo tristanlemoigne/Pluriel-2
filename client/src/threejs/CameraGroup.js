@@ -12,7 +12,7 @@ export default function CameraGroup(
     camera = buildDefaultCamera()
 ) {
     camera.target = new THREE.Object3D() // use this to lookAt() with camera
-
+    console.log("i receive it", raycastShape)
     camera.raycastShape = raycastShape
 
     raycastShape.material = new THREE.MeshBasicMaterial({

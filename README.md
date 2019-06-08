@@ -27,12 +27,6 @@ npm run client
 npm run server
 ```
 
-## Running local production version
-http://localhost:5000/
-```
-heroku local
-```
-
 ## Deploying to Heroku
 https://pluriel.herokuapp.com/
 ```
