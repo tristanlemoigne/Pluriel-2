@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import io from "socket.io-client"
-import { threeBus } from "@/main"
-import CanvasRotator from "@/threejs/CanvasRotator"
-const firstStep = require("../../../server/experienceSteps.js")[0]
-import Logo from "@/components/Logo"
+import io from "socket.io-client";
+import { threeBus } from "@/main";
+import CanvasRotator from "@/threejs/CanvasRotator";
+const firstStep = require("../../../server/experienceSteps.js")[0];
+import Logo from "@/components/Logo";
 
 export default {
     name: "home",
@@ -39,28 +39,28 @@ export default {
     },
     data: () => ({
         title: "Pluriel",
-        subtitle: "Une expérience singulière",
+        subtitle: "Une expérience singulière.",
         requestedRoom: ""
     }),
     methods: {
         createRoom(event) {
-            this.$emit("createRoom")
-            threeBus.$emit("step creation room")
+            this.$emit("createRoom");
+            threeBus.$emit("step creation room");
         },
         joinRoom(event) {
-            this.$emit("joinRoom", this.$data.requestedRoom)
+            this.$emit("joinRoom", this.$data.requestedRoom);
         },
         sliderMove(e) {
             if (this.$refs.sliderBar)
                 this.$refs.sliderBar.style.left = `calc(50% + (${
                     e.pageX
-                }px - 50%) * 0.45)`
+                }px - 50%) * 0.45)`;
         }
     },
     mounted() {
-        CanvasRotator().rotateCSS(this.$refs.sliderBar, firstStep.canvasAngle)
+        CanvasRotator().rotateCSS(this.$refs.sliderBar, firstStep.canvasAngle);
     }
-}
+};
 </script>
 
 
