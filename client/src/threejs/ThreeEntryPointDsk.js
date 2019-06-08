@@ -1,4 +1,4 @@
-import AssetLoader from "/assetsLoader"
+import AssetLoader from "./AssetsLoader"
 import SceneManager from "./SceneManager"
 
 /**
