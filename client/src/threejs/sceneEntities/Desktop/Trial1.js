@@ -12,8 +12,9 @@ function Trial1(scene, camera, assets) {
         video = document.getElementsByTagName("video")[0]
     }, 0)
 
-    let time = 0
     let cyanSpotLight, pinkSpotLight, cyanSpotLightHelper, pinkSpotLightHelper
+    let cyanQuaternion = new THREE.Quaternion()
+    let pinkQuaternion = new THREE.Quaternion()
 
     let mobileQuaternionHelper, mobileQuaternionHelperDir
 
@@ -67,22 +68,6 @@ function Trial1(scene, camera, assets) {
         mobileQuaternionHelperDir = new THREE.Vector3()
         scene.add(mobileQuaternionHelper)
 
-        // LIGHTS
-        // const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x080804)
-        // hemisphereLight.position.set(-10, 10, 0)
-        // scene.add(hemisphereLight)
-
-        // MODELS
-        // TOUR1
-        // const tour = assets.islands
-        // const tourMaterial = new THREE.MeshPhongMaterial()
-        // Replace all materials by default
-        // tour.traverse(child => {
-        //     if (child instanceof THREE.Mesh) {
-        //         child.material = tourMaterial.clone()
-        //     }
-        // })
-
         // Get tour base
         assets.islands.traverse(child => {
             if (child.name.includes("Towerbroken")) baseTour = child
@@ -105,7 +90,7 @@ function Trial1(scene, camera, assets) {
             hole.scaleMin = hole.scale.clone()
         })
 
-        scene.add(assets.islands)
+        // scene.add(assets.islands)
 
         // LISTENERS
         threeBus.$on("track", refreshTrackedDatas)
@@ -139,7 +124,8 @@ function Trial1(scene, camera, assets) {
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         cyanSpotLight.target.add(targetSphere)
         cyanSpotLight.add(cyanSpotLight.target)
-        scene.add(cyanSpotLight)
+        // scene.add(cyanSpotLight)
+        camera.add(cyanSpotLight)
 
         cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
         cyanSpotLightHelper.visible = true
@@ -160,7 +146,8 @@ function Trial1(scene, camera, assets) {
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         pinkSpotLight.target.add(targetSphere)
         pinkSpotLight.add(pinkSpotLight.target)
-        scene.add(pinkSpotLight)
+        // scene.add(pinkSpotLight)
+        camera.add(pinkSpotLight)
 
         pinkSpotLightHelper = new THREE.SpotLightHelper(pinkSpotLight)
         pinkSpotLightHelper.visible = true
@@ -206,26 +193,23 @@ function Trial1(scene, camera, assets) {
 
     /* ----------------------- RAYCAST ----------------------- */
     function raycastedPosFromBlob(blob) {
-        if (blob) {
-            let projectedTargPos
-            const normalizedBlob = {
-                // should be between -1 -> 1
-                x: Math.max(Math.min(-(blob.x / video.width) * 2 + 1, 1), -1),
-                y: Math.max(Math.min(-(blob.y / video.height) * 2 + 1, 1), -1)
-            }
-
-            raycaster.setFromCamera(normalizedBlob, camera)
-            const intersects = raycaster.intersectObject(camera.raycastShape)
-
-            if (intersects[0]) {
-                projectedTargPos = intersects[0].point
-                return projectedTargPos
-            } else {
-                console.warn("'intersects[0]' does not exist")
-            }
-        } else {
+        if (!blob) {
             console.warn("blob is falsy")
+            return
         }
+        let projectedTargPos
+        const normalizedBlob = {
+            // should be between -1 -> 1
+            x: Math.max(Math.min(-(blob.x / video.width) * 2 + 1, 1), -1),
+            y: Math.max(Math.min(-(blob.y / video.height) * 2 + 1, 1), -1)
+        }
+
+        projectedTargPos = new THREE.Vector3(
+            normalizedBlob.x, // TODO: use camera.target.position.length or somthing here
+            normalizedBlob.y,
+            -0.1
+        )
+        return projectedTargPos
     }
 
     function raycastedPosFromSpot(spot) {
@@ -233,18 +217,18 @@ function Trial1(scene, camera, assets) {
             let spotPos = new THREE.Vector3()
             spot.getWorldPosition(spotPos)
 
-            let normalizedTarget = new THREE.Vector3()
-            spot.target.getWorldPosition(normalizedTarget)
-            normalizedTarget.normalize()
+            let spotTargetPos = new THREE.Vector3()
+            spot.target.getWorldPosition(spotTargetPos)
 
-            spotLightRaycaster.set(spotPos, normalizedTarget)
+            const raycastDir = new THREE.Vector3()
+                .copy(spotTargetPos)
+                .sub(spotPos)
+                .normalize()
+
+            spotLightRaycaster.set(spotPos, raycastDir)
             const intersects = spotLightRaycaster.intersectObjects(
                 baseTour.children
             )
-
-            // if (intersects.length > 0) {
-            // console.log({ intersects }, baseTour)
-            // }
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -257,8 +241,8 @@ function Trial1(scene, camera, assets) {
         }
     }
 
-    function checkVictoryHole(cyanRaycastPos, pinkRaycastPos) {
-        console.log(holesArr)
+    function checkAimingHole(cyanRaycastPos, pinkRaycastPos) {
+        // console.log(holesArr)
         holesArr.forEach((hole, index) => {
             if (hole.progress < hole.progressMax) {
                 // HOLE IS NOT COMPLETLY FILLED > FILL IT
@@ -345,17 +329,17 @@ function Trial1(scene, camera, assets) {
         }
     }
 
-    function update(mobileQuaternions) {
-        // time += 0.1
+    function update(time, mobileQuaternions) {
         applyLastTrackedDatas()
         if (cyanSpotLight.lastTrackedBlob) {
             cyanSpotLight.position.lerp(cyanPosToLerp, easingFactor)
+            // TODO: the use of camera.position makes no sense here
             cyanSpotLight.target.position.z = camera.position.length()
             cyanSpotLight.intensity = 1 + camera.position.length() * 2
             cyanSpotLightHelper.update()
 
             if (mobileQuaternions.cyan) {
-                const cyanQuaternion = new THREE.Quaternion(
+                cyanQuaternion.set(
                     mobileQuaternions.cyan._x,
                     mobileQuaternions.cyan._y,
                     mobileQuaternions.cyan._z,
@@ -363,47 +347,40 @@ function Trial1(scene, camera, assets) {
                 )
                 mobileQuaternionHelper.quaternion.copy(cyanQuaternion)
 
-                // const offsQuaternion = new THREE.Quaternion().setFromEuler(
-                //     new THREE.Euler(0, Math.PI / 2, 0)
-                // )
-                const camToWorldQuaternion = new THREE.Quaternion()
-                camera.getWorldQuaternion(camToWorldQuaternion)
+                cyanSpotLight.quaternion.copy(cyanQuaternion)
 
-                cyanSpotLight.quaternion
-                    .copy(camToWorldQuaternion)
-                    // .multiply(offsQuaternion)
-                    .multiply(cyanQuaternion)
+                // let camWorldDirection = new THREE.Vector3()
+                // camera.getWorldDirection(camWorldDirection)
+                // cyanSpotLight.quaternion.setFromUnitVectors(
+                //     camWorldDirection,
+                //     new THREE.Vector3(0, 0, -1)
+                // )
             }
         }
 
         if (pinkSpotLight.lastTrackedBlob) {
             pinkSpotLight.position.lerp(pinkPosToLerp, easingFactor)
+            // TODO: the use of camera.position makes no sense here
             pinkSpotLight.target.position.z = camera.position.length()
             pinkSpotLight.intensity = 1 + camera.position.length() * 2
             pinkSpotLightHelper.update()
 
             if (mobileQuaternions.pink) {
-                const pinkQuaternion = new THREE.Quaternion(
-                    mobileQuaternions.pink._x,
-                    mobileQuaternions.pink._y,
-                    mobileQuaternions.pink._z,
-                    mobileQuaternions.pink._w
+                pinkQuaternion.set(
+                    mobileQuaternions.cyan._x,
+                    mobileQuaternions.cyan._y,
+                    mobileQuaternions.cyan._z,
+                    mobileQuaternions.cyan._w
                 )
-                // const offsQuaternion = new THREE.Quaternion().setFromEuler(
-                //     new THREE.Euler(0, Math.PI / 2, 0)
-                // )
-                const camToWorldQuaternion = new THREE.Quaternion()
-                camera.getWorldQuaternion(camToWorldQuaternion)
 
                 pinkSpotLight.quaternion
-                    .copy(camToWorldQuaternion)
-                    // .multiply(offsQuaternion)
+                    .copy(camera.quaternion)
                     .multiply(pinkQuaternion)
             }
         }
 
         // Fill holes
-        checkVictoryHole(
+        checkAimingHole(
             raycastedPosFromSpot(cyanSpotLight),
             raycastedPosFromSpot(pinkSpotLight)
         )
