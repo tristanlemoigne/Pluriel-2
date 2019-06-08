@@ -4,10 +4,9 @@ function Tracker(video) {
     let cyanBlob, pinkBlob
 
     function onTrack(callback) {
-        console.log("tracking")
+        console.log("started tracking")
         trackingTask = tracking.track(video, tracker, { camera: true })
         tracker.on("track", event => {
-            console.log("'track' event triggering tracker.on()")
             if (event.data.length > 0) {
                 const cyanBlobs = event.data.filter(
                     blob => blob.color === "cyan"

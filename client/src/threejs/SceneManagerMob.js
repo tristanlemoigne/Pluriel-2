@@ -25,7 +25,6 @@ function SceneManagerMob(canvas, assets) {
     let currentSceneEntity, sceneEntities
     let character
 
-    // Shape to raycast
     let LAST_TIME = Date.now()
     let DELTA_TIME
     let mstime = 0
@@ -36,9 +35,8 @@ function SceneManagerMob(canvas, assets) {
         /* TODO: Enable double scene with postprocess > look at renderpass */
         const isPostProcess = false
 
-        // Shape to raycast
-        const raycastShape = assets.raycastShape
-        camera = CameraGroup(raycastShape)
+        camera = CameraGroup()
+        camera.position.copy(new THREE.Vector3(0, 0, -10))
 
         sceneEntities = initScenesEntities()
         currentSceneEntity = sceneEntities["home"]()
@@ -99,7 +97,6 @@ function SceneManagerMob(canvas, assets) {
         requestAnimationFrame(update)
         updateTime()
 
-        camera.position.copy(new THREE.Vector3(0, 0, -10))
         camera.lookAt(new THREE.Vector3(0, 0, 1))
 
         currentSceneEntity.update()

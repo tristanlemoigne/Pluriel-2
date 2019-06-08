@@ -30,11 +30,6 @@ function ThreeEntryPointMob(canvas) {
     loader.load("/assets/img/lamar.svg", "lamarSVG")
 
     // STEP 1
-    loader.load("/assets/models/raycastShape.gltf", "raycastShape", [
-        "scene",
-        "children",
-        "0"
-    ])
     loader.load("/assets/campaths/CamPaths.obj", "camPaths")
     loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [
         "scene"

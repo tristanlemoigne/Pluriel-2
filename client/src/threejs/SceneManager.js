@@ -36,6 +36,7 @@ function SceneManager(canvas, assets) {
     let globalTweenedVars = {
         camPosPercentage: 0 // 0 -> 1
     }
+    let camTargetGlobalPos = new THREE.Vector3()
 
     // Time init
     let LAST_TIME = Date.now()
@@ -59,10 +60,7 @@ function SceneManager(canvas, assets) {
         // const fog = new THREE.Fog(0x8455b3, 10, 200)
         masterScene.fog = fog
 
-        // Shape to raycast
-        const raycastShape = assets.raycastShape
-        console.log("i pass it ", raycastShape)
-        camera = CameraGroup(raycastShape)
+        camera = CameraGroup()
         camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
         const initialTarget = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes("Target00")
@@ -274,8 +272,7 @@ function SceneManager(canvas, assets) {
     }
 
     function changeToStep(step) {
-        // currentSceneEntity.scenes[0].add(camera) // for debugging, this is to display the raycastShape that is in the CameraGroup
-        masterScene.add(camera) // for debugging, this is to display the raycastShape that is in the CameraGroup
+        masterScene.add(camera) // this is to display the spotLights that are dependant on the camera's position (cf.Trial1)
 
         canvasAngle = step.canvasAngle ? step.canvasAngle : 0
         CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
@@ -327,7 +324,6 @@ function SceneManager(canvas, assets) {
             }
         }
 
-        let camTargetGlobalPos = new THREE.Vector3()
         camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
         // camTargetGlobalPos.y += Math.sin(time) * 30 // for debug
         camera.lookAt(camTargetGlobalPos)

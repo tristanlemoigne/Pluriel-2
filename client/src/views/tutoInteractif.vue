@@ -136,8 +136,8 @@ export default {
             justify-content: space-between;
 
             video {
-                width: 800px;
-                height: 535px;
+                width: 40vw;
+                height: auto;
                 // filter: grayscale(100%);
             }
 
