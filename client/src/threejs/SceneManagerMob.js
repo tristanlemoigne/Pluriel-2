@@ -6,7 +6,7 @@ import CrystalSceneEntity from "./sceneEntities/Mobile/CrystalSceneEntity"
 import HomeMobSceneEntity from "./sceneEntities/Mobile/HomeMobSceneEntity"
 import CanvasRotator from "./CanvasRotator"
 import { bus, threeBus } from "../main"
-import socket from "../socket.js";
+import socket from "../socket.js"
 
 import * as THREE from "three"
 
@@ -54,8 +54,8 @@ function SceneManagerMob(canvas, assets) {
         threeBus.$on("change to step", changeToStep)
 
         bus.$on("setRoomState", stateObj => {
-            if(stateObj.lamar || stateObj.zanit){
-                if(stateObj.lamar === socket.id) {
+            if (stateObj.lamar || stateObj.zanit) {
+                if (stateObj.lamar === socket.id) {
                     character = "lamar"
                 } else if (stateObj.zanit === socket.id) {
                     character = "zanit"

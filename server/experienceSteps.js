@@ -72,7 +72,6 @@ module.exports = [
 
     {
         name: "global_intro",
-        hasMobileThreeScene: true, // TODO: remove this and use added/removedThreeGroupsMob instead in SceneManagerMob
         fogDist: { near: 50, far: 250 }, // TODO: fogDist is not used yet
         addedThreeGroupsDsk: [{ asset: "islands", delay: 0, time: 1 }],
         removedThreeGroupsDsk: [
@@ -89,6 +88,7 @@ module.exports = [
 
     {
         name: "trial_1_intro",
+        hasMobileThreeScene: true,
         cameraTransition: {
             camPos: { path: "NurbsPath01", delay: 0, time: 12, easing: null },
             camTarget: { point: "Target02", delay: 0, time: 8, easing: null }

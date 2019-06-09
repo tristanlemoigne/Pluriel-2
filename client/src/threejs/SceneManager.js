@@ -197,8 +197,10 @@ function SceneManager(canvas, assets) {
             switch (scene) {
                 case "sceneR":
                     sceneR.add(assets[addedAssetName])
+                    break
                 case "sceneL":
                     sceneL.add(assets[addedAssetName])
+                    break
                 default:
                     masterScene.add(assets[addedAssetName])
             }

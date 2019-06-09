@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { visibleHeightAtZDepth, visibleWidthAtZDepth } from "../../helpers"
 import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
@@ -189,10 +190,16 @@ function Trial1(scene, camera, assets) {
             y: Math.max(Math.min(-(blob.y / video.height) * 2 + 1, 1), -1)
         }
 
+        const cameraTargetDist = camera.target.position.length()
+
         projectedTargPos = new THREE.Vector3(
-            normalizedBlob.x, // TODO: use camera.target.position.length or somthing here
-            normalizedBlob.y,
-            -3 // negative = in front of camera, positive = behind
+            normalizedBlob.x *
+                visibleWidthAtZDepth(cameraTargetDist, camera) *
+                0.5,
+            normalizedBlob.y *
+                visibleHeightAtZDepth(cameraTargetDist, camera) *
+                0.5,
+            10 - cameraTargetDist * 0.3 // negative = in front of camera, positive = behind
         )
         return projectedTargPos
     }
