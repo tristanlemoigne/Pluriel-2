@@ -71,7 +71,7 @@ module.exports = [
     },
 
     {
-        name: "trial_1_intro",
+        name: "global_intro",
         hasMobileThreeScene: true, // TODO: remove this and use added/removedThreeGroupsMob instead in SceneManagerMob
         fogDist: { near: 50, far: 250 }, // TODO: fogDist is not used yet
         addedThreeGroupsDsk: [{ asset: "islands", delay: 0, time: 1 }],
@@ -81,24 +81,48 @@ module.exports = [
         ],
         removedThreeGroupsMob: [{ asset: "nuages", delay: 0, time: 3 }],
         cameraTransition: {
-            camPos: { path: "NurbsPath00", delay: 0, time: 10, easing: null },
+            camPos: { path: "NurbsPath00", delay: 0, time: 11, easing: null },
             camTarget: { point: "Target01", delay: 0.5, time: 6, easing: null }
         },
         canvasAngle: toRadians(0)
     },
 
     {
+        name: "trial_1_intro",
+        cameraTransition: {
+            camPos: { path: "NurbsPath01", delay: 0, time: 12, easing: null },
+            camTarget: { point: "Target02", delay: 0, time: 8, easing: null }
+        }
+    },
+
+    {
+        name: "trial_1_tuto",
+        cameraTransition: {
+            camPos: { path: "NurbsPath02", delay: 0, time: 4, easing: null },
+            camTarget: { point: "Target03", delay: 0, time: 3, easing: null }
+        }
+    },
+
+    {
         name: "trial_1_game",
         cameraTransition: {
-            camPos: { path: "NurbsPath01", delay: 0, time: 18, easing: null },
-            camTarget: { point: "Target02", delay: 0, time: 6, easing: null }
+            camPos: { path: "NurbsPath03", delay: 0, time: 28, easing: null }, // this camPath is fucked up (maybe because double spiral, not good for CatmullCurve function)
+            camTarget: { point: "Target04", delay: 0, time: 28, easing: null }
         }
     },
 
     {
         name: "trial_1_end",
         cameraTransition: {
-            camPos: { path: "NurbsPath02", delay: 0, time: 30, easing: null }
+            camTarget: { point: "Target05", delay: 0, time: 2, easing: null }
+        }
+    },
+
+    {
+        name: "global_end",
+        cameraTransition: {
+            camPos: { path: "NurbsPath04", delay: 0, time: 8, easing: null },
+            camTarget: { point: "Target01", delay: 0, time: 9, easing: null }
         }
     }
 ]

@@ -75,7 +75,7 @@ function SceneManager(canvas, assets) {
             setTimeout(() => {
                 applyFuncOnObjs(assets[assetName], "Light", light => {
                     light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
-                    light.intensity *= 1
+                    light.intensity *= 1.1
                 })
             }, 0)
         })

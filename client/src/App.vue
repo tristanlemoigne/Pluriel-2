@@ -114,7 +114,7 @@ export default {
             if (roomState.currentStep.name === "tuto_interactif") {
                 this.$router.push({ name: "tutoInteractif" });
             }
-            if (roomState.currentStep.name === "trial_1_intro") {
+            if (roomState.currentStep.name === "global_intro") {
                 this.$router.push({ name: "experience" });
             }
         },
