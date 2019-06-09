@@ -6,7 +6,7 @@ module.exports = [
     {
         name: "home",
         hasMobileThreeScene: true, // TODO: remove this and use added/removedThreeGroupsMob instead in SceneManagerMob
-        fogDist: { near: 0, far: 120 }, // TODO: fogDist is not used yet
+        fog: { delay: 0, time: 0, density: 0.008, easing: ["Power1", "easeInOut"] },
         // addedThreeGroupsDsk: [
         //     // TODO: delay and time times are not used yet
         //     { asset: "nuages", delay: 0, time: 0 },
@@ -72,7 +72,6 @@ module.exports = [
 
     {
         name: "global_intro",
-        fogDist: { near: 50, far: 250 }, // TODO: fogDist is not used yet
         addedThreeGroupsDsk: [{ asset: "islands", delay: 0, time: 1 }],
         removedThreeGroupsDsk: [
             { asset: "nuages", delay: 5, time: 0 },
@@ -80,49 +79,107 @@ module.exports = [
         ],
         removedThreeGroupsMob: [{ asset: "nuages", delay: 0, time: 3 }],
         cameraTransition: {
-            camPos: { path: "NurbsPath00", delay: 0, time: 11, easing: null },
-            camTarget: { point: "Target01", delay: 0.5, time: 6, easing: null }
+            camPos: {
+                path: "NurbsPath00",
+                delay: 0,
+                time: 11,
+                easing: ["Power3", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target01",
+                delay: 0.5,
+                time: 6.5,
+                easing: ["Power3", "easeInOut"]
+            }
         },
-        canvasAngle: toRadians(0)
+        canvasAngle: toRadians(0),
+        fog: { delay: 4, time: 6, density: 0.006, easing: ["Power1", "easeInOut"] }
     },
 
     {
         name: "trial_1_intro",
         hasMobileThreeScene: true,
         cameraTransition: {
-            camPos: { path: "NurbsPath01", delay: 0, time: 12, easing: null },
-            camTarget: { point: "Target02", delay: 0, time: 8, easing: null }
-        }
+            camPos: {
+                path: "NurbsPath01",
+                delay: 0,
+                time: 12,
+                easing: ["Power3", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target02",
+                delay: 0,
+                time: 8,
+                easing: ["Power3", "easeInOut"]
+            }
+        },
+        fog: { delay: 1, time: 10, density: 0.016, easing: ["Power1", "easeInOut"] }
     },
 
     {
         name: "trial_1_tuto",
         cameraTransition: {
-            camPos: { path: "NurbsPath02", delay: 0, time: 4, easing: null },
-            camTarget: { point: "Target03", delay: 0, time: 3, easing: null }
+            camPos: {
+                path: "NurbsPath02",
+                delay: 0,
+                time: 4,
+                easing: ["Power3", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target03",
+                delay: 0,
+                time: 3,
+                easing: ["Power3", "easeInOut"]
+            }
         }
     },
 
     {
         name: "trial_1_game",
         cameraTransition: {
-            camPos: { path: "NurbsPath03", delay: 0, time: 28, easing: null }, // this camPath is fucked up (maybe because double spiral, not good for CatmullCurve function)
-            camTarget: { point: "Target04", delay: 0, time: 28, easing: null }
+            camPos: {
+                path: "NurbsPath03",
+                delay: 0,
+                time: 32,
+                easing: ["Sine", "easeInOut"]
+            }, // this camPath is fucked up (maybe because double spiral, not good for CatmullCurve function)
+            camTarget: {
+                point: "Target04",
+                delay: 0,
+                time: 25,
+                easing: ["Sine", "easeInOut"]
+            }
         }
     },
 
     {
         name: "trial_1_end",
         cameraTransition: {
-            camTarget: { point: "Target05", delay: 0, time: 2, easing: null }
+            camTarget: {
+                point: "Target05",
+                delay: 0,
+                time: 2,
+                easing: ["Power3", "easeInOut"]
+            }
         }
     },
 
     {
         name: "global_end",
         cameraTransition: {
-            camPos: { path: "NurbsPath04", delay: 0, time: 8, easing: null },
-            camTarget: { point: "Target01", delay: 0, time: 9, easing: null }
-        }
+            camPos: {
+                path: "NurbsPath04",
+                delay: 0,
+                time: 8,
+                easing: ["Power3", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target01",
+                delay: 0,
+                time: 9,
+                easing: ["Power3", "easeInOut"]
+            }
+        },
+        fog: { delay: 0, time: 8, density: 0.006, easing: ["Power3", "easeInOut"] }
     }
 ]

@@ -1,6 +1,8 @@
 import socket from "../socket"
 import * as THREE from "three"
-import { TweenLite, Power3 } from "gsap"
+import { TweenLite, Sine, Power1, Power2, Power3 } from "gsap"
+
+import * as dat from "dat.gui"
 
 import OrbitControls from "orbit-controls-es6"
 import CustomRenderer from "./postprocessing/CustomRenderer"
@@ -34,7 +36,8 @@ function SceneManager(canvas, assets) {
     let currentCameraPath = undefined
     let isMovingCamera = false
     let globalTweenedVars = {
-        camPosPercentage: 0 // 0 -> 1
+        camPosPercentage: 0, // 0 -> 1
+        fogChangePercentage: 0 // 0 -> 1
     }
     let camTargetGlobalPos = new THREE.Vector3()
 
@@ -56,13 +59,13 @@ function SceneManager(canvas, assets) {
         const isPostProcess = false
 
         // Fog
-        const fog = new THREE.FogExp2(0x8455b3, 0.008)
-        // const fog = new THREE.Fog(0x8455b3, 10, 200)
-        masterScene.fog = fog
+        let sceneFog = new THREE.FogExp2(0x8455b3, 0.008)
+        // const fosceneFogg = new THREE.Fog(0x8455b3, 10, 200)
+        masterScene.fog = sceneFog
 
         camera = CameraGroup()
         camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
-        const initialTarget = assets.camTargetPoints.children.find(Object3D =>
+        const initialTarget = assets.camTargetPoints.children.find((Object3D) =>
             Object3D.name.includes("Target00")
         )
         camera.target.position.copy(initialTarget.position)
@@ -71,11 +74,11 @@ function SceneManager(canvas, assets) {
         masterScene.add(assets.nuages)
         masterScene.add(assets.nuagesLights)
 
-        Object.keys(assets).map(assetName => {
+        Object.keys(assets).map((assetName) => {
             setTimeout(() => {
-                applyFuncOnObjs(assets[assetName], "Light", light => {
+                applyFuncOnObjs(assets[assetName], "Light", (light) => {
                     light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
-                    light.intensity *= 1.1
+                    light.intensity *= 1
                 })
             }, 0)
         })
@@ -104,6 +107,8 @@ function SceneManager(canvas, assets) {
         // controls.target = camera.target.position
 
         threeBus.$on("change to step", changeToStep)
+
+        initGui()
     }
 
     function onWindowResize() {
@@ -119,17 +124,39 @@ function SceneManager(canvas, assets) {
         window.addEventListener("resize", onWindowResize)
         onWindowResize()
 
-        socket.on("dispatch cyan quaternion", Quaternion => {
+        socket.on("dispatch cyan quaternion", (Quaternion) => {
             mobileQuaternions.cyan = Quaternion
         })
-        socket.on("dispatch pink quaternion", Quaternion => {
+        socket.on("dispatch pink quaternion", (Quaternion) => {
             mobileQuaternions.pink = Quaternion
         })
     }
 
+    function getEasing(powerStr, inOrOutStr) {
+        let easingReturned
+        switch (powerStr) {
+            case "Sine":
+                easingReturned = Sine[inOrOutStr]
+                break
+            case "Power1":
+                easingReturned = Power1[inOrOutStr]
+                break
+            case "Power2":
+                easingReturned = Power2[inOrOutStr]
+                break
+            case "Power3":
+                easingReturned = Power3[inOrOutStr]
+                break
+            default:
+                easingReturned = Power2.easeInOut
+                console.warn("Easing's string is not recognized")
+        }
+        return easingReturned
+    }
+
     function animateCamOnPath({ path, delay, time, easing }) {
         // TODO: use "easing" values from experienceSteps
-        const cameraPathGeometry = assets.camPaths.children.find(child => {
+        const cameraPathGeometry = assets.camPaths.children.find((child) => {
             return child.name.includes(path) // must be something like NurbsPath00 in the blender file
         }).geometry
 
@@ -140,13 +167,17 @@ function SceneManager(canvas, assets) {
             globalTweenedVars,
             time,
             { camPosPercentage: 0 },
-            { camPosPercentage: 1, delay: delay, ease: Power3.easeInOut }
+            {
+                camPosPercentage: 1,
+                delay: delay,
+                ease: getEasing(...easing)
+            }
         )
     }
 
     function animateCamTarget({ point: targetName, delay, time, easing }) {
         // TODO: use "easing" values from experienceSteps
-        const nextTargetPos = assets.camTargetPoints.children.find(Object3D =>
+        const nextTargetPos = assets.camTargetPoints.children.find((Object3D) =>
             Object3D.name.includes(targetName)
         ).position
 
@@ -163,7 +194,7 @@ function SceneManager(canvas, assets) {
                 y: nextTargetPos.y,
                 z: nextTargetPos.z,
                 delay: delay,
-                ease: Power3.easeInOut
+                ease: getEasing(...easing)
             }
         )
     }
@@ -174,7 +205,7 @@ function SceneManager(canvas, assets) {
                 console.error(`Can't add "${addedAssetName}", asset not found`)
             }
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
-            applyFuncOnObjs(assets[addedAssetName], "Light", light => {
+            applyFuncOnObjs(assets[addedAssetName], "Light", (light) => {
                 TweenLite.fromTo(
                     light,
                     time,
@@ -187,7 +218,7 @@ function SceneManager(canvas, assets) {
                     }
                 )
             })
-            applyFuncOnObjs(assets[addedAssetName], "Mesh", addedMesh => {
+            applyFuncOnObjs(assets[addedAssetName], "Mesh", (addedMesh) => {
                 addedMesh.material.side = THREE.FrontSide
                 // addedMesh.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
                 addedMesh.material.transparent = true
@@ -210,14 +241,9 @@ function SceneManager(canvas, assets) {
                 // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
                 delay: delay + 0.2,
                 onUpdate: () => {
-                    applyFuncOnObjs(
-                        assets[addedAssetName],
-                        "Mesh",
-                        addedMesh => {
-                            addedMesh.material.opacity =
-                                localTweenedVar.fadeInPercentage
-                        }
-                    )
+                    applyFuncOnObjs(assets[addedAssetName], "Mesh", (addedMesh) => {
+                        addedMesh.material.opacity = localTweenedVar.fadeInPercentage
+                    })
                 }
             })
         })
@@ -228,9 +254,7 @@ function SceneManager(canvas, assets) {
             let localTweenedVar = { fadeOutPercentage: 1 } // 1 -> 0
 
             if (!assets[removedAssetName]) {
-                console.error(
-                    `Can't remove "${removedAssetName}", asset not found`
-                )
+                console.error(`Can't remove "${removedAssetName}", asset not found`)
             }
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
@@ -239,7 +263,7 @@ function SceneManager(canvas, assets) {
                     applyFuncOnObjs(
                         assets[removedAssetName],
                         "Mesh",
-                        removedMesh => {
+                        (removedMesh) => {
                             removedMesh.material.side = THREE.FrontSide
                             removedMesh.material.transparent = true
                             removedMesh.material.opacity =
@@ -249,7 +273,7 @@ function SceneManager(canvas, assets) {
                     applyFuncOnObjs(
                         assets[removedAssetName],
                         "Light",
-                        removedLight => {
+                        (removedLight) => {
                             removedLight.intensity =
                                 removedLight.normalIntensity *
                                 localTweenedVar.fadeOutPercentage // not very accurate, but may be sufficient (best accuracy would involve stocking initial intensity values for all lights)
@@ -261,15 +285,19 @@ function SceneManager(canvas, assets) {
                     sceneL.remove(assets[removedAssetName])
                     masterScene.remove(assets[removedAssetName])
 
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "",
-                        removedStuff => {
-                            if (removedStuff.dispose) removedStuff.dispose()
-                        }
-                    )
+                    applyFuncOnObjs(assets[removedAssetName], "", (removedStuff) => {
+                        if (removedStuff.dispose) removedStuff.dispose()
+                    })
                 }
             })
+        })
+    }
+
+    function tweenFog(newFog) {
+        TweenLite.to(masterScene.fog, newFog.time, {
+            density: newFog.density,
+            delay: newFog.delay,
+            ease: getEasing(...newFog.easing)
         })
     }
 
@@ -288,6 +316,9 @@ function SceneManager(canvas, assets) {
         if (step.removedThreeGroupsDsk) {
             fadeOut(step.removedThreeGroupsDsk)
         }
+        if (step.fog) {
+            tweenFog(step.fog)
+        }
 
         if (step.cameraTransition) {
             if (step.cameraTransition.camPos) {
@@ -297,10 +328,7 @@ function SceneManager(canvas, assets) {
             if (step.cameraTransition.camTarget) {
                 animateCamTarget(step.cameraTransition.camTarget)
             }
-            if (
-                !step.cameraTransition.camPos &&
-                !step.cameraTransition.camTarget
-            ) {
+            if (!step.cameraTransition.camPos && !step.cameraTransition.camTarget) {
                 console.error("step.cameraTransition is not as expected")
             }
         }
@@ -362,6 +390,18 @@ function SceneManager(canvas, assets) {
         // )
         customRenderer.render([sceneL, sceneR], camera)
         // TODO: customRenderer.render([sceneL, sceneR], camera)
+    }
+
+    function initGui() {
+        // Gui
+        const gui = new dat.GUI()
+
+        gui.add(masterScene.fog, "density")
+            .min(0)
+            .max(0.035)
+            .name("Fog density")
+
+        gui.close()
     }
 
     return {

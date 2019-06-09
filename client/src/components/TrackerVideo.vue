@@ -45,5 +45,7 @@ export default {
 <style lang="scss" scoped>
 video {
     transform: scaleX(-1);
+    width: 40vw;
+    height: auto;
 }
 </style>
