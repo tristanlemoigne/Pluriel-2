@@ -320,7 +320,7 @@ function Trial1(scene, camera, assets) {
             cyanSpotLight.position.lerp(cyanPosToLerp, easingFactor)
             // TODO: the use of camera.position makes no sense here
             cyanSpotLight.target.position.z = camera.position.length()
-            cyanSpotLight.intensity = 1 + camera.position.length() * 2
+            cyanSpotLight.intensity = 1 + camera.target.position.length() * 2
             cyanSpotLightHelper.update()
 
             if (mobileQuaternions.cyan) {
@@ -341,7 +341,7 @@ function Trial1(scene, camera, assets) {
             pinkSpotLight.position.lerp(pinkPosToLerp, easingFactor)
             // TODO: the use of camera.position makes no sense here
             pinkSpotLight.target.position.z = camera.position.length()
-            pinkSpotLight.intensity = 1 + camera.position.length() * 2
+            pinkSpotLight.intensity = 1 + camera.target.position.length() * 2
             pinkSpotLightHelper.update()
 
             if (mobileQuaternions.pink) {
