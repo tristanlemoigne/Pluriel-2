@@ -65,18 +65,60 @@ function SceneManager(canvas, assets) {
 
         camera = CameraGroup()
         camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
-        const initialTarget = assets.camTargetPoints.children.find((Object3D) =>
+        const initialTarget = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes("Target00")
         )
         camera.target.position.copy(initialTarget.position)
         camera.lookAt(initialTarget.position)
 
+        let camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
+            camera.quaternion
+        )
+        const testSphere = new THREE.Mesh(
+            new THREE.IcosahedronBufferGeometry(1.5, 2),
+            // new THREE.MeshBasicMaterial({ color: 0xffff00 })
+            new THREE.ShaderMaterial({
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                side: THREE.DoubleSide,
+                uniforms: {
+                    glowColor: { value: [1, 1, 0] },
+                    camDir: { value: [camDir.x, camDir.y, camDir.z] }
+                },
+                vertexShader: `
+                uniform vec3 camDir;
+                //uniform float c;
+                //uniform float p;
+                varying float intensity;
+                void main()
+                {
+                    vec3 vNormal = normalize( normalMatrix * normal );
+                    vec3 vNormel = normalize( normalMatrix * camDir );
+                    intensity = pow( 0.1 - dot(vNormal, vNormel), 3. );
+
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                }
+                `,
+                fragmentShader: `
+                uniform vec3 glowColor;
+                varying float intensity;
+                void main()
+                {
+                    vec3 glow = glowColor * intensity;
+                    gl_FragColor = vec4( glow, length(glow) );
+                }
+                `
+            })
+        )
+        testSphere.position.z = 5
+        masterScene.add(testSphere)
+
         masterScene.add(assets.nuages)
         masterScene.add(assets.nuagesLights)
 
-        Object.keys(assets).map((assetName) => {
+        Object.keys(assets).map(assetName => {
             setTimeout(() => {
-                applyFuncOnObjs(assets[assetName], "Light", (light) => {
+                applyFuncOnObjs(assets[assetName], "Light", light => {
                     light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
                     light.intensity *= 1
                 })
@@ -124,10 +166,10 @@ function SceneManager(canvas, assets) {
         window.addEventListener("resize", onWindowResize)
         onWindowResize()
 
-        socket.on("dispatch cyan quaternion", (Quaternion) => {
+        socket.on("dispatch cyan quaternion", Quaternion => {
             mobileQuaternions.cyan = Quaternion
         })
-        socket.on("dispatch pink quaternion", (Quaternion) => {
+        socket.on("dispatch pink quaternion", Quaternion => {
             mobileQuaternions.pink = Quaternion
         })
     }
@@ -156,7 +198,7 @@ function SceneManager(canvas, assets) {
 
     function animateCamOnPath({ path, delay, time, easing }) {
         // TODO: use "easing" values from experienceSteps
-        const cameraPathGeometry = assets.camPaths.children.find((child) => {
+        const cameraPathGeometry = assets.camPaths.children.find(child => {
             return child.name.includes(path) // must be something like NurbsPath00 in the blender file
         }).geometry
 
@@ -177,7 +219,7 @@ function SceneManager(canvas, assets) {
 
     function animateCamTarget({ point: targetName, delay, time, easing }) {
         // TODO: use "easing" values from experienceSteps
-        const nextTargetPos = assets.camTargetPoints.children.find((Object3D) =>
+        const nextTargetPos = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes(targetName)
         ).position
 
@@ -205,7 +247,7 @@ function SceneManager(canvas, assets) {
                 console.error(`Can't add "${addedAssetName}", asset not found`)
             }
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
-            applyFuncOnObjs(assets[addedAssetName], "Light", (light) => {
+            applyFuncOnObjs(assets[addedAssetName], "Light", light => {
                 TweenLite.fromTo(
                     light,
                     time,
@@ -218,7 +260,7 @@ function SceneManager(canvas, assets) {
                     }
                 )
             })
-            applyFuncOnObjs(assets[addedAssetName], "Mesh", (addedMesh) => {
+            applyFuncOnObjs(assets[addedAssetName], "Mesh", addedMesh => {
                 addedMesh.material.side = THREE.FrontSide
                 // addedMesh.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
                 addedMesh.material.transparent = true
@@ -241,9 +283,14 @@ function SceneManager(canvas, assets) {
                 // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
                 delay: delay + 0.2,
                 onUpdate: () => {
-                    applyFuncOnObjs(assets[addedAssetName], "Mesh", (addedMesh) => {
-                        addedMesh.material.opacity = localTweenedVar.fadeInPercentage
-                    })
+                    applyFuncOnObjs(
+                        assets[addedAssetName],
+                        "Mesh",
+                        addedMesh => {
+                            addedMesh.material.opacity =
+                                localTweenedVar.fadeInPercentage
+                        }
+                    )
                 }
             })
         })
@@ -254,7 +301,9 @@ function SceneManager(canvas, assets) {
             let localTweenedVar = { fadeOutPercentage: 1 } // 1 -> 0
 
             if (!assets[removedAssetName]) {
-                console.error(`Can't remove "${removedAssetName}", asset not found`)
+                console.error(
+                    `Can't remove "${removedAssetName}", asset not found`
+                )
             }
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
@@ -263,7 +312,7 @@ function SceneManager(canvas, assets) {
                     applyFuncOnObjs(
                         assets[removedAssetName],
                         "Mesh",
-                        (removedMesh) => {
+                        removedMesh => {
                             removedMesh.material.side = THREE.FrontSide
                             removedMesh.material.transparent = true
                             removedMesh.material.opacity =
@@ -273,7 +322,7 @@ function SceneManager(canvas, assets) {
                     applyFuncOnObjs(
                         assets[removedAssetName],
                         "Light",
-                        (removedLight) => {
+                        removedLight => {
                             removedLight.intensity =
                                 removedLight.normalIntensity *
                                 localTweenedVar.fadeOutPercentage // not very accurate, but may be sufficient (best accuracy would involve stocking initial intensity values for all lights)
@@ -285,9 +334,13 @@ function SceneManager(canvas, assets) {
                     sceneL.remove(assets[removedAssetName])
                     masterScene.remove(assets[removedAssetName])
 
-                    applyFuncOnObjs(assets[removedAssetName], "", (removedStuff) => {
-                        if (removedStuff.dispose) removedStuff.dispose()
-                    })
+                    applyFuncOnObjs(
+                        assets[removedAssetName],
+                        "",
+                        removedStuff => {
+                            if (removedStuff.dispose) removedStuff.dispose()
+                        }
+                    )
                 }
             })
         })
@@ -328,7 +381,10 @@ function SceneManager(canvas, assets) {
             if (step.cameraTransition.camTarget) {
                 animateCamTarget(step.cameraTransition.camTarget)
             }
-            if (!step.cameraTransition.camPos && !step.cameraTransition.camTarget) {
+            if (
+                !step.cameraTransition.camPos &&
+                !step.cameraTransition.camTarget
+            ) {
                 console.error("step.cameraTransition is not as expected")
             }
         }
