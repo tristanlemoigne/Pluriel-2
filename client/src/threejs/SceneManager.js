@@ -33,6 +33,8 @@ function SceneManager(canvas, assets) {
     let currentSceneEntity, sceneEntities
     let canvasAngle = firstStep.canvasAngle
 
+    let glowMaterial
+
     let currentCameraPath = undefined
     let isMovingCamera = false
     let globalTweenedVars = {
@@ -74,44 +76,65 @@ function SceneManager(canvas, assets) {
         let camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
             camera.quaternion
         )
+        glowMaterial = new THREE.ShaderMaterial({
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            side: THREE.DoubleSide,
+            depthTest: true,
+            depthWrite: true,
+            uniforms: {
+                glowColor: { value: [1, 1, 0] },
+                camDir: { value: [camDir.x, camDir.y, camDir.z] }
+            },
+            vertexShader: `
+            uniform vec3 camDir;
+            //uniform float c;
+            //uniform float p;
+            varying float intensity;
+            void main()
+            {
+                vec3 vNormal = normalize( normalMatrix * normal );
+                vec3 vNormel = normalize( normalMatrix * camDir );
+                intensity = pow( 0.01 - dot(vNormal, vNormel), 3. );
+
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            }
+            `,
+            fragmentShader: `
+            uniform vec3 glowColor;
+            varying float intensity;
+            void main()
+            {
+                vec3 glow = glowColor * intensity;
+                gl_FragColor = vec4( glow, length(glow) );
+            }
+            `
+        })
         const testSphere = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(1.5, 2),
             // new THREE.MeshBasicMaterial({ color: 0xffff00 })
-            new THREE.ShaderMaterial({
-                blending: THREE.AdditiveBlending,
-                transparent: true,
-                side: THREE.DoubleSide,
-                uniforms: {
-                    glowColor: { value: [1, 1, 0] },
-                    camDir: { value: [camDir.x, camDir.y, camDir.z] }
-                },
-                vertexShader: `
-                uniform vec3 camDir;
-                //uniform float c;
-                //uniform float p;
-                varying float intensity;
-                void main()
-                {
-                    vec3 vNormal = normalize( normalMatrix * normal );
-                    vec3 vNormel = normalize( normalMatrix * camDir );
-                    intensity = pow( 0.1 - dot(vNormal, vNormel), 3. );
-
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-                }
-                `,
-                fragmentShader: `
-                uniform vec3 glowColor;
-                varying float intensity;
-                void main()
-                {
-                    vec3 glow = glowColor * intensity;
-                    gl_FragColor = vec4( glow, length(glow) );
-                }
-                `
-            })
+            glowMaterial
         )
         testSphere.position.z = 5
         masterScene.add(testSphere)
+        let testSphere2 = testSphere.clone()
+        testSphere2.position.x += 1.7
+        testSphere2.scale.multiplyScalar(0.05)
+        masterScene.add(testSphere2)
+        let testSphere3 = testSphere.clone()
+        testSphere3.position.x -= 2
+        testSphere3.scale.multiplyScalar(1.5)
+        masterScene.add(testSphere3)
+
+        // Set glow material
+        console.log(assets.islands)
+
+        assets.islands.traverse(child => {
+            if (child.name.includes("Glow")) {
+                console.log(child)
+                child.material = glowMaterial
+            }
+        })
 
         masterScene.add(assets.nuages)
         masterScene.add(assets.nuagesLights)
@@ -119,8 +142,8 @@ function SceneManager(canvas, assets) {
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
                 applyFuncOnObjs(assets[assetName], "Light", light => {
+                    light.intensity *= 0.1
                     light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
-                    light.intensity *= 1
                 })
             }, 0)
         })
@@ -402,6 +425,10 @@ function SceneManager(canvas, assets) {
         updateTime()
 
         if (isMovingCamera) {
+            const camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
+                camera.quaternion
+            )
+            glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
                 currentCameraPath.getPointAt(globalTweenedVars.camPosPercentage)
             ) // 0 -> 1

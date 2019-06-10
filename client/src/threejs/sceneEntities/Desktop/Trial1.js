@@ -1,5 +1,9 @@
 import * as THREE from "three"
-import { visibleHeightAtZDepth, visibleWidthAtZDepth } from "../../helpers"
+import {
+    visibleHeightAtZDepth,
+    visibleWidthAtZDepth,
+    applyFuncOnObjs
+} from "../../helpers"
 import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
@@ -60,15 +64,15 @@ function Trial1(scene, camera, assets) {
         scene.add(axesHelper)
 
         // Get tour base
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
         // Get all holes
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("HoleFill")) holesArr.push(child)
         })
-        holesArr.forEach((hole) => {
+        holesArr.forEach(hole => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -222,7 +226,9 @@ function Trial1(scene, camera, assets) {
                 .normalize()
 
             spotLightRaycaster.set(spotPos, raycastDir)
-            const intersects = spotLightRaycaster.intersectObjects(baseTour.children)
+            const intersects = spotLightRaycaster.intersectObjects(
+                baseTour.children
+            )
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -299,10 +305,11 @@ function Trial1(scene, camera, assets) {
     function checkVictoriousPlayer() {
         const nbTotalHoles = holesArr.length
         const nbFilledHoles =
-            nbTotalHoles - holesArr.filter((hole) => hole.winner === "None").length
-        const nbWhite = holesArr.filter((hole) => hole.winner === "White").length
-        const nbCyan = holesArr.filter((hole) => hole.winner === "Cyan").length
-        const nbPink = holesArr.filter((hole) => hole.winner === "Pink").length
+            nbTotalHoles -
+            holesArr.filter(hole => hole.winner === "None").length
+        const nbWhite = holesArr.filter(hole => hole.winner === "White").length
+        const nbCyan = holesArr.filter(hole => hole.winner === "Cyan").length
+        const nbPink = holesArr.filter(hole => hole.winner === "Pink").length
 
         if (nbFilledHoles > nbTotalHoles / 2) {
             // Check white
@@ -388,7 +395,7 @@ function Trial1(scene, camera, assets) {
         // Gui
         const gui = new dat.GUI()
 
-        gui.add(debug, "video").onChange((boolean) => {
+        gui.add(debug, "video").onChange(boolean => {
             if (boolean) {
                 video.style.opacity = 1
             } else {

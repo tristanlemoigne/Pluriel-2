@@ -28,9 +28,9 @@ function applyFuncOnObjs(group, nameOfObj, callback) {
         callback(group)
     }
     group.children.map(child => {
-        if (child.constructor.name.includes(nameOfObj)) {
-            callback(child)
-        }
+        // if (child.constructor.name.includes(nameOfObj)) {
+        //     callback(child)
+        // }
         if (child.children.length > 0) {
             applyFuncOnObjs(child, nameOfObj, callback)
         }
