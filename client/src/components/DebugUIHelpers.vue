@@ -15,7 +15,7 @@
             class="debugButton"
             v-if="isDebugMode"
             @click="setRoomState({currentStep: {name:'global_intro'}})"
-        >TRIAL1 STEP</button>
+        >global_intro</button>
 
         <button
             class="debugButton"
@@ -83,7 +83,7 @@ export default {
 
     .debugButton {
         pointer-events: auto;
-        margin-right: 10px;
+        margin-right: 22px;
         color: #0f0;
         background: #000;
         padding: 10px;
