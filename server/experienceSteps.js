@@ -6,7 +6,12 @@ module.exports = [
     {
         name: "home",
         hasMobileThreeScene: true, // TODO: remove this and use added/removedThreeGroupsMob instead in SceneManagerMob
-        fog: { delay: 0, time: 0, density: 0.008, easing: ["Power1", "easeInOut"] },
+        fog: {
+            delay: 0,
+            time: 0,
+            density: 0.008,
+            easing: ["Power1", "easeInOut"]
+        },
         // addedThreeGroupsDsk: [
         //     // TODO: delay and time times are not used yet
         //     { asset: "nuages", delay: 0, time: 0 },
@@ -93,7 +98,12 @@ module.exports = [
             }
         },
         canvasAngle: toRadians(0),
-        fog: { delay: 4, time: 6, density: 0.006, easing: ["Power1", "easeInOut"] }
+        fog: {
+            delay: 4,
+            time: 6,
+            density: 0.006,
+            easing: ["Power1", "easeInOut"]
+        }
     },
 
     {
@@ -113,7 +123,12 @@ module.exports = [
                 easing: ["Power3", "easeInOut"]
             }
         },
-        fog: { delay: 1, time: 10, density: 0.016, easing: ["Power1", "easeInOut"] }
+        fog: {
+            delay: 1,
+            time: 10,
+            density: 0.016,
+            easing: ["Power1", "easeInOut"]
+        }
     },
 
     {
@@ -135,18 +150,35 @@ module.exports = [
     },
 
     {
-        name: "trial_1_game",
+        name: "trial_1_game_1",
         cameraTransition: {
             camPos: {
                 path: "NurbsPath03",
                 delay: 0,
-                time: 32,
+                time: 18,
                 easing: ["Sine", "easeInOut"]
-            }, // this camPath is fucked up (maybe because double spiral, not good for CatmullCurve function)
+            },
             camTarget: {
                 point: "Target04",
                 delay: 0,
-                time: 25,
+                time: 18,
+                easing: ["Sine", "easeInOut"]
+            }
+        }
+    },
+    {
+        name: "trial_1_game_2",
+        cameraTransition: {
+            camPos: {
+                path: "NurbsPath04",
+                delay: 0,
+                time: 32,
+                easing: ["Sine", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target05",
+                delay: 0,
+                time: 28,
                 easing: ["Sine", "easeInOut"]
             }
         }
@@ -156,10 +188,10 @@ module.exports = [
         name: "trial_1_end",
         cameraTransition: {
             camTarget: {
-                point: "Target05",
+                point: "Target06",
                 delay: 0,
                 time: 2,
-                easing: ["Power3", "easeInOut"]
+                easing: ["Power2", "easeInOut"]
             }
         }
     },
@@ -168,7 +200,7 @@ module.exports = [
         name: "global_end",
         cameraTransition: {
             camPos: {
-                path: "NurbsPath04",
+                path: "NurbsPath05",
                 delay: 0,
                 time: 8,
                 easing: ["Power3", "easeInOut"]
@@ -180,6 +212,11 @@ module.exports = [
                 easing: ["Power3", "easeInOut"]
             }
         },
-        fog: { delay: 0, time: 8, density: 0.006, easing: ["Power3", "easeInOut"] }
+        fog: {
+            delay: 0,
+            time: 8,
+            density: 0.006,
+            easing: ["Power3", "easeInOut"]
+        }
     }
 ]

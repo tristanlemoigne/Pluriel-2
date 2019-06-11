@@ -1,6 +1,6 @@
 import socket from "../socket"
 import * as THREE from "three"
-import { TweenLite, Sine, Power1, Power2, Power3 } from "gsap"
+import { TweenLite, Power0, Sine, Power1, Power2, Power3 } from "gsap"
 
 import * as dat from "dat.gui"
 
@@ -11,7 +11,10 @@ import CameraGroup from "./CameraGroup"
 import HomeDskSceneEntity from "./sceneEntities/Desktop/HomeDskSceneEntity"
 import Trial1 from "./sceneEntities/Desktop/Trial1"
 import CanvasRotator from "./CanvasRotator"
-import { curveFromGeometry, applyFuncOnObjs } from "./helpers/index.js"
+import {
+    catmullRomCurveFromGeometry,
+    applyFuncOnObjs
+} from "./helpers/index.js"
 import { threeBus } from "../main"
 const firstStep = require("../../../server/experienceSteps.js")[0]
 
@@ -36,6 +39,7 @@ function SceneManager(canvas, assets) {
     let glowMaterial
 
     let currentCameraPath = undefined
+    let currentCameraPathSpacedPoints = []
     let isMovingCamera = false
     let globalTweenedVars = {
         camPosPercentage: 0, // 0 -> 1
@@ -77,14 +81,15 @@ function SceneManager(canvas, assets) {
             camera.quaternion
         )
         glowMaterial = new THREE.ShaderMaterial({
-            blending: THREE.AdditiveBlending,
+            // blending: THREE.AdditiveBlending,
             transparent: true,
-            side: THREE.DoubleSide,
+            side: THREE.FrontSide,
             depthTest: true,
             depthWrite: true,
             uniforms: {
-                glowColor: { value: [1, 1, 0] },
-                camDir: { value: [camDir.x, camDir.y, camDir.z] }
+                glowColor: { value: [0, 0.5, 1] },
+                camDir: { value: [camDir.x, camDir.y, camDir.z] },
+                luminosity: { value: 0.45 }
             },
             vertexShader: `
             uniform vec3 camDir;
@@ -95,36 +100,34 @@ function SceneManager(canvas, assets) {
             {
                 vec3 vNormal = normalize( normalMatrix * normal );
                 vec3 vNormel = normalize( normalMatrix * camDir );
-                intensity = pow( 0.01 - dot(vNormal, vNormel), 3. );
+                intensity = pow( 0.08 - dot(vNormal, vNormel), 6. ); // For FrontSide
+                //intensity = pow( 0.7 - dot(vNormal, vNormel), 3.0 ); // For BackSide
 
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
             `,
             fragmentShader: `
             uniform vec3 glowColor;
+            uniform float luminosity;
             varying float intensity;
             void main()
             {
                 vec3 glow = glowColor * intensity;
-                gl_FragColor = vec4( glow, length(glow) );
+                gl_FragColor = vec4( glowColor*0.9 + glow*0.8, clamp(length(glow) * luminosity, 0., .9 * luminosity) );
             }
             `
         })
         const testSphere = new THREE.Mesh(
-            new THREE.IcosahedronBufferGeometry(1.5, 2),
+            new THREE.IcosahedronBufferGeometry(1.5, 3),
             // new THREE.MeshBasicMaterial({ color: 0xffff00 })
             glowMaterial
         )
         testSphere.position.z = 5
-        masterScene.add(testSphere)
+        sceneL.add(testSphere) // TODO: add to assets.cyanStone instead (and position it correctly)
         let testSphere2 = testSphere.clone()
-        testSphere2.position.x += 1.7
-        testSphere2.scale.multiplyScalar(0.05)
-        masterScene.add(testSphere2)
-        let testSphere3 = testSphere.clone()
-        testSphere3.position.x -= 2
-        testSphere3.scale.multiplyScalar(1.5)
-        masterScene.add(testSphere3)
+        testSphere2.material = testSphere2.material.clone()
+        testSphere2.material.uniforms.glowColor.value = [1, 0, 0.5]
+        sceneR.add(testSphere2) // TODO: add to assets.pinkStone instead (and position it correctly)
 
         // Set glow material
         console.log(assets.islands)
@@ -200,6 +203,9 @@ function SceneManager(canvas, assets) {
     function getEasing(powerStr, inOrOutStr) {
         let easingReturned
         switch (powerStr) {
+            case "Power0":
+                easingReturned = Power0[inOrOutStr]
+                break
             case "Sine":
                 easingReturned = Sine[inOrOutStr]
                 break
@@ -220,13 +226,16 @@ function SceneManager(canvas, assets) {
     }
 
     function animateCamOnPath({ path, delay, time, easing }) {
-        // TODO: use "easing" values from experienceSteps
         const cameraPathGeometry = assets.camPaths.children.find(child => {
             return child.name.includes(path) // must be something like NurbsPath00 in the blender file
         }).geometry
 
-        currentCameraPath = curveFromGeometry(cameraPathGeometry)
-        // console.log(currentCameraPath)
+        currentCameraPath = catmullRomCurveFromGeometry(cameraPathGeometry)
+        console.log(currentCameraPath.getLength(), time)
+        currentCameraPath.arcLengthDivisions = time * time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
+        // currentCameraPathSpacedPoints = currentCameraPath.getSpacedPoints(
+        //     time * 60
+        // )
 
         TweenLite.fromTo(
             globalTweenedVars,
@@ -430,6 +439,13 @@ function SceneManager(canvas, assets) {
             )
             glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
+                // currentCameraPathSpacedPoints[
+                //     Math.floor(
+                //         globalTweenedVars.camPosPercentage *
+                //             currentCameraPathSpacedPoints.length
+                //     )
+                // ]
+                // currentCameraPath.getPoint(globalTweenedVars.camPosPercentage)
                 currentCameraPath.getPointAt(globalTweenedVars.camPosPercentage)
             ) // 0 -> 1
             if (globalTweenedVars.camPosPercentage >= 0.9999) {

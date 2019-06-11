@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-function curveFromGeometry(geometry) {
+function catmullRomCurveFromGeometry(geometry) {
     // console.log(rawCamPathGeometry)
     const rawXYZarr = geometry.attributes.position.array
     // const withoutDuplicatesXYZarr = [...new Set(rawXYZarr)] // this can break stuff (changing order of points ???)
@@ -14,6 +14,7 @@ function curveFromGeometry(geometry) {
         )
     }
     return new THREE.CatmullRomCurve3(camPathPoints, false)
+    // return new THREE.CatmullRomCurve3(camPathPoints, false, "chordal", 0.01)
 }
 
 /**
@@ -54,7 +55,7 @@ const visibleWidthAtZDepth = (depth, camera) => {
 }
 
 export {
-    curveFromGeometry,
+    catmullRomCurveFromGeometry,
     applyFuncOnObjs,
     visibleHeightAtZDepth,
     visibleWidthAtZDepth
