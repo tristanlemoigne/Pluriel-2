@@ -18,9 +18,14 @@ function Trial1(scene, camera, assets) {
         video = document.getElementsByTagName("video")[0]
     }, 0)
 
-    let cyanSpotLight, pinkSpotLight, cyanSpotLightHelper, pinkSpotLightHelper
+    let cyanSpotLight,
+        pinkSpotLight,
+        cyanSpotLightHelper,
+        rotationHelper,
+        pinkSpotLightHelper
 
-    const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
+    const neutralQuaternion = new THREE.Quaternion() // same as (0, 0, 0, 1)
+    const neutralCamVector = new THREE.Vector3(0, 0, -1)
     let cameraTargetDist
 
     let cyanTargetPosToLerp = new THREE.Vector3()
@@ -44,13 +49,14 @@ function Trial1(scene, camera, assets) {
         canvas: false
     }
 
-    const easingFactor = 0.28
+    const easingFactor = 0.15
 
     // Conditions de victoire (seconds)
     const defaultScaleDuration = 2.5 // 5
     const fusionScaleDuration = 1 // 2
 
-    const maxDistanceFromHole = 0.65
+    // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
+    const maxDistanceFromHole = 0.7 // 0.65 convient pour les plus petits trous
 
     // If a color scaled the shape more than this value, it win the hole
     // Both win between (1 - 0.7) and 0.7
@@ -101,7 +107,7 @@ function Trial1(scene, camera, assets) {
         const spotLightParams = {
             intensity: 50,
             distance: 0,
-            angle: Math.PI / 60,
+            angle: Math.PI / 65,
             penumbra: 0.9
         }
         // const spotTargetPos = new THREE.Vector3()
@@ -118,15 +124,19 @@ function Trial1(scene, camera, assets) {
 
         // Cyan target
         cyanSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.2, 8, 8)
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 })
+        var targetGeometry = new THREE.SphereGeometry(0.1, 16, 16)
+        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         cyanSpotLight.target.add(targetSphere)
         cyanSpotLight.add(cyanSpotLight.target)
         camera.add(cyanSpotLight)
 
+        rotationHelper = targetSphere.clone()
+        rotationHelper.material.wireframe = true
+        // cyanSpotLight.add(rotationHelper)
+
         cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
-        cyanSpotLightHelper.visible = true
+        cyanSpotLightHelper.visible = false
         scene.add(cyanSpotLightHelper)
 
         // PINK
@@ -134,20 +144,21 @@ function Trial1(scene, camera, assets) {
             colors.pink,
             ...Object.values(spotLightParams)
         )
+        pinkSpotLight.position.set(0, 0, 0)
         pinkSpotLight.lastTrackedBlob = null
         pinkSpotLight.isTracking = false
 
         // Pink target
         pinkSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(1, 8, 8) // helper for debug
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8) // helper for debug
+        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         pinkSpotLight.target.add(targetSphere)
         pinkSpotLight.add(pinkSpotLight.target)
         camera.add(pinkSpotLight)
 
         pinkSpotLightHelper = new THREE.SpotLightHelper(pinkSpotLight)
-        pinkSpotLightHelper.visible = true
+        pinkSpotLightHelper.visible = false
         scene.add(pinkSpotLightHelper)
     }
 
@@ -178,8 +189,7 @@ function Trial1(scene, camera, assets) {
             const projectedTargetPosFromCyanBlob = projectedPosFromBlob(
                 cyanSpotLight.lastTrackedBlob,
                 cameraTargetDist,
-                camera,
-                true
+                camera
             )
             if (projectedTargetPosFromCyanBlob) {
                 cyanTargetPosToLerp.copy(projectedTargetPosFromCyanBlob)
@@ -189,8 +199,7 @@ function Trial1(scene, camera, assets) {
             const projectedTargetPosFromPinkBlob = projectedPosFromBlob(
                 pinkSpotLight.lastTrackedBlob,
                 cameraTargetDist,
-                camera,
-                true
+                camera
             )
             if (projectedTargetPosFromPinkBlob) {
                 pinkTargetPosToLerp.copy(projectedTargetPosFromPinkBlob)
@@ -204,44 +213,39 @@ function Trial1(scene, camera, assets) {
      * @param {object} blob
      * @param {number} distance
      * @param {THREE.Camera} camera
-     * @param {boolean} reversedY
      * @returns {THREE.Vector3}
      */
-    function projectedPosFromBlob(blob, distance, camera, reversedY) {
+    function projectedPosFromBlob(blob, distance, camera) {
         // function projectedPosFromBlob(blob) {
         if (!blob) {
             console.warn("blob is falsy")
             return
         }
         let projectedTargPos
-        const reverseVal = reversedY === true ? -1 : 1
         const normalizedBlob = {
             // should be between -1 -> 1
             x: reMap(blob.x, 0, video.offsetWidth, 1, -1),
-            y: reMap(blob.y, 0, video.offsetHeight, 1, -1) * reverseVal
+            y: reMap(blob.y, 0, video.offsetHeight, 1, -1)
         }
 
         projectedTargPos = new THREE.Vector3(
-            normalizedBlob.x * visibleWidthAtZDepth(-distance, camera) * 0.5,
-            normalizedBlob.y * visibleHeightAtZDepth(-distance, camera) * 0.5,
+            normalizedBlob.x * visibleWidthAtZDepth(distance, camera) * 0.5,
+            normalizedBlob.y * visibleHeightAtZDepth(distance, camera) * 0.5,
             // 10 - cameraTargetDist * 0.3 // negative => in front of camera, positive => behind
             -distance
         )
-        console.log("visibleH:", visibleHeightAtZDepth(-distance, camera))
-        console.log("cameraTargetDist:", cameraTargetDist)
         return projectedTargPos
     }
 
     /* ----------------------- RAYCAST ----------------------- */
     function raycastedPosFromSpot(spot) {
         if (spot) {
-            // let spotPos = new THREE.Vector3()
-            // spot.getWorldPosition(spotPos)
-            const spotPos = camera.position
+            let spotPos = new THREE.Vector3()
+            spot.getWorldPosition(spotPos)
+            // const spotPos = camera.position // /!\ not the same thing (?!) => doesnt work
 
             let spotTargetPos = new THREE.Vector3()
             spot.target.getWorldPosition(spotTargetPos)
-
             const raycastDir = new THREE.Vector3()
                 .copy(spotTargetPos)
                 .sub(spotPos)
@@ -343,7 +347,7 @@ function Trial1(scene, camera, assets) {
                 } else if (nbPink > nbCyan) {
                     console.log("Tour color is pink")
                 } else {
-                    console.log("Restart bitch (vous vous êtes pas départager")
+                    console.log("Restart bitch (vous n'êtes pas départagés)")
                 }
             }
         } else {
@@ -360,51 +364,70 @@ function Trial1(scene, camera, assets) {
             .length()
 
         if (cyanSpotLight.lastTrackedBlob) {
-            cyanSpotLight.target.position.lerp(
-                cyanTargetPosToLerp,
-                easingFactor
+            // TODO: do some LERP or SLERP here
+            const targetQuat = new THREE.Quaternion().setFromUnitVectors(
+                neutralCamVector,
+                cyanTargetPosToLerp.normalize()
             )
-            cyanSpotLight.target.position.z = cameraTargetDist * 0.9
-            cyanSpotLight.intensity = 1 + cameraTargetDist * 5
-            cyanSpotLightHelper.update()
+            cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
+            cyanSpotLight.target.position.z = -cameraTargetDist
+
+            cyanSpotLight.intensity = 10 + cameraTargetDist * 5
+
+            rotationHelper.scale.set(
+                cameraTargetDist * 2,
+                cameraTargetDist * 2,
+                cameraTargetDist * 2
+            )
 
             if (mobileQuaternions.cyan) {
-                cyanSpotLight.quaternion
-                    .set(
-                        mobileQuaternions.cyan._x,
-                        mobileQuaternions.cyan._y,
-                        mobileQuaternions.cyan._z,
-                        mobileQuaternions.cyan._w
-                    )
-                    .slerp(neutralQuaternion, 0.95)
-                // slerp value should be around 0.95 -> 0.85 (closer to 0, the spotlight feels easier to rotate)
-                // TODO: maybe use camera.target.position.length here
-            } else {
-                cyanSpotLight.quaternion.copy(neutralQuaternion)
+                // TODO: remove dummy stuff (optimize)
+                const dummyVec = new THREE.Vector3(0, 0, 1)
+                const mobileQuat = new THREE.Quaternion(
+                    mobileQuaternions.cyan._x,
+                    mobileQuaternions.cyan._y,
+                    mobileQuaternions.cyan._z,
+                    mobileQuaternions.cyan._w
+                )
+                dummyVec.applyQuaternion(mobileQuat)
+                const dummyQuat = new THREE.Quaternion().setFromUnitVectors(
+                    cyanSpotLight.target.position,
+                    dummyVec
+                )
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.12)
+                // slerp value should be around 0.08 -> 0.25 (closer to 0, the spotlight feels harder to rotate)
             }
+            cyanSpotLightHelper.update()
         }
 
         if (pinkSpotLight.lastTrackedBlob) {
-            pinkSpotLight.position.lerp(pinkSpotPosToLerp, easingFactor)
-            // TODO: the use of camera.position makes no sense here
-            pinkSpotLight.target.position.z = cameraTargetDist
-            pinkSpotLight.intensity = 1 + cameraTargetDist * 2
-            pinkSpotLightHelper.update()
+            // TODO: do some LERP or SLERP here
+            pinkSpotLight.quaternion.setFromUnitVectors(
+                neutralCamVector,
+                pinkTargetPosToLerp.clone().normalize()
+            )
+            pinkSpotLight.target.position.z = -cameraTargetDist
+
+            pinkSpotLight.intensity = 10 + cameraTargetDist * 10
 
             if (mobileQuaternions.pink) {
-                pinkSpotLight.quaternion
-                    .set(
-                        mobileQuaternions.pink._x,
-                        mobileQuaternions.pink._y,
-                        mobileQuaternions.pink._z,
-                        mobileQuaternions.pink._w
-                    )
-                    .slerp(neutralQuaternion, 0.5)
-                // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
-                // TODO: maybe use camera.target.position.length here
-            } else {
-                pinkSpotLight.quaternion.copy(neutralQuaternion)
+                // TODO: remove dummy stuff (optimize)
+                const dummyVec = new THREE.Vector3(0, 0, 1)
+                const mobileQuat = new THREE.Quaternion(
+                    mobileQuaternions.pink._x,
+                    mobileQuaternions.pink._y,
+                    mobileQuaternions.pink._z,
+                    mobileQuaternions.pink._w
+                )
+                dummyVec.applyQuaternion(mobileQuat)
+                const dummyQuat = new THREE.Quaternion().setFromUnitVectors(
+                    pinkSpotLight.target.position,
+                    dummyVec
+                )
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.12)
+                // slerp value should be around 0.08 -> 0.25 (closer to 0, the spotlight feels harder to rotate)
             }
+            pinkSpotLightHelper.update()
         }
 
         // Fill holes
@@ -430,6 +453,7 @@ function Trial1(scene, camera, assets) {
         const spotLightHelpers = gui.addFolder("Spotlight Helpers")
         spotLightHelpers.add(pinkSpotLightHelper, "visible").name("Pink")
         spotLightHelpers.add(cyanSpotLightHelper, "visible").name("Cyan")
+
         spotLightHelpers.open()
 
         gui.add(camera, "logCamera")

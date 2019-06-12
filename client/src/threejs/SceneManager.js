@@ -145,7 +145,7 @@ function SceneManager(canvas, assets) {
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
                 applyFuncOnObjs(assets[assetName], "Light", light => {
-                    light.intensity *= 0.1
+                    light.intensity *= 0.05
                     light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
                 })
             }, 0)
