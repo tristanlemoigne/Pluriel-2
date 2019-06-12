@@ -4,6 +4,7 @@ import {
     visibleWidthAtZDepth,
     applyFuncOnObjs
 } from "../../helpers"
+import { reMap } from "../../../utils"
 import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
@@ -22,7 +23,9 @@ function Trial1(scene, camera, assets) {
     const neutralQuaternion = new THREE.Quaternion(1, 0, 0, 0)
     let cameraTargetDist
 
-    let cyanPosToLerp, pinkPosToLerp
+    let cyanTargetPosToLerp = new THREE.Vector3()
+    let pinkTargetPosToLerp = new THREE.Vector3()
+
     let baseTour
     let holesArr = []
 
@@ -41,10 +44,10 @@ function Trial1(scene, camera, assets) {
         canvas: false
     }
 
-    const easingFactor = 0.275
+    const easingFactor = 0.28
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2 // 5
+    const defaultScaleDuration = 2.5 // 5
     const fusionScaleDuration = 1 // 2
 
     const maxDistanceFromHole = 0.65
@@ -62,6 +65,7 @@ function Trial1(scene, camera, assets) {
         // Helpers
         const axesHelper = new THREE.AxesHelper(50)
         scene.add(axesHelper)
+        // scene.add(camera.target)
 
         // Get tour base
         assets.islands.traverse(child => {
@@ -98,7 +102,7 @@ function Trial1(scene, camera, assets) {
             intensity: 50,
             distance: 0,
             angle: Math.PI / 60,
-            penumbra: 0.2
+            penumbra: 0.9
         }
         // const spotTargetPos = new THREE.Vector3()
         // const spotLightPos = new THREE.Vector3(0, 0, 0)
@@ -108,6 +112,7 @@ function Trial1(scene, camera, assets) {
             colors.cyan,
             ...Object.values(spotLightParams)
         )
+        cyanSpotLight.position.set(0, 0, 0)
         cyanSpotLight.lastTrackedBlob = null
         cyanSpotLight.isTracking = false
 
@@ -164,58 +169,75 @@ function Trial1(scene, camera, assets) {
     }
 
     function applyLastTrackedDatas() {
+        // cyanSpotLight.target.position =>
+        // cyanTargetPosToLerp.copy(projectedPosFromBlob(cyanSpotLight.lastTrackedBlob, cameraTargetDist, camera, true))
+        // cyanSpotLight.position =>
+        // cyanSpotPosToLerp.copy(projectedPosFromBlob(cyanSpotLight.lastTrackedBlob, cameraTargetDist*0.01, camera, false))
+
         if (cyanSpotLight.lastTrackedBlob) {
-            const projectedPosFromCyanBlob = projectedPosFromBlob(
-                cyanSpotLight.lastTrackedBlob
+            const projectedTargetPosFromCyanBlob = projectedPosFromBlob(
+                cyanSpotLight.lastTrackedBlob,
+                cameraTargetDist,
+                camera,
+                true
             )
-            if (projectedPosFromCyanBlob) {
-                cyanPosToLerp = projectedPosFromCyanBlob
+            if (projectedTargetPosFromCyanBlob) {
+                cyanTargetPosToLerp.copy(projectedTargetPosFromCyanBlob)
             }
         }
         if (pinkSpotLight.lastTrackedBlob) {
-            const projectedPosFromPinkBlob = projectedPosFromBlob(
-                pinkSpotLight.lastTrackedBlob
+            const projectedTargetPosFromPinkBlob = projectedPosFromBlob(
+                pinkSpotLight.lastTrackedBlob,
+                cameraTargetDist,
+                camera,
+                true
             )
-            if (projectedPosFromPinkBlob) {
-                pinkPosToLerp = projectedPosFromPinkBlob
+            if (projectedTargetPosFromPinkBlob) {
+                pinkTargetPosToLerp.copy(projectedTargetPosFromPinkBlob)
             }
         }
     }
 
-    /* ----------------------- RAYCAST ----------------------- */
-    function projectedPosFromBlob(blob) {
+    /* ----------------------- PROJECT BLOB ----------------------- */
+    /**
+     * @function projectedPosFromBlob
+     * @param {object} blob
+     * @param {number} distance
+     * @param {THREE.Camera} camera
+     * @param {boolean} reversedY
+     * @returns {THREE.Vector3}
+     */
+    function projectedPosFromBlob(blob, distance, camera, reversedY) {
+        // function projectedPosFromBlob(blob) {
         if (!blob) {
             console.warn("blob is falsy")
             return
         }
         let projectedTargPos
+        const reverseVal = reversedY === true ? -1 : 1
         const normalizedBlob = {
             // should be between -1 -> 1
-            x: Math.max(Math.min(-(blob.x / video.width) * 2 + 1, 1), -1),
-            y: Math.max(Math.min(-(blob.y / video.height) * 2 + 1, 1), -1)
+            x: reMap(blob.x, 0, video.offsetWidth, 1, -1),
+            y: reMap(blob.y, 0, video.offsetHeight, 1, -1) * reverseVal
         }
 
         projectedTargPos = new THREE.Vector3(
-            ((normalizedBlob.x *
-                (visibleWidthAtZDepth(cameraTargetDist, camera) +
-                    cameraTargetDist)) /
-                2) *
-                0.025,
-            ((normalizedBlob.y *
-                (visibleHeightAtZDepth(cameraTargetDist, camera) +
-                    cameraTargetDist)) /
-                2) *
-                0.025,
-            // 10 - cameraTargetDist * 0.3 // negative = in front of camera, positive = behind
-            -cameraTargetDist * 0.05
+            normalizedBlob.x * visibleWidthAtZDepth(-distance, camera) * 0.5,
+            normalizedBlob.y * visibleHeightAtZDepth(-distance, camera) * 0.5,
+            // 10 - cameraTargetDist * 0.3 // negative => in front of camera, positive => behind
+            -distance
         )
+        console.log("visibleH:", visibleHeightAtZDepth(-distance, camera))
+        console.log("cameraTargetDist:", cameraTargetDist)
         return projectedTargPos
     }
 
+    /* ----------------------- RAYCAST ----------------------- */
     function raycastedPosFromSpot(spot) {
         if (spot) {
-            let spotPos = new THREE.Vector3()
-            spot.getWorldPosition(spotPos)
+            // let spotPos = new THREE.Vector3()
+            // spot.getWorldPosition(spotPos)
+            const spotPos = camera.position
 
             let spotTargetPos = new THREE.Vector3()
             spot.target.getWorldPosition(spotTargetPos)
@@ -338,10 +360,12 @@ function Trial1(scene, camera, assets) {
             .length()
 
         if (cyanSpotLight.lastTrackedBlob) {
-            cyanSpotLight.position.lerp(cyanPosToLerp, easingFactor)
-            // TODO: the use of camera.position makes no sense here
-            cyanSpotLight.target.position.z = cameraTargetDist * 2
-            cyanSpotLight.intensity = 1 + cameraTargetDist * 2
+            cyanSpotLight.target.position.lerp(
+                cyanTargetPosToLerp,
+                easingFactor
+            )
+            cyanSpotLight.target.position.z = cameraTargetDist * 0.9
+            cyanSpotLight.intensity = 1 + cameraTargetDist * 5
             cyanSpotLightHelper.update()
 
             if (mobileQuaternions.cyan) {
@@ -352,8 +376,8 @@ function Trial1(scene, camera, assets) {
                         mobileQuaternions.cyan._z,
                         mobileQuaternions.cyan._w
                     )
-                    .slerp(neutralQuaternion, 0.5)
-                // slerp value should be around 0.7 -> 0.4 (closer to 0, the spotlight feels easier to rotate)
+                    .slerp(neutralQuaternion, 0.95)
+                // slerp value should be around 0.95 -> 0.85 (closer to 0, the spotlight feels easier to rotate)
                 // TODO: maybe use camera.target.position.length here
             } else {
                 cyanSpotLight.quaternion.copy(neutralQuaternion)
@@ -361,9 +385,9 @@ function Trial1(scene, camera, assets) {
         }
 
         if (pinkSpotLight.lastTrackedBlob) {
-            pinkSpotLight.position.lerp(pinkPosToLerp, easingFactor)
+            pinkSpotLight.position.lerp(pinkSpotPosToLerp, easingFactor)
             // TODO: the use of camera.position makes no sense here
-            pinkSpotLight.target.position.z = cameraTargetDist * 2
+            pinkSpotLight.target.position.z = cameraTargetDist
             pinkSpotLight.intensity = 1 + cameraTargetDist * 2
             pinkSpotLightHelper.update()
 
