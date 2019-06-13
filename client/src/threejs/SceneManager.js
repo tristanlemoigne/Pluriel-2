@@ -11,10 +11,8 @@ import CameraGroup from "./CameraGroup"
 import HomeDskSceneEntity from "./sceneEntities/Desktop/HomeDskSceneEntity"
 import Trial1 from "./sceneEntities/Desktop/Trial1"
 import CanvasRotator from "./CanvasRotator"
-import {
-    catmullRomCurveFromGeometry,
-    applyFuncOnObjs
-} from "./helpers/index.js"
+import { reMap } from "../utils"
+import { catmullRomCurveFromGeometry } from "./helpers/index.js"
 import { threeBus } from "../main"
 const firstStep = require("../../../server/experienceSteps.js")[0]
 
