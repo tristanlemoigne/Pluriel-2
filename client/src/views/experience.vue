@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--Desktop stuff -->
-        <div class="desktop" v-bind:class="{ visible: canShowUI }" v-if="!isMobile" >
+        <div class="desktop" v-bind:class="{ visible: canShowUI }" v-if="!isMobile">
             <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
             <button v-if="!isMobile" @click="onFirstStepClick()">
@@ -10,16 +10,13 @@
                 </div>
             </button>
 
-            <p class="textGlow ">
-                Accédez à la 1ère étape grâce à votre téléphone.
-            </p>
+            <p class="textGlow">Accédez à la 1ère étape grâce à votre téléphone.</p>
 
             <div class="stones">
                 <img src="assets/img/icon-stone.png" alt>
                 <img src="assets/img/icon-stone@2x.png" alt>
                 <img src="assets/img/icon-stone.png" alt>
             </div>
-
         </div>
 
         <!-- Mobile stuff -->
@@ -39,8 +36,8 @@
 <script>
 import TrackerVideo from "@/components/TrackerVideo.vue";
 import socket from "@/socket.js";
-import { bus } from "../main"
-import { setTimeout } from 'timers';
+import { bus } from "../main";
+import { setTimeout } from "timers";
 
 export default {
     name: "experience",
@@ -64,11 +61,11 @@ export default {
     },
     methods: {
         setRoomState(stateObj) {
-            bus.$emit("setRoomState", stateObj)
+            bus.$emit("setRoomState", stateObj);
         },
-        onFirstStepClick(){
-            this.setRoomState({currentStep: {name:'NEXT'}})
-            this.canShowUI = false
+        onFirstStepClick() {
+            this.setRoomState({ currentStep: { name: "NEXT" } });
+            this.canShowUI = false;
         }
     },
     mounted() {
@@ -80,11 +77,11 @@ export default {
             this.character = undefined;
         }
 
-        setTimeout(()=>{
-            this.canShowUI = true
-        }, 8000)
+        setTimeout(() => {
+            this.canShowUI = true;
+        }, (this.roomState.currentStep.cameraTransition.camPos.time + this.roomState.currentStep.cameraTransition.camPos.delay) * 1000 - 3000); // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -93,7 +90,7 @@ export default {
 div {
     color: #fff;
 
-    .mobile{
+    .mobile {
         img {
             position: fixed;
             top: 0;
@@ -104,7 +101,7 @@ div {
         }
     }
 
-    .desktop{
+    .desktop {
         position: absolute;
         bottom: 80px;
         left: 50%;
@@ -113,7 +110,7 @@ div {
         opacity: 0;
         transition: opacity 0.5s ease;
 
-        &.visible{
+        &.visible {
             opacity: 1;
         }
 
@@ -164,23 +161,23 @@ div {
             }
         }
 
-        p{
+        p {
             max-width: 280px;
             margin: 0 auto 80px;
         }
 
-        .stones{
+        .stones {
             display: flex;
             // border: solid 1px red;
             // width: 200px;
             align-items: flex-end;
             justify-content: center;
 
-            img{
-                border: solid 8px rgba(227,227,227, 0.1);
+            img {
+                border: solid 8px rgba(227, 227, 227, 0.1);
                 border-radius: 100%;
 
-                &:nth-of-type(2){
+                &:nth-of-type(2) {
                     align-self: flex-start;
                     width: 110px;
                     margin: -50px 30px 0;
@@ -190,5 +187,4 @@ div {
         }
     }
 }
-
 </style>

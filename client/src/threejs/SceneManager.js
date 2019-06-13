@@ -160,6 +160,7 @@ function SceneManager(canvas, assets) {
 
         sceneEntities = {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
+            // global_intro: () => TODO(masterScene, camera, assets),
             trial_1_intro: () => Trial1(masterScene, camera, assets)
         }
         currentSceneEntity = sceneEntities["home"]()
