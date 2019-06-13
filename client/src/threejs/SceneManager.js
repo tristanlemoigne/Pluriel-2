@@ -134,7 +134,6 @@ function SceneManager(canvas, assets) {
 
         assets.islands.traverse(child => {
             if (child.name.includes("Glow")) {
-                console.log(child)
                 child.material = glowMaterial
             }
         })
@@ -144,19 +143,14 @@ function SceneManager(canvas, assets) {
 
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
-                applyFuncOnObjs(assets[assetName], "Light", light => {
-                    light.intensity *= 0.05
-                    light.normalIntensity = light.intensity // stock intensity values (will be tweened from 0)
+                assets[assetName].traverse(child => {
+                    if (child.name.includes("Light")) {
+                        child.intensity *= 0.05
+                        child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
+                    }
                 })
             }, 0)
         })
-
-        // applyFuncOnObjs(assets.nuagesLights, "Light", light => {
-        //     light.intensity *= 2
-        // })
-        // applyFuncOnObjs(assets.islands, "Light", light => {
-        //     light.intensity *= 2
-        // })
 
         sceneEntities = {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
@@ -280,24 +274,42 @@ function SceneManager(canvas, assets) {
                 console.error(`Can't add "${addedAssetName}", asset not found`)
             }
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
-            applyFuncOnObjs(assets[addedAssetName], "Light", light => {
-                TweenLite.fromTo(
-                    light,
-                    time,
-                    {
-                        intensity: 0
-                    },
-                    {
-                        delay: delay,
-                        intensity: light.normalIntensity
+
+            assets[addedAssetName].traverse(child => {
+                if (
+                    child.constructor.name.includes("Light") ||
+                    child.name.includes("Light")
+                ) {
+                    TweenLite.fromTo(
+                        child,
+                        time,
+                        {
+                            intensity: 0
+                        },
+                        {
+                            delay: delay,
+                            intensity: child.normalIntensity
+                            // onUpdate: () => {
+                            //     console.log(child.name, child.intensity)
+                            // }
+                        }
+                    )
+                } else if (child.material) {
+                    /* NOTE: this can be an array!! */
+                    if (child.material.map) {
+                        child.material.map(actualMaterial => {
+                            actualMaterial.side = THREE.FrontSide
+                            // actualMaterial.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                            actualMaterial.transparent = true
+                            actualMaterial.opacity = 0
+                        })
                     }
-                )
-            })
-            applyFuncOnObjs(assets[addedAssetName], "Mesh", addedMesh => {
-                addedMesh.material.side = THREE.FrontSide
-                // addedMesh.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
-                addedMesh.material.transparent = true
-                addedMesh.material.opacity = 0
+
+                    child.material.side = THREE.FrontSide
+                    // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                    child.material.transparent = true
+                    child.material.opacity = 0
+                }
             })
 
             switch (scene) {
@@ -316,14 +328,19 @@ function SceneManager(canvas, assets) {
                 // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
                 delay: delay + 0.2,
                 onUpdate: () => {
-                    applyFuncOnObjs(
-                        assets[addedAssetName],
-                        "Mesh",
-                        addedMesh => {
-                            addedMesh.material.opacity =
+                    assets[addedAssetName].traverse(child => {
+                        if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.opacity =
+                                        localTweenedVar.fadeInPercentage
+                                })
+                            }
+                            child.material.opacity =
                                 localTweenedVar.fadeInPercentage
                         }
-                    )
+                    })
                 }
             })
         })
