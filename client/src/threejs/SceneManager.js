@@ -11,6 +11,7 @@ import CameraGroup from "./CameraGroup"
 import HomeDskSceneEntity from "./sceneEntities/Desktop/HomeDskSceneEntity"
 import Trial1 from "./sceneEntities/Desktop/Trial1"
 import CanvasRotator from "./CanvasRotator"
+import { reMap } from "../utils"
 import {
     catmullRomCurveFromGeometry,
     applyFuncOnObjs
@@ -36,6 +37,7 @@ function SceneManager(canvas, assets) {
     let currentSceneEntity, sceneEntities
     let canvasAngle = firstStep.canvasAngle
 
+    const neutralCamDir = new THREE.Vector3(0, 0, -1)
     let glowMaterial
 
     let currentCameraPath = undefined
@@ -70,16 +72,24 @@ function SceneManager(canvas, assets) {
         masterScene.fog = sceneFog
 
         camera = CameraGroup()
-        camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
+        // camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
+        camera.position.set(
+            -42.89377212175061,
+            -429.4975280749318,
+            299.8096313497871
+        ) // initial camera's position, should be were the first camPath (OBJ file) begins
         const initialTarget = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes("Target00")
         )
-        camera.target.position.copy(initialTarget.position)
-        camera.lookAt(initialTarget.position)
-
-        let camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
-            camera.quaternion
+        // camera.target.position.copy(initialTarget.position)
+        camera.target.position.set(
+            -45.04399871826172,
+            -432.2128601074219,
+            297.58349609375
         )
+        camera.lookAt(camera.target.position)
+
+        const camDir = neutralCamDir.applyQuaternion(camera.quaternion)
         glowMaterial = new THREE.ShaderMaterial({
             // blending: THREE.AdditiveBlending,
             transparent: true,
@@ -138,18 +148,36 @@ function SceneManager(canvas, assets) {
             }
         })
 
-        masterScene.add(assets.nuages)
-        masterScene.add(assets.nuagesLights)
+        // masterScene.add(assets.nuages)
+        // masterScene.add(assets.nuagesLights)
+        masterScene.add(assets.islands)
 
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
                 assets[assetName].traverse(child => {
-                    if (child.name.includes("Light")) {
-                        child.intensity *= 0.05
+                    if (child.intensity) {
+                        child.intensity *= 1
                         child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
                     }
                 })
             }, 0)
+        })
+
+        // this is a temporary fix
+        assets.islands.traverse(child => {
+            if (child.intensity) {
+                console.log(child.name, child.intensity)
+                if (child.intensity >= 100) {
+                    child.intensity = reMap(
+                        child.intensity,
+                        100,
+                        90000,
+                        100,
+                        900
+                    )
+                }
+                child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
+            }
         })
 
         sceneEntities = {
@@ -163,7 +191,7 @@ function SceneManager(canvas, assets) {
             canvas,
             [sceneL, sceneR],
             camera,
-            isPostProcess
+            false // isPostProcess
         )
 
         // controls = new OrbitControls(camera, canvas)
@@ -226,8 +254,8 @@ function SceneManager(canvas, assets) {
         }).geometry
 
         currentCameraPath = catmullRomCurveFromGeometry(cameraPathGeometry)
-        console.log(currentCameraPath.getLength(), time)
-        currentCameraPath.arcLengthDivisions = time * time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
+        currentCameraPath.arcLengthDivisions = time * 10 // default is 200, must be very high if the time of the transition / the curve length is long
+        // currentCameraPath.arcLengthDivisions = time * time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
         // currentCameraPathSpacedPoints = currentCameraPath.getSpacedPoints(
         //     time * 60
         // )
@@ -276,10 +304,7 @@ function SceneManager(canvas, assets) {
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
 
             assets[addedAssetName].traverse(child => {
-                if (
-                    child.constructor.name.includes("Light") ||
-                    child.name.includes("Light")
-                ) {
+                if (child.intensity && child.normalIntensity) {
                     TweenLite.fromTo(
                         child,
                         time,
@@ -303,12 +328,12 @@ function SceneManager(canvas, assets) {
                             actualMaterial.transparent = true
                             actualMaterial.opacity = 0
                         })
+                    } else {
+                        child.material.side = THREE.FrontSide
+                        // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                        child.material.transparent = true
+                        child.material.opacity = 0
                     }
-
-                    child.material.side = THREE.FrontSide
-                    // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
-                    child.material.transparent = true
-                    child.material.opacity = 0
                 }
             })
 
@@ -336,9 +361,10 @@ function SceneManager(canvas, assets) {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeInPercentage
                                 })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeInPercentage
                             }
-                            child.material.opacity =
-                                localTweenedVar.fadeInPercentage
                         }
                     })
                 }
@@ -358,39 +384,50 @@ function SceneManager(canvas, assets) {
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
                 delay: delay,
+                onStart: () => {
+                    assets[removedAssetName].traverse(child => {
+                        if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.side = THREE.FrontSide
+                                    actualMaterial.transparent = true
+                                })
+                            } else {
+                                child.material.side = THREE.FrontSide
+                                child.material.transparent = true
+                            }
+                        }
+                    })
+                },
                 onUpdate: () => {
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "Mesh",
-                        removedMesh => {
-                            removedMesh.material.side = THREE.FrontSide
-                            removedMesh.material.transparent = true
-                            removedMesh.material.opacity =
-                                localTweenedVar.fadeOutPercentage
-                        }
-                    )
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "Light",
-                        removedLight => {
-                            removedLight.intensity =
-                                removedLight.normalIntensity *
+                    assets[removedAssetName].traverse(child => {
+                        if (child.constructor.name.includes("Light")) {
+                            child.intensity =
+                                child.normalIntensity *
                                 localTweenedVar.fadeOutPercentage // not very accurate, but may be sufficient (best accuracy would involve stocking initial intensity values for all lights)
+                        } else if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.opacity =
+                                        localTweenedVar.fadeOutPercentage
+                                })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeOutPercentage
+                            }
                         }
-                    )
+                    })
                 },
                 onComplete: () => {
                     sceneR.remove(assets[removedAssetName])
                     sceneL.remove(assets[removedAssetName])
                     masterScene.remove(assets[removedAssetName])
 
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "",
-                        removedStuff => {
-                            if (removedStuff.dispose) removedStuff.dispose()
-                        }
-                    )
+                    assets[removedAssetName].traverse(child => {
+                        if (child.dispose) child.dispose()
+                    })
                 }
             })
         })
@@ -407,8 +444,8 @@ function SceneManager(canvas, assets) {
     function changeToStep(step) {
         masterScene.add(camera) // this is to display the spotLights that are dependant on the camera's position (cf.Trial1)
 
-        canvasAngle = step.canvasAngle ? step.canvasAngle : 0
-        CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
+        // canvasAngle = step.canvasAngle ? step.canvasAngle : 0
+        // CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
 
         if (sceneEntities[step.name]) {
             currentSceneEntity = sceneEntities[step.name]()
@@ -452,9 +489,7 @@ function SceneManager(canvas, assets) {
         updateTime()
 
         if (isMovingCamera) {
-            const camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
-                camera.quaternion
-            )
+            const camDir = neutralCamDir.applyQuaternion(camera.quaternion)
             glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
                 // currentCameraPathSpacedPoints[
@@ -471,9 +506,9 @@ function SceneManager(canvas, assets) {
             }
         }
 
-        camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
+        // camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
         // camTargetGlobalPos.y += Math.sin(time) * 30 // for debug
-        camera.lookAt(camTargetGlobalPos)
+        // camera.lookAt(camTargetGlobalPos)
 
         currentSceneEntity.update(time, mobileQuaternions)
 
@@ -484,29 +519,29 @@ function SceneManager(canvas, assets) {
         // )
 
         // TEST FOR RENDER STUFF
-        customRenderer.finalRenderer.autoClear = false // important!
-        customRenderer.finalRenderer.clear()
-        customRenderer.finalRenderer.setViewport(
-            0,
-            0,
-            window.innerWidth,
-            window.innerHeight
-        )
+        // customRenderer.finalRenderer.autoClear = false // important!
+        // customRenderer.finalRenderer.clear()
+        // customRenderer.finalRenderer.setViewport(
+        //     0,
+        //     0,
+        //     window.innerWidth,
+        //     window.innerHeight
+        // )
         customRenderer.render([masterScene], camera)
 
-        customRenderer.finalRenderer.clearDepth() // important! clear the depth buffer
-        customRenderer.finalRenderer.setViewport(
-            0,
-            0,
-            window.innerWidth,
-            window.innerHeight
-        )
-        // customRenderer.render(
-        //     [currentSceneEntity.scenes[0], currentSceneEntity.scenes[1]],
-        //     camera
+        // customRenderer.finalRenderer.clearDepth() // important! clear the depth buffer
+        // customRenderer.finalRenderer.setViewport(
+        //     0,
+        //     0,
+        //     window.innerWidth,
+        //     window.innerHeight
         // )
-        customRenderer.render([sceneL, sceneR], camera)
-        // TODO: customRenderer.render([sceneL, sceneR], camera)
+        // // customRenderer.render(
+        // //     [currentSceneEntity.scenes[0], currentSceneEntity.scenes[1]],
+        // //     camera
+        // // )
+        // customRenderer.render([sceneL, sceneR], camera)
+        // // TODO: customRenderer.render([sceneL, sceneR], camera)
     }
 
     function initGui() {

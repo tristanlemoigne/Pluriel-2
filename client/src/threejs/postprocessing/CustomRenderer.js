@@ -47,7 +47,7 @@ export default function CustomRenderer(canvas, scenes, camera, isPostProcess) {
         renderer.setClearColor(0x000000, 0)
 
         renderer.setPixelRatio(DPR)
-        renderer.setScissorTest(scenes.length > 1 ? true : false)
+        // renderer.setScissorTest(scenes.length > 1 ? true : false)
 
         // LIGHTS TEST
         renderer.physicallyCorrectLights = true
@@ -110,25 +110,25 @@ export default function CustomRenderer(canvas, scenes, camera, isPostProcess) {
         if (isPostProcess) {
             finalRenderer.render()
         } else {
-            if (scenes.length > 1 && isScissor) {
-                finalRenderer.setScissorTest(true)
+            // if (scenes.length > 1 && isScissor) {
+            //     finalRenderer.setScissorTest(true)
 
-                finalRenderer.setScissor(0, 0, sliderPos, canvas.offsetHeight)
-                finalRenderer.render(scenes[0], camera)
+            //     finalRenderer.setScissor(0, 0, sliderPos, canvas.offsetHeight)
+            //     finalRenderer.render(scenes[0], camera)
 
-                finalRenderer.setScissor(
-                    sliderPos,
-                    0,
-                    canvas.offsetWidth,
-                    canvas.offsetHeight
-                )
+            //     finalRenderer.setScissor(
+            //         sliderPos,
+            //         0,
+            //         canvas.offsetWidth,
+            //         canvas.offsetHeight
+            //     )
 
-                finalRenderer.render(scenes[1], camera)
-            } else {
-                finalRenderer.setScissorTest(false)
-                // console.log({ scenes })
-                finalRenderer.render(scenes[0], camera)
-            }
+            //     finalRenderer.render(scenes[1], camera)
+            // } else {
+            // finalRenderer.setScissorTest(false)
+            // console.log({ scenes })
+            finalRenderer.render(scenes[0], camera)
+            // }
         }
     }
 

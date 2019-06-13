@@ -46,7 +46,7 @@ function SceneManagerMob(canvas, assets) {
             canvas,
             currentSceneEntity.scenes,
             camera,
-            isPostProcess
+            false // isPostProcess
         )
 
         // controls = new OrbitControls(camera, canvas)
