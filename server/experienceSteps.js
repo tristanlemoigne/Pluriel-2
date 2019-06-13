@@ -45,6 +45,7 @@ module.exports = [
 
     {
         name: "selection_perso",
+        cleanSlider: true,
         addedThreeGroupsDsk: [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
             { asset: "zanitRigged", delay: 0, time: 0.5 },

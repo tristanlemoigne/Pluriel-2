@@ -122,11 +122,11 @@ function SceneManager(canvas, assets) {
             glowMaterial
         )
         testSphere.position.z = 5
-        sceneL.add(testSphere) // TODO: add to assets.cyanStone instead (and position it correctly)
+        sceneL.add(testSphere) // TODO: add to assets.cyanStone instead (and position it correctly) => implies handling uniforms of glowMaterial in a more costly way
         let testSphere2 = testSphere.clone()
         testSphere2.material = testSphere2.material.clone()
         testSphere2.material.uniforms.glowColor.value = [1, 0, 0.5]
-        sceneR.add(testSphere2) // TODO: add to assets.pinkStone instead (and position it correctly)
+        sceneR.add(testSphere2) // TODO: add to assets.pinkStone instead (and position it correctly) => implies handling uniforms of glowMaterial in a more costly way
 
         // Set glow material
         assets.islands.traverse(child => {
@@ -442,6 +442,9 @@ function SceneManager(canvas, assets) {
         if (step.removedThreeGroupsDsk) {
             fadeOut(step.removedThreeGroupsDsk)
         }
+        if (step.cleanSlider) {
+            // TODO: clean glowMaterial elements
+        }
         if (step.fog) {
             tweenFog(step.fog)
         }
@@ -494,9 +497,9 @@ function SceneManager(canvas, assets) {
             }
         }
 
-        camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
+        // camera.target.getWorldPosition(camTargetGlobalPos) // mutate the camTargetGlobalPos variable
         // camTargetGlobalPos.y += Math.sin(time) * 30 // for debug
-        camera.lookAt(camTargetGlobalPos)
+        camera.lookAt(camera.target.position)
 
         currentSceneEntity.update(time, mobileQuaternions)
 
@@ -507,29 +510,33 @@ function SceneManager(canvas, assets) {
         // )
 
         //TEST FOR RENDER STUFF
-        customRenderer.finalRenderer.autoClear = false // important!
-        customRenderer.finalRenderer.clear()
-        customRenderer.finalRenderer.setViewport(
-            0,
-            0,
-            window.innerWidth,
-            window.innerHeight
-        )
-        customRenderer.render([masterScene], camera)
+        if (sceneL.children.length > 0) {
+            customRenderer.finalRenderer.autoClear = false // important!
+            customRenderer.finalRenderer.clear()
+            customRenderer.finalRenderer.setViewport(
+                0,
+                0,
+                window.innerWidth,
+                window.innerHeight
+            )
+            customRenderer.render([masterScene], camera)
 
-        customRenderer.finalRenderer.clearDepth() // important! clear the depth buffer
-        customRenderer.finalRenderer.setViewport(
-            0,
-            0,
-            window.innerWidth,
-            window.innerHeight
-        )
-        // customRenderer.render(
-        //     [currentSceneEntity.scenes[0], currentSceneEntity.scenes[1]],
-        //     camera
-        // )
-        customRenderer.render([sceneL, sceneR], camera)
-        // TODO: customRenderer.render([sceneL, sceneR], camera)
+            customRenderer.finalRenderer.clearDepth() // important! clear the depth buffer
+            customRenderer.finalRenderer.setViewport(
+                0,
+                0,
+                window.innerWidth,
+                window.innerHeight
+            )
+            // customRenderer.render(
+            //     [currentSceneEntity.scenes[0], currentSceneEntity.scenes[1]],
+            //     camera
+            // )
+            customRenderer.render([sceneL, sceneR], camera)
+        } else {
+            customRenderer.finalRenderer.autoClear = true // important!
+            customRenderer.render([masterScene], camera)
+        }
     }
 
     function initGui() {
