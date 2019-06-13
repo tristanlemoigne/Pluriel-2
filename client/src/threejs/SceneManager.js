@@ -151,7 +151,7 @@ function SceneManager(canvas, assets) {
             }, 0)
         })
 
-        // this is a temporary fix
+        // ---- this is a temporary fix ---- TODO: remove this when the blender file has the right light values
         assets.islands.traverse(child => {
             if (child.intensity) {
                 if (child.intensity >= 100) {
@@ -171,6 +171,8 @@ function SceneManager(canvas, assets) {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
             // global_intro: () => TODO(masterScene, camera, assets),
             trial_1_intro: () => Trial1(masterScene, camera, assets, timeVars)
+            // trial_1_end_victory: () => Victory(), // TODO: tweener les iles l'une vers l'autre, enlever le fog, faire briller la tour centrale, afficher l'ui victoire
+            // trial_1_end_defeat: () => Defeat() // TODO: tweener légèrement les iles en les éloignant, ajouter du fog, afficher l'ui défaite
         }
         currentSceneEntity = sceneEntities["home"]()
 
@@ -181,8 +183,8 @@ function SceneManager(canvas, assets) {
             false // isPostProcess
         )
 
-        // controls = new OrbitControls(camera, canvas)
-        // controls.target = camera.target.position
+        controls = new OrbitControls(camera, canvas)
+        controls.target = camera.target.position
 
         threeBus.$on("change to step", changeToStep)
 
