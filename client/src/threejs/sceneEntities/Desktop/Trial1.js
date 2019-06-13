@@ -1,9 +1,5 @@
 import * as THREE from "three"
-import {
-    visibleHeightAtZDepth,
-    visibleWidthAtZDepth,
-    applyFuncOnObjs
-} from "../../helpers"
+import { visibleHeightAtZDepth, visibleWidthAtZDepth } from "../../helpers"
 import { reMap } from "../../../utils"
 import * as dat from "dat.gui"
 import { bus } from "../../../main"
