@@ -5,7 +5,7 @@ import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
 
-function Trial1(scene, camera, assets) {
+function Trial1(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
 
     let video
@@ -49,8 +49,8 @@ function Trial1(scene, camera, assets) {
     const easingFactor = 0.15
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.5 // 5
-    const fusionScaleDuration = 1 // 2
+    const defaultScaleDuration = 2.2 // 5
+    const fusionScaleDuration = 0.9 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
@@ -289,8 +289,10 @@ function Trial1(scene, camera, assets) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue += 1 / (60 * fusionScaleDuration * 2)
-                    hole.cyanValue += 1 / (60 * fusionScaleDuration * 2)
+                    hole.pinkValue +=
+                        timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.cyanValue +=
+                        timeVars.DELTA_TIME * fusionScaleDuration * 2
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
                         hole.cyanValue += 1 / (60 * defaultScaleDuration)
@@ -355,7 +357,7 @@ function Trial1(scene, camera, assets) {
         }
     }
 
-    function update(time, mobileQuaternions) {
+    function update(timeVars, mobileQuaternions) {
         applyLastTrackedDatas()
 
         cameraTargetDist = camera.position

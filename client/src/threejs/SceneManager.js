@@ -47,10 +47,11 @@ function SceneManager(canvas, assets) {
     let camTargetGlobalPos = new THREE.Vector3()
 
     // Time init
-    let LAST_TIME = Date.now()
-    let DELTA_TIME
-    let mstime = 0
-    let time = 0
+    const timeVars = {}
+    // let LAST_TIME = Date.now()
+    // let DELTA_TIME
+    // let mstime = 0
+    // let time = 0
 
     // Quaternions from mobiles declaration
     const mobileQuaternions = {
@@ -169,7 +170,7 @@ function SceneManager(canvas, assets) {
         sceneEntities = {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
             // global_intro: () => TODO(masterScene, camera, assets),
-            trial_1_intro: () => Trial1(masterScene, camera, assets)
+            trial_1_intro: () => Trial1(masterScene, camera, assets, timeVars)
         }
         currentSceneEntity = sceneEntities["home"]()
 
@@ -473,10 +474,10 @@ function SceneManager(canvas, assets) {
     }
 
     function updateTime() {
-        DELTA_TIME = Date.now() - LAST_TIME
-        LAST_TIME = Date.now()
-        mstime += DELTA_TIME
-        time = mstime * 0.001 // convert from millis to seconds
+        timeVars.DELTA_TIME = Date.now() - timeVars.LAST_TIME
+        timeVars.LAST_TIME = Date.now()
+        timeVars.mstime += timeVars.DELTA_TIME
+        timeVars.time = timeVars.mstime * 0.001 // convert from millis to seconds
     }
 
     function update() {
@@ -507,7 +508,7 @@ function SceneManager(canvas, assets) {
         // camTargetGlobalPos.y += Math.sin(time) * 30 // for debug
         camera.lookAt(camera.target.position)
 
-        currentSceneEntity.update(time, mobileQuaternions)
+        currentSceneEntity.update(timeVars, mobileQuaternions)
 
         // customRenderer.render(currentSceneEntity.scenes, camera)
         // customRenderer.render(
