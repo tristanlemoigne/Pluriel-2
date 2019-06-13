@@ -138,6 +138,7 @@ export default {
             video {
                 width: 40vw;
                 height: auto;
+                margin-right: 100px;
                 // filter: grayscale(100%);
             }
 
