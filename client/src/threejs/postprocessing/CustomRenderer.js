@@ -47,7 +47,7 @@ export default function CustomRenderer(canvas, scenes, camera, isPostProcess) {
         renderer.setClearColor(0x000000, 0)
 
         renderer.setPixelRatio(DPR)
-        renderer.setScissorTest(scenes.length > 1 ? true : false)
+        // renderer.setScissorTest(scenes.length > 1 ? true : false)
 
         // LIGHTS TEST
         renderer.physicallyCorrectLights = true
@@ -126,7 +126,6 @@ export default function CustomRenderer(canvas, scenes, camera, isPostProcess) {
                 finalRenderer.render(scenes[1], camera)
             } else {
                 finalRenderer.setScissorTest(false)
-                // console.log({ scenes })
                 finalRenderer.render(scenes[0], camera)
             }
         }

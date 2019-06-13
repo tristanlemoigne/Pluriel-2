@@ -69,7 +69,8 @@ function SceneManager(canvas, assets) {
         masterScene.fog = sceneFog
 
         camera = CameraGroup()
-        camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
+        // camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
+
         const initialTarget = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes("Target00")
         )
@@ -136,6 +137,7 @@ function SceneManager(canvas, assets) {
 
         masterScene.add(assets.nuages)
         masterScene.add(assets.nuagesLights)
+        // masterScene.add(assets.islands)
 
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
@@ -175,7 +177,7 @@ function SceneManager(canvas, assets) {
             canvas,
             [sceneL, sceneR],
             camera,
-            isPostProcess
+            false // isPostProcess
         )
 
         // controls = new OrbitControls(camera, canvas)
@@ -368,8 +370,24 @@ function SceneManager(canvas, assets) {
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
                 delay: delay,
+                onStart: () => {
+                    assets[removedAssetName].traverse(child => {
+                        if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.side = THREE.FrontSide
+                                    actualMaterial.transparent = true
+                                })
+                            } else {
+                                child.material.side = THREE.FrontSide
+                                child.material.transparent = true
+                            }
+                        }
+                    })
+                },
                 onUpdate: () => {
-                    assets.islands.traverse(child => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.intensity) {
                             child.intensity =
                                 child.normalIntensity *
@@ -412,8 +430,8 @@ function SceneManager(canvas, assets) {
     function changeToStep(step) {
         masterScene.add(camera) // this is to display the spotLights that are dependant on the camera's position (cf.Trial1)
 
-        canvasAngle = step.canvasAngle ? step.canvasAngle : 0
-        CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
+        // canvasAngle = step.canvasAngle ? step.canvasAngle : 0
+        // CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
 
         if (sceneEntities[step.name]) {
             currentSceneEntity = sceneEntities[step.name]()
@@ -457,8 +475,9 @@ function SceneManager(canvas, assets) {
         updateTime()
 
         if (isMovingCamera) {
-            const camDir = neutralCamDir.applyQuaternion(camera.quaternion)
-
+            const camDir = neutralCamDir
+                .clone()
+                .applyQuaternion(camera.quaternion)
             glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
                 // currentCameraPathSpacedPoints[
@@ -487,7 +506,7 @@ function SceneManager(canvas, assets) {
         //     camera
         // )
 
-        // TEST FOR RENDER STUFF
+        //TEST FOR RENDER STUFF
         customRenderer.finalRenderer.autoClear = false // important!
         customRenderer.finalRenderer.clear()
         customRenderer.finalRenderer.setViewport(

@@ -95,11 +95,14 @@ function HomeDskSceneEntity([sceneL, sceneR], assets) {
 
     function initMeshes() {
         assets.cyanStone.position.set(0, 0, 15)
+        // assets.cyanStone.scale.multiplyScalar(3, 3, 3)
+
         sceneL.add(assets.cyanStone)
 
         assets.pinkStone.position.set(0, 0, 0)
         let pinkStoneClone = assets.pinkStone.clone()
         pinkStoneClone.scale.set(1, 1, 1)
+        // pinkStoneClone.scale.multiplyScalar(3, 3, 3)
         assets.pinkStone.add(pinkStoneClone)
 
         assets.pinkStone.material = gemFrontMaterial

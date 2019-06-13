@@ -37,7 +37,8 @@ function Trial1(scene, camera, assets) {
         cyan: "#00ffff",
         pink: "#ff00ff",
         blue: "#0000ff",
-        red: "#ff0000"
+        red: "#ff0000",
+        white: "#ff99ff"
     }
 
     const debug = {
@@ -76,7 +77,10 @@ function Trial1(scene, camera, assets) {
 
         // Get all holes
         assets.islands.traverse(child => {
-            if (child.name.includes("HoleFill")) holesArr.push(child)
+            if (child.name.includes("HoleFill")) {
+                child.material = child.material.clone() // clone material so that it is not shared with other meshes
+                holesArr.push(child)
+            }
         })
         holesArr.forEach(hole => {
             hole.cyanValue = 0
@@ -120,7 +124,7 @@ function Trial1(scene, camera, assets) {
 
         // Cyan target
         cyanSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.1, 16, 16)
+        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8)
         var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
         var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
         cyanSpotLight.target.add(targetSphere)
@@ -318,7 +322,7 @@ function Trial1(scene, camera, assets) {
                 } else {
                     // Both wins
                     hole.winner = "White"
-                    hole.material.color.set(colors.blue)
+                    hole.material.color.set(colors.white)
                 }
             }
         })
@@ -390,7 +394,7 @@ function Trial1(scene, camera, assets) {
                     cyanSpotLight.target.position,
                     dummyVec
                 )
-                cyanSpotLight.quaternion.slerp(dummyQuat, 0.12)
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.1)
                 // slerp value should be around 0.08 -> 0.25 (closer to 0, the spotlight feels harder to rotate)
             }
             cyanSpotLightHelper.update()
@@ -420,7 +424,7 @@ function Trial1(scene, camera, assets) {
                     pinkSpotLight.target.position,
                     dummyVec
                 )
-                pinkSpotLight.quaternion.slerp(dummyQuat, 0.12)
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.1)
                 // slerp value should be around 0.08 -> 0.25 (closer to 0, the spotlight feels harder to rotate)
             }
             pinkSpotLightHelper.update()
