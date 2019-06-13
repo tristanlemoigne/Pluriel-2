@@ -114,7 +114,7 @@ div {
             opacity: 1;
         }
 
-        video {
+        .trackerVideo {
             position: absolute;
             top: 0;
             left: 0;

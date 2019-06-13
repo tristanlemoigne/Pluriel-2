@@ -69,14 +69,14 @@ export default {
         },
         roomState: {
             handler: function(currentRoomState, oldRoomState) {
-                if (
-                    currentRoomState.currentStep.name === "selection_perso" &&
-                    currentRoomState.zanit !== undefined &&
-                    currentRoomState.lamar !== undefined
-                ) {
-                    console.log("NEXT", currentRoomState);
-                    this.setRoomState({ currentStep: { name: "dioramas" } });
-                }
+                // Go to dioramas when all are ready
+                // if (
+                //     currentRoomState.currentStep.name === "selection_perso" &&
+                //     currentRoomState.zanit !== undefined &&
+                //     currentRoomState.lamar !== undefined
+                // ) {
+                //     this.setRoomState({ currentStep: { name: "dioramas" } });
+                // }
             },
             deep: true
         }
