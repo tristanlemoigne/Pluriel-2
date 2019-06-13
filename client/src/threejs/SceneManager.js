@@ -443,7 +443,13 @@ function SceneManager(canvas, assets) {
             fadeOut(step.removedThreeGroupsDsk)
         }
         if (step.cleanSlider) {
-            // TODO: clean glowMaterial elements
+            // TODO: fadeOut these elements before removing them
+            while (sceneL.children.length) {
+                sceneL.remove(sceneL.children[0])
+            }
+            while (sceneR.children.length) {
+                sceneR.remove(sceneR.children[0])
+            }
         }
         if (step.fog) {
             tweenFog(step.fog)

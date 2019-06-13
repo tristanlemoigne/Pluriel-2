@@ -32,6 +32,7 @@ module.exports = [
 
     {
         name: "room_waiting",
+        cleanSlider: true,
         removedThreeGroupsDsk: [
             { asset: "pinkStone", delay: 0, time: 0.8, scene: "sceneR" },
             { asset: "cyanStone", delay: 0, time: 0.8, scene: "sceneL" },
@@ -45,7 +46,6 @@ module.exports = [
 
     {
         name: "selection_perso",
-        cleanSlider: true,
         addedThreeGroupsDsk: [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
             { asset: "zanitRigged", delay: 0, time: 0.5 },
