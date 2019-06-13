@@ -36,6 +36,7 @@ function SceneManager(canvas, assets) {
     let currentSceneEntity, sceneEntities
     let canvasAngle = firstStep.canvasAngle
 
+    const neutralCamDir = new THREE.Vector3(0, 0, -1)
     let glowMaterial
 
     let currentCameraPath = undefined
@@ -77,9 +78,8 @@ function SceneManager(canvas, assets) {
         camera.target.position.copy(initialTarget.position)
         camera.lookAt(initialTarget.position)
 
-        let camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
-            camera.quaternion
-        )
+        const camDir = neutralCamDir.applyQuaternion(camera.quaternion)
+
         glowMaterial = new THREE.ShaderMaterial({
             // blending: THREE.AdditiveBlending,
             transparent: true,
@@ -144,12 +144,29 @@ function SceneManager(canvas, assets) {
         Object.keys(assets).map(assetName => {
             setTimeout(() => {
                 assets[assetName].traverse(child => {
-                    if (child.name.includes("Light")) {
-                        child.intensity *= 0.05
+                    if (child.intensity) {
+                        child.intensity *= 1
                         child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
                     }
                 })
             }, 0)
+        })
+
+        // this is a temporary fix
+        assets.islands.traverse(child => {
+            if (child.intensity) {
+                console.log(child.name, child.intensity)
+                if (child.intensity >= 100) {
+                    child.intensity = reMap(
+                        child.intensity,
+                        100,
+                        90000,
+                        100,
+                        900
+                    )
+                }
+                child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
+            }
         })
 
         sceneEntities = {
@@ -226,8 +243,8 @@ function SceneManager(canvas, assets) {
         }).geometry
 
         currentCameraPath = catmullRomCurveFromGeometry(cameraPathGeometry)
-        console.log(currentCameraPath.getLength(), time)
-        currentCameraPath.arcLengthDivisions = time * time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
+        // console.log(currentCameraPath.getLength(), time)
+        currentCameraPath.arcLengthDivisions = time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
         // currentCameraPathSpacedPoints = currentCameraPath.getSpacedPoints(
         //     time * 60
         // )
@@ -276,10 +293,7 @@ function SceneManager(canvas, assets) {
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
 
             assets[addedAssetName].traverse(child => {
-                if (
-                    child.constructor.name.includes("Light") ||
-                    child.name.includes("Light")
-                ) {
+                if (child.intensity && child.normalIntensity) {
                     TweenLite.fromTo(
                         child,
                         time,
@@ -303,12 +317,12 @@ function SceneManager(canvas, assets) {
                             actualMaterial.transparent = true
                             actualMaterial.opacity = 0
                         })
+                    } else {
+                        child.material.side = THREE.FrontSide
+                        // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                        child.material.transparent = true
+                        child.material.opacity = 0
                     }
-
-                    child.material.side = THREE.FrontSide
-                    // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
-                    child.material.transparent = true
-                    child.material.opacity = 0
                 }
             })
 
@@ -336,9 +350,10 @@ function SceneManager(canvas, assets) {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeInPercentage
                                 })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeInPercentage
                             }
-                            child.material.opacity =
-                                localTweenedVar.fadeInPercentage
                         }
                     })
                 }
@@ -359,38 +374,33 @@ function SceneManager(canvas, assets) {
                 fadeOutPercentage: 0,
                 delay: delay,
                 onUpdate: () => {
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "Mesh",
-                        removedMesh => {
-                            removedMesh.material.side = THREE.FrontSide
-                            removedMesh.material.transparent = true
-                            removedMesh.material.opacity =
-                                localTweenedVar.fadeOutPercentage
-                        }
-                    )
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "Light",
-                        removedLight => {
-                            removedLight.intensity =
-                                removedLight.normalIntensity *
+                    assets.islands.traverse(child => {
+                        if (child.intensity) {
+                            child.intensity =
+                                child.normalIntensity *
                                 localTweenedVar.fadeOutPercentage // not very accurate, but may be sufficient (best accuracy would involve stocking initial intensity values for all lights)
+                        } else if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.opacity =
+                                        localTweenedVar.fadeOutPercentage
+                                })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeOutPercentage
+                            }
                         }
-                    )
+                    })
                 },
                 onComplete: () => {
                     sceneR.remove(assets[removedAssetName])
                     sceneL.remove(assets[removedAssetName])
                     masterScene.remove(assets[removedAssetName])
 
-                    applyFuncOnObjs(
-                        assets[removedAssetName],
-                        "",
-                        removedStuff => {
-                            if (removedStuff.dispose) removedStuff.dispose()
-                        }
-                    )
+                    assets[removedAssetName].traverse(child => {
+                        if (child.dispose) child.dispose()
+                    })
                 }
             })
         })
@@ -452,9 +462,8 @@ function SceneManager(canvas, assets) {
         updateTime()
 
         if (isMovingCamera) {
-            const camDir = new THREE.Vector3(0, 0, -1).applyQuaternion(
-                camera.quaternion
-            )
+            const camDir = neutralCamDir.applyQuaternion(camera.quaternion)
+
             glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
                 // currentCameraPathSpacedPoints[
