@@ -128,8 +128,6 @@ function SceneManager(canvas, assets) {
         sceneR.add(testSphere2) // TODO: add to assets.pinkStone instead (and position it correctly)
 
         // Set glow material
-        console.log(assets.islands)
-
         assets.islands.traverse(child => {
             if (child.name.includes("Glow")) {
                 child.material = glowMaterial
@@ -153,7 +151,6 @@ function SceneManager(canvas, assets) {
         // this is a temporary fix
         assets.islands.traverse(child => {
             if (child.intensity) {
-                console.log(child.name, child.intensity)
                 if (child.intensity >= 100) {
                     child.intensity = reMap(
                         child.intensity,
