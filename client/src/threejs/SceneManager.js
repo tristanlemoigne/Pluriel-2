@@ -91,7 +91,7 @@ function SceneManager(canvas, assets) {
                 camDir: { value: [camDir.x, camDir.y, camDir.z] },
                 luminosity: { value: 0.45 }
             },
-            vertexShader: `
+            vertexShader: /*glsl*/ `
             uniform vec3 camDir;
             //uniform float c;
             //uniform float p;
@@ -101,12 +101,12 @@ function SceneManager(canvas, assets) {
                 vec3 vNormal = normalize( normalMatrix * normal );
                 vec3 vNormel = normalize( normalMatrix * camDir );
                 intensity = pow( 0.08 - dot(vNormal, vNormel), 6. ); // For FrontSide
-                //intensity = pow( 0.7 - dot(vNormal, vNormel), 3.0 ); // For BackSide
+                // intensity = pow( 0.7 - dot(vNormal, vNormel), 3.0 ); // For BackSide
 
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
             `,
-            fragmentShader: `
+            fragmentShader: /*glsl*/ `
             uniform vec3 glowColor;
             uniform float luminosity;
             varying float intensity;
