@@ -198,7 +198,7 @@ module.exports = [
     },
 
     {
-        name: "global_end",
+        name: "global_ending",
         cameraTransition: {
             camPos: {
                 path: "NurbsPath05",

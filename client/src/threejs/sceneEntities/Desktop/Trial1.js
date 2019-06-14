@@ -5,7 +5,7 @@ import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
 
-function Trial1(scene, camera, assets) {
+function Trial1(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
 
     let video
@@ -49,11 +49,11 @@ function Trial1(scene, camera, assets) {
     const easingFactor = 0.15
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.5 // 5
-    const fusionScaleDuration = 1 // 2
+    const defaultScaleDuration = 2.2 // 5
+    const fusionScaleDuration = 0.9 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
-    const maxDistanceFromHole = 0.7 // 0.65 convient pour les plus petits trous
+    const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
 
     // If a color scaled the shape more than this value, it win the hole
     // Both win between (1 - 0.7) and 0.7
@@ -71,18 +71,25 @@ function Trial1(scene, camera, assets) {
         // scene.add(camera.target)
 
         // Get tour base
-        assets.islands.traverse(child => {
+        assets.islands.traverse((child) => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
+        assets.islands.traverse((child) => {
+            if (child.material) {
+                child.material.metalness = 0
+                child.material.roughness = 1
+            }
+        })
+
         // Get all holes
-        assets.islands.traverse(child => {
+        assets.islands.traverse((child) => {
             if (child.name.includes("HoleFill")) {
                 child.material = child.material.clone() // clone material so that it is not shared with other meshes
                 holesArr.push(child)
             }
         })
-        holesArr.forEach(hole => {
+        holesArr.forEach((hole) => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -252,9 +259,7 @@ function Trial1(scene, camera, assets) {
                 .normalize()
 
             spotLightRaycaster.set(spotPos, raycastDir)
-            const intersects = spotLightRaycaster.intersectObjects(
-                baseTour.children
-            )
+            const intersects = spotLightRaycaster.intersectObjects(baseTour.children)
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -289,8 +294,8 @@ function Trial1(scene, camera, assets) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue += 1 / (60 * fusionScaleDuration * 2)
-                    hole.cyanValue += 1 / (60 * fusionScaleDuration * 2)
+                    hole.pinkValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.cyanValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
                         hole.cyanValue += 1 / (60 * defaultScaleDuration)
@@ -331,21 +336,24 @@ function Trial1(scene, camera, assets) {
     function checkVictoriousPlayer() {
         const nbTotalHoles = holesArr.length
         const nbFilledHoles =
-            nbTotalHoles -
-            holesArr.filter(hole => hole.winner === "None").length
-        const nbWhite = holesArr.filter(hole => hole.winner === "White").length
-        const nbCyan = holesArr.filter(hole => hole.winner === "Cyan").length
-        const nbPink = holesArr.filter(hole => hole.winner === "Pink").length
+            nbTotalHoles - holesArr.filter((hole) => hole.winner === "None").length
+        const nbWhite = holesArr.filter((hole) => hole.winner === "White").length
+        const nbCyan = holesArr.filter((hole) => hole.winner === "Cyan").length
+        const nbPink = holesArr.filter((hole) => hole.winner === "Pink").length
 
+        let victoriousPlayer = null
         if (nbFilledHoles > nbTotalHoles / 2) {
             // Check white
             if (nbWhite >= nbFilledHoles / 2) {
                 console.log("Tour color is white")
+                victoriousPlayer = "team"
             } else {
                 if (nbCyan > nbPink) {
                     console.log("Tour color is cyan")
+                    victoriousPlayer = "cyan"
                 } else if (nbPink > nbCyan) {
                     console.log("Tour color is pink")
+                    victoriousPlayer = "pink"
                 } else {
                     console.log("Restart bitch (vous n'êtes pas départagés)")
                 }
@@ -353,9 +361,13 @@ function Trial1(scene, camera, assets) {
         } else {
             console.log("Restart bitch (need more FilledHoles)")
         }
+
+        if (victoriousPlayer != null) {
+            bus.$emit("trigger ending", victoriousPlayer)
+        }
     }
 
-    function update(time, mobileQuaternions) {
+    function update(timeVars, mobileQuaternions) {
         applyLastTrackedDatas()
 
         cameraTargetDist = camera.position
@@ -442,7 +454,7 @@ function Trial1(scene, camera, assets) {
         // Gui
         const gui = new dat.GUI()
 
-        gui.add(debug, "video").onChange(boolean => {
+        gui.add(debug, "video").onChange((boolean) => {
             if (boolean) {
                 video.style.opacity = 1
             } else {
