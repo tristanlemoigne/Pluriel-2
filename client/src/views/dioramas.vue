@@ -1,7 +1,7 @@
 <template>
     <div class="dioramas" v-if="roomState.currentStep.name.slice(0,7) === 'diorama'">
         <div class="videoContainer">
-            <video ref="video" src="/assets/videos/pluriel3.mp4" autoplay></video>
+            <video ref="video" src="/assets/videos/pluriel.mp4" autoplay></video>
         </div>
 
         <button class="skip" @click.once="onSkip">Passer</button>

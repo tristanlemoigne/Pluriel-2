@@ -135,12 +135,12 @@ export default {
             align-items: center;
             justify-content: space-between;
 
-            video {
-                width: 40vw;
-                height: auto;
-                margin-right: 100px;
-                // filter: grayscale(100%);
-            }
+            // video {
+            //     width: 40vw;
+            //     height: auto;
+            //     margin-right: 100px;
+            //     // filter: grayscale(100%);
+            // }
 
             p {
                 font-weight: bold;

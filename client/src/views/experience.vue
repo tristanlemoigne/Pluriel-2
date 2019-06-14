@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--Desktop stuff -->
-        <div class="desktop" v-bind:class="{ visible: canShowUI }" v-if="!isMobile">
+        <!-- <div class="uiGlobale" v-bind:class="{ visible: canShowUI }" v-if="!isMobile">
             <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
             <button v-if="!isMobile" @click="onFirstStepClick()">
@@ -16,6 +16,55 @@
                 <img src="assets/img/icon-stone.png" alt>
                 <img src="assets/img/icon-stone@2x.png" alt>
                 <img src="assets/img/icon-stone.png" alt>
+            </div>
+        </div> -->
+
+        <div class="uiStep1"  v-if="!isMobile">
+            <!-- <div class="recapTuto">
+                <p class="textGlow">Cette tour a besoin d’être réanimée, seule <b>la lumière de vos amulettes</b> permettra de rétablir son énergie.</p>
+                <img class="svgGlow" src="/assets/img/tuto.svg" alt>
+            </div> -->
+
+            <div class="scores">
+                <div class="scoreLamar">
+                    <div class="stone">
+                        <img src="assets/img/icon-stone-lamar.png" alt>
+                    </div>
+
+                    <div class="score">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
+                <div class="scoreGlobal">
+                    <img src="assets/img/icon-stone.png" alt>
+                </div>
+
+                <div class="scoreZanit">
+                    <div class="score">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <div class="stone">
+                        <img src="assets/img/icon-stone-zanit.png" alt>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -101,7 +150,7 @@ div {
         }
     }
 
-    .desktop {
+    .uiGlobale {
         position: absolute;
         bottom: 80px;
         left: 50%;
@@ -114,7 +163,7 @@ div {
             opacity: 1;
         }
 
-        video {
+        .trackerVideo {
             position: absolute;
             top: 0;
             left: 0;
@@ -182,6 +231,86 @@ div {
                     width: 110px;
                     margin: -50px 30px 0;
                     // transform: scale(0.75);
+                }
+            }
+        }
+    }
+
+    .uiStep1{
+        .recapTuto{
+            border: solid 1px red;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+
+            p{
+                max-width: 500px;
+                margin: 0 auto;
+                margin-bottom: 50px;
+            }
+        }
+
+        .scores{
+            border: solid 1px red;
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+
+            .scoreGlobal{
+                margin: 0 20px;
+            }
+
+            .scoreLamar, .scoreZanit{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &.scoreLamar .stone::before{
+                    content: "Lamar";
+                }
+                &.scoreZanit .stone::before{
+                    content: "Zanit";
+                }
+
+                .stone{
+                    margin: 0 10px;
+                    position: relative;
+
+                    &::before{
+                        position: absolute;
+                        top: -30px; 
+                        left: 50%;;
+                        font-weight: bold;
+                        transform: translateX(-50%);
+                    }
+                }
+
+                div.score{
+                    border-radius: 50px;
+                    width: 300px;
+                    height: 20px;
+                    display: flex;
+                    background-color: rgba(255, 255, 255, 0.5);
+
+                    div{
+                        width: 11.111%;
+                        border: solid 2px white;
+
+                        &:first-child{
+                            border-top-left-radius: 50px;
+                            border-bottom-left-radius: 50px;
+                        }
+
+                        &:last-child{
+                            border-top-right-radius: 50px;
+                            border-bottom-right-radius: 50px;
+                        }
+                    }
                 }
             }
         }

@@ -37,7 +37,7 @@ function ThreeEntryPointDsk(canvas) {
     loader.load("/assets/models/home/lamarRigged.fbx", "lamarRigged")
     loader.load("/assets/models/home/zanitRigged.fbx", "zanitRigged")
     loader.load(
-        "/assets/models/home/lamarReadyAnimation.fbx",
+        "/assets/models/home/lamarReadyAnimation2.fbx",
         "lamarReadyAnimation"
     )
     loader.load(
