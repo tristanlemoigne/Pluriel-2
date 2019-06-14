@@ -71,11 +71,11 @@ function Trial1(scene, camera, assets, timeVars) {
         // scene.add(camera.target)
 
         // Get tour base
-        assets.islands.traverse(child => {
+        assets.islands.traverse((child) => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
-        assets.islands.traverse(child => {
+        assets.islands.traverse((child) => {
             if (child.material) {
                 child.material.metalness = 0
                 child.material.roughness = 1
@@ -83,13 +83,13 @@ function Trial1(scene, camera, assets, timeVars) {
         })
 
         // Get all holes
-        assets.islands.traverse(child => {
+        assets.islands.traverse((child) => {
             if (child.name.includes("HoleFill")) {
                 child.material = child.material.clone() // clone material so that it is not shared with other meshes
                 holesArr.push(child)
             }
         })
-        holesArr.forEach(hole => {
+        holesArr.forEach((hole) => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -259,9 +259,7 @@ function Trial1(scene, camera, assets, timeVars) {
                 .normalize()
 
             spotLightRaycaster.set(spotPos, raycastDir)
-            const intersects = spotLightRaycaster.intersectObjects(
-                baseTour.children
-            )
+            const intersects = spotLightRaycaster.intersectObjects(baseTour.children)
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -296,10 +294,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue +=
-                        timeVars.DELTA_TIME * fusionScaleDuration * 2
-                    hole.cyanValue +=
-                        timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.pinkValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.cyanValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
                         hole.cyanValue += 1 / (60 * defaultScaleDuration)
@@ -340,27 +336,35 @@ function Trial1(scene, camera, assets, timeVars) {
     function checkVictoriousPlayer() {
         const nbTotalHoles = holesArr.length
         const nbFilledHoles =
-            nbTotalHoles -
-            holesArr.filter(hole => hole.winner === "None").length
-        const nbWhite = holesArr.filter(hole => hole.winner === "White").length
-        const nbCyan = holesArr.filter(hole => hole.winner === "Cyan").length
-        const nbPink = holesArr.filter(hole => hole.winner === "Pink").length
+            nbTotalHoles - holesArr.filter((hole) => hole.winner === "None").length
+        const nbWhite = holesArr.filter((hole) => hole.winner === "White").length
+        const nbCyan = holesArr.filter((hole) => hole.winner === "Cyan").length
+        const nbPink = holesArr.filter((hole) => hole.winner === "Pink").length
 
+        let victoriousPlayer = null
         if (nbFilledHoles > nbTotalHoles / 2) {
             // Check white
             if (nbWhite >= nbFilledHoles / 2) {
                 console.log("Tour color is white")
+                victoriousPlayer = "team"
             } else {
                 if (nbCyan > nbPink) {
                     console.log("Tour color is cyan")
+                    victoriousPlayer = "cyan"
                 } else if (nbPink > nbCyan) {
                     console.log("Tour color is pink")
+                    victoriousPlayer = "pink"
                 } else {
                     console.log("Restart bitch (vous n'êtes pas départagés)")
                 }
             }
         } else {
             console.log("Restart bitch (need more FilledHoles)")
+            victoriousPlayer = "cyan" // test for debug
+        }
+
+        if (victoriousPlayer != null) {
+            bus.$emit("trigger ending", victoriousPlayer)
         }
     }
 
@@ -451,7 +455,7 @@ function Trial1(scene, camera, assets, timeVars) {
         // Gui
         const gui = new dat.GUI()
 
-        gui.add(debug, "video").onChange(boolean => {
+        gui.add(debug, "video").onChange((boolean) => {
             if (boolean) {
                 video.style.opacity = 1
             } else {
