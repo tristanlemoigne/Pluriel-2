@@ -75,6 +75,13 @@ function Trial1(scene, camera, assets, timeVars) {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
+        assets.islands.traverse(child => {
+            if (child.material) {
+                child.material.metalness = 0
+                child.material.roughness = 1
+            }
+        })
+
         // Get all holes
         assets.islands.traverse(child => {
             if (child.name.includes("HoleFill")) {
