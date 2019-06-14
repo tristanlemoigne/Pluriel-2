@@ -360,7 +360,6 @@ function Trial1(scene, camera, assets, timeVars) {
             }
         } else {
             console.log("Restart bitch (need more FilledHoles)")
-            victoriousPlayer = "team" // test for debug
         }
 
         if (victoriousPlayer != null) {
