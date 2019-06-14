@@ -42,19 +42,48 @@ function Ending(scene, camera, assets, timeVars) {
 
     function animateEnding(winnerStr) {
         console.log("winnerStr in animateEnding(): ", winnerStr)
-        islandLeft.position.x -= datguiVars.spaceOffs
-        islandRight.position.x += datguiVars.spaceOffs
-        // distance APART : around 9
-        // distance TOGETHER : -13.9
+        if (winnerStr === "cyan" || winnerStr === "pink") {
+            const losingTweenLeft = new TimelineLite()
+            losingTweenLeft.to(islandLeft.position, 6, {
+                x: islandLeft.position.x - 9,
+                ease: Power2.easeInOut
+            })
+            const losingTweenRight = new TimelineLite()
+            losingTweenRight.to(islandRight.position, 6, {
+                x: islandRight.position.x + 9,
+                ease: Power2.easeInOut
+            })
+        } else if (winnerStr === "team") {
+            const winningTweens = new TimelineLite()
+            winningTweens
+                .add("move")
+                .to(
+                    islandLeft.position,
+                    6,
+                    {
+                        x: islandLeft.position.x + 13.9,
+                        ease: Power2.easeInOut
+                    },
+                    "move"
+                )
+                .to(
+                    islandRight.position,
+                    6,
+                    {
+                        x: islandRight.position.x - 13.9,
+                        ease: Power2.easeInOut
+                    },
+                    "move"
+                )
+        }
+        // distance APART : originalPos + 9 // OR
+        // distance TOGETHER : originalPos -13.9 // OR
     }
 
     // TODO: tweener légèrement les iles en les éloignant, ajouter du fog, afficher l'ui défaite
     // TODO: tweener les iles l'une vers l'autre, enlever le fog, faire briller la tour centrale, afficher l'ui victoire
 
-    function update(timeVars, mobileQuaternions) {
-        islandLeft.position.x = originalPos[0] - datguiVars.spaceOffs
-        islandRight.position.x = originalPos[1] + datguiVars.spaceOffs
-    }
+    function update(timeVars, mobileQuaternions) {}
 
     /* ----------------------- GUI ----------------------- */
     function initGui() {
