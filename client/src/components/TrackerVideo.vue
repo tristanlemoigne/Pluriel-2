@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import Tracker from "../threejs/sceneEntities/tracker/Tracker.js"
+import Tracker from "../threejs/sceneEntities/tracker/Tracker.js";
 
-import { threeBus } from "../main"
+import { threeBus } from "../main";
 
 export default {
     name: "TrackerVideo",
@@ -18,32 +18,34 @@ export default {
     methods: {
         /* ----------------------- TRACKER ----------------------- */
         startTracker() {
-            this.tracker = Tracker(this.$refs.video)
+            this.tracker = Tracker(this.$refs.video);
             this.tracker.onTrack(trackedDatas => {
-                threeBus.$emit("track", trackedDatas)
-            })
+                threeBus.$emit("track", trackedDatas);
+            });
         }
     },
     watch: {
         hasStarted() {
             if (this.hasStarted === true) {
-                this.startTracker()
+                this.startTracker();
             }
         }
     },
     mounted() {
         if (this.hasStarted === true) {
-            this.startTracker()
+            this.startTracker();
         }
     },
     beforeDestroy() {
         this.tracker.stop();
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 video {
     transform: scaleX(-1);
+    width: 40vw;
+    height: auto;
 }
 </style>

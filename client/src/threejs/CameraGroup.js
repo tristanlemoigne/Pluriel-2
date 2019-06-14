@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { MeshBasicMaterial } from "three"
 
 /**
  * Factory that creates an object with a target and a camera, and returns it. Later on, spotLights are added to this.
@@ -8,6 +9,13 @@ import * as THREE from "three"
  */
 export default function CameraGroup(camera = buildDefaultCamera()) {
     camera.target = new THREE.Object3D() // use this to lookAt() with camera
+    // camera.target = new THREE.Mesh(
+    //     new THREE.SphereBufferGeometry(1.5, 16, 16),
+    //     new THREE.MeshPhongMaterial({
+    //         color: 0x050505,
+    //         side: THREE.DoubleSide
+    //     })
+    // )
 
     camera.logCamera = () => {
         console.log(`camera's position : \n`, camera.position)

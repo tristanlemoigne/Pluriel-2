@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import ThreeEntryPointDsk from "../../threejs/ThreeEntryPointDsk.js"
-import { threeBus } from "../../main"
+import ThreeEntryPointDsk from "../../threejs/ThreeEntryPointDsk.js";
+import { threeBus } from "../../main";
 
 export default {
     name: "ThreeContainerDsk",
@@ -20,26 +20,27 @@ export default {
     }),
     computed: {
         currentStep() {
-            return this.$props.roomState.currentStep
+            return this.$props.roomState.currentStep;
         }
     },
     mounted() {
-        this.$data.threeEntryPoint = ThreeEntryPointDsk(this.$refs.canvas)
+        this.$data.threeEntryPoint = ThreeEntryPointDsk(this.$refs.canvas);
     },
     methods: {
         animCubeFromTo() {
-            threeEntryPoint.animThree
+            threeEntryPoint.animThree;
         }
     },
     watch: {
         "roomState.currentStep": {
             handler: function(currentStep, oldStep) {
-                threeBus.$emit("change to step", currentStep)
+                if (oldStep.name !== currentStep.name)
+                    threeBus.$emit("change to step", currentStep);
             },
             deep: true
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

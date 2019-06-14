@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-function curveFromGeometry(geometry) {
+function catmullRomCurveFromGeometry(geometry) {
     // console.log(rawCamPathGeometry)
     const rawXYZarr = geometry.attributes.position.array
     // const withoutDuplicatesXYZarr = [...new Set(rawXYZarr)] // this can break stuff (changing order of points ???)
@@ -14,6 +14,7 @@ function curveFromGeometry(geometry) {
         )
     }
     return new THREE.CatmullRomCurve3(camPathPoints, false)
+    // return new THREE.CatmullRomCurve3(camPathPoints, false, "chordal", 0.01)
 }
 
 /**
@@ -28,13 +29,35 @@ function applyFuncOnObjs(group, nameOfObj, callback) {
         callback(group)
     }
     group.children.map(child => {
-        if (child.constructor.name.includes(nameOfObj)) {
-            callback(child)
-        }
+        // if (child.constructor.name.includes(nameOfObj)) {
+        //     callback(child)
+        // }
         if (child.children.length > 0) {
             applyFuncOnObjs(child, nameOfObj, callback)
         }
     })
 }
 
-export { curveFromGeometry, applyFuncOnObjs }
+const visibleHeightAtZDepth = (depth, camera) => {
+    // compensate for cameras not positioned at z=0
+    // const cameraOffset = camera.position.z
+    // if (depth < cameraOffset) depth -= cameraOffset
+    // else depth += cameraOffset
+
+    // vertical fov in radians
+    const vFOV = (camera.fov * Math.PI) / 180
+    // Math.abs to ensure the result is always positive
+    return 2 * Math.tan(vFOV / 2) * Math.abs(depth)
+}
+
+const visibleWidthAtZDepth = (depth, camera) => {
+    const height = visibleHeightAtZDepth(depth, camera)
+    return height * camera.aspect
+}
+
+export {
+    catmullRomCurveFromGeometry,
+    applyFuncOnObjs,
+    visibleHeightAtZDepth,
+    visibleWidthAtZDepth
+}

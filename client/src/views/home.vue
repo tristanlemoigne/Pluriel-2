@@ -39,7 +39,7 @@ export default {
     },
     data: () => ({
         title: "Pluriel",
-        subtitle: "Une expérience singulière.",
+        subtitle: "Une expérience singulière",
         requestedRoom: ""
     }),
     methods: {
