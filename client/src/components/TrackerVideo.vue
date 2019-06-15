@@ -41,12 +41,13 @@ export default {
         },
         createAmulettes(){
             this.cyanAmulette = new Image();
-            this.cyanAmulette.src = "/assets/img/AmulettesTest_Lamar.png";
+            this.cyanAmulette.src = "/assets/img/AmuletteLamar.png";
             this.pinkAmulette = new Image();
-            this.pinkAmulette.src = "/assets/img/AmulettesTest_Zanit.png";
+            this.pinkAmulette.src = "/assets/img/AmuletteZanit.png";
         },
         updateAmulette(amulette, blob){
-            this.context.drawImage(amulette, blob.x - blob.width, blob.y - blob.height/2, blob.width, blob.height);
+            console.log(blob.x)
+            this.context.drawImage(amulette, blob.x, blob.y     , blob.width, blob.height);
         }
     },
     watch: {
