@@ -11,10 +11,11 @@
                     </div>
                 </button>
 
-                <p class="textGlow">Accédez à la 1ère étape grâce à votre téléphone.</p>
+                <p class="textGlow" v-bind:class="{ visible: !canShowUIGlobaleEnd }">Accédez à la 1ère étape grâce à votre téléphone.</p>
+                <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">Recommencer <br/>l'expérience</p>
 
                 <div class="stones">
-                    <img src="assets/img/icon-stone.png" alt>
+                    <img ref="victoriousStep" src="assets/img/icon-stone.png" alt>
                     <img src="assets/img/icon-stone@2x.png" alt>
                     <img src="assets/img/icon-stone.png" alt>
                 </div>
@@ -123,6 +124,17 @@
                     {{victoriousScore}}/9 trous
                 </p>
             </div>
+
+            <div class="globalEnd textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
+                <p v-bind:class="{ visible: !plurielMerged }">
+                    Malheureusement, <br/>
+                    Votre collaboration n’a pas été suffisante
+                </p>
+                <p v-bind:class="{ visible: plurielMerged }">
+                    Félicitations, <br/>
+                    Vous avez crée votre Pluriel
+                </p>
+            </div>
         </div>  
 
         <!-- Mobile stuff -->
@@ -162,12 +174,14 @@ export default {
         canShowUITuto: false,
         canShowUIStep: false,
         canShowUIEnd: false,
+        canShowUIGlobaleEnd: false,
         scoreLamar: 0,
         scoreZanit: 0,
         scoreTeam: 0,
         totalFilledHoles: 0,
         totalholes: 9,
         victoriousScore: 0,
+        plurielMerged: false,
         victoriousText: "Aucun",
         victoriousLegend: "à remporté la première épreuve",
         iconSrc: "icon-stone@2x.png",
@@ -281,11 +295,12 @@ export default {
                         this.victoriousText = "Bravo"
                         this.victoriousLegend = "Vous avez réussi à reconstruire la tour"
                         this.victoriousScore = this.scoreTeam
+                        this.plurielMerged = true
                         color = CSS.white
                     } else {
                         this.victoriousText = "Egalité"
                         this.victoriousLegend = "Vous ferez mieux une prochaine fois"
-                        this.victoriousScore = this.scoreTeam
+                        this.victoriousScore = this.scoreTeam + this.scoreLamar + this.scoreZanit
                         color = CSS.white
                     }
 
@@ -293,9 +308,10 @@ export default {
                         this.$refs.victoriousScore.children[i].style.backgroundColor = color
                     }
 
+                    this.$refs.victoriousStep.style.borderColor = color
+
                     setTimeout(()=>{
                         this.canShowUIEnd = true
-                        console.log("the transiton has finished", this.canShowUIEnd)
                     }, this.getTransitionEnd())
                 }
 
@@ -303,9 +319,11 @@ export default {
                 if (currentRoomState.currentStep.name === "global_ending") {
                     console.log("GLOBALL ENDING")
                     this.canShowUIEnd = false
+                    console.log("plUrIEL MERGED", this.plurielMerged)
 
                     setTimeout(()=>{
                         this.canShowUIGlobale = true;
+                        this.canShowUIGlobaleEnd = true;
                         bus.$emit('trigger ending', this.victoriousPlayer)
                     }, this.getTransitionEnd())
                 }
@@ -348,6 +366,7 @@ div {
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
+        z-index: 5;
 
         .trackerVideo {
             position: absolute;
@@ -396,7 +415,13 @@ div {
             }
         }
 
-        p {
+
+        p.visible{
+            display: block;
+        }
+
+        p {    
+            display: none;
             max-width: 280px;
             margin: 0 auto 80px;
         }
@@ -409,6 +434,11 @@ div {
             img {
                 border: solid 8px rgba(227, 227, 227, 0.1);
                 border-radius: 100%;
+                opacity: 0.5;
+
+                &:nth-of-type(1){
+                    opacity: 1;
+                }
 
                 &:nth-of-type(2) {
                     align-self: flex-start;
@@ -653,6 +683,23 @@ div {
                     border-bottom-right-radius: 50px;
                 }
             }
+        }
+    }
+
+    .globalEnd{
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        text-align: center;
+
+        p.visible{
+            opacity: 1;
+        }
+
+        p{
+            font-size: 50px;
+            opacity: 0;
+            margin-top: 20%;
+            transition: opacity 0.5s ease;
         }
     }
 

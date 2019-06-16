@@ -11,7 +11,7 @@
 			@click="setRoomState({currentStep: {name:'NEXT'}})"
 		>NEXT STEP</button>
 
-		<button
+		<!-- <button
 			class="debugButton"
 			v-if="isDebugMode"
 			@click="setRoomState({currentStep: {name:'global_intro'}})"
@@ -20,7 +20,7 @@
 			class="debugButton"
 			v-if="isDebugMode && !isMobile"
 			@click="setRoomState({currentStep: {name:'global_ending'}})"
-		>global_ending</button>
+		>global_ending</button> -->
 
 		<!-- <button class="debugButton" v-if="isDebugMode" @click="logTrial1Victorious()">Who wins?</button> -->
 		<button
@@ -33,12 +33,12 @@
 			v-if="isDebugMode"
 			@click="emitToBus('trigger ending', 'lamar')"
 		>cyan wins</button>
-
+<!-- 
 		<div>
 			<span>Desktop Users: {{desktopUsersCount}}</span>
 			<span>Mobile Users: {{mobileUsersCount}}</span>
 			<span>Current Step: {{roomState.currentStep}}</span>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -85,7 +85,7 @@ export default {
 .debugUI {
 	pointer-events: none;
 	position: absolute;
-	bottom: 0;
+	top: 25px;
 	left: 0;
 	z-index: 1000;
 	font-size: 10px;
@@ -98,10 +98,12 @@ export default {
 	.debugButton {
 		pointer-events: auto;
 		margin-right: 22px;
+        margin-bottom: 5px;
 		color: #0f0;
 		background: #000;
 		padding: 10px;
 		display: inline-block;
 	}
+
 }
 </style>

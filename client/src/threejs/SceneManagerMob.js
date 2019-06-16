@@ -3,7 +3,6 @@ import CustomRenderer from "./postprocessing/CustomRenderer"
 import CameraGroup from "./CameraGroup"
 
 import CrystalSceneEntity from "./sceneEntities/Mobile/CrystalSceneEntity"
-import HomeMobSceneEntity from "./sceneEntities/Mobile/HomeMobSceneEntity"
 import CanvasRotator from "./CanvasRotator"
 import { bus, threeBus } from "../main"
 import socket from "../socket.js"
@@ -40,7 +39,7 @@ function SceneManagerMob(canvas, assets) {
         camera.position.copy(new THREE.Vector3(0, 0, -10))
 
         sceneEntities = initScenesEntities()
-        currentSceneEntity = sceneEntities["home"]()
+        // currentSceneEntity = sceneEntities["home"]()
 
         customRenderer = CustomRenderer(
             canvas,
@@ -68,7 +67,6 @@ function SceneManagerMob(canvas, assets) {
 
     function initScenesEntities() {
         const sceneEntities = {
-            home: () => HomeMobSceneEntity(assets),
             trial_1_intro: () => CrystalSceneEntity(assets, character)
         }
         return sceneEntities

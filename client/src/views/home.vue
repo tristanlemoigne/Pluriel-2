@@ -1,8 +1,8 @@
 <template>
     <div id="home" @mousemove="sliderMove">
-        <div ref="sliderBar" class="sliderBar"></div>
+        <div  v-if="!isMobile" ref="sliderBar" class="sliderBar"></div>
 
-        <div class="titles">
+        <div v-if="!isMobile" class="titles">
             <h1>{{title}}</h1>
             <Logo/>
             <h2 class="textGlow">{{subtitle}}</h2>
@@ -15,9 +15,16 @@
             </div>
         </button>
 
-        <form v-if="isMobile" action @submit.prevent="joinRoom">
-            <input type="text" v-model="requestedRoom" placeholder="Room id">
-            <input class="bigTextButton" value="Join room" type="submit">
+        <!-- Commencer l'expérience Mobile-->
+        <form class="mobile" v-if="isMobile" action @submit.prevent="joinRoom">
+            <p class="textGlow">Connectez-vous sur <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché</p>
+            <input class="inputText textGlow" type="text" v-model="requestedRoom" placeholder="Code"><br/>
+
+            <button type="submit">
+                <div class="outerCircle">
+                    <div class="innerCircle"></div>
+                </div>
+            </button>
         </form>
     </div>
 </template>
@@ -58,7 +65,9 @@ export default {
         }
     },
     mounted() {
-        CanvasRotator().rotateCSS(this.$refs.sliderBar, firstStep.canvasAngle);
+        if(!this.isMobile){
+            CanvasRotator().rotateCSS(this.$refs.sliderBar, firstStep.canvasAngle);
+        }
     }
 };
 </script>
@@ -147,6 +156,33 @@ export default {
 
                 animation: pulse 1.5s infinite ease-in;
             }
+        }
+    }
+
+    .mobile{
+        input{
+            margin-top: 10%;
+            background: none;
+            border: none;
+            color: $white;
+            text-transform: uppercase;
+            border-bottom: solid 2px $white;
+            font-size: 20px;
+            text-align: center;
+            padding-bottom: 5px;
+            width: 80px;
+
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: $white;
+            opacity: 1; /* Firefox */
+            }
+
+        }
+        button{
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
 
