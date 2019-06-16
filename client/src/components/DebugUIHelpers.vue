@@ -22,7 +22,7 @@
 			@click="setRoomState({currentStep: {name:'global_ending'}})"
 		>global_ending</button>
 
-		<button class="debugButton" v-if="isDebugMode" @click="logTrial1Victorious()">Who wins?</button>
+		<!-- <button class="debugButton" v-if="isDebugMode" @click="logTrial1Victorious()">Who wins?</button> -->
 		<button
 			class="debugButton"
 			v-if="isDebugMode"
@@ -31,7 +31,7 @@
 		<button
 			class="debugButton"
 			v-if="isDebugMode"
-			@click="emitToBus('trigger ending', 'cyan')"
+			@click="emitToBus('trigger ending', 'lamar')"
 		>cyan wins</button>
 
 		<div>
@@ -71,9 +71,9 @@ export default {
 		setRoomState(stateObj) {
 			bus.$emit("setRoomState", stateObj);
 		},
-		logTrial1Victorious() {
-			bus.$emit("logTrial1Victorious");
-		},
+		// logTrial1Victorious() {
+		// 	bus.$emit("logTrial1Victorious");
+		// },
 		emitToBus(eventName, passedParam) {
 			bus.$emit(eventName, passedParam);
 		}

@@ -30,7 +30,7 @@
                     <div class="stone">
                         <svg  width="100" height="100">
                             <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
-                            <circle class="circleFill" ref="cyanProgression" stroke="#00ffff" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                            <circle class="circleFill" ref="cyanProgression" stroke="#356BFF" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
                         </svg>
                         <img src="assets/img/icon-stone-lamar.png" alt>
                     </div>
@@ -91,11 +91,37 @@
                     <div class="stone">
                          <svg  width="100" height="100">
                             <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
-                            <circle class="circleFill" ref="pinkProgression" stroke="#ff00ff" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                            <circle class="circleFill" ref="pinkProgression" stroke="#FF1A54" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
                         </svg>
                         <img src="assets/img/icon-stone-zanit.png" alt>
                     </div>
                 </div>
+            </div>
+
+            <div class="step1End" v-bind:class="{ visible: canShowUIEnd }">
+                <p class="victorious textGlow">
+                    <span>{{victoriousText}}</span><br/>
+                    {{victoriousLegend}}
+                </p>
+
+                <!-- <img src="assets/img/icon-stone.png" alt> -->
+                <img :src="getVictoriousIcon()" alt>
+
+                <div ref="victoriousScore" class="score">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <p class="totalHoles textGlow">
+                    {{victoriousScore}}/9 trous
+                </p>
             </div>
         </div>  
 
@@ -135,9 +161,17 @@ export default {
         canShowUIGlobale: false,
         canShowUITuto: false,
         canShowUIStep: false,
+        canShowUIEnd: false,
         scoreLamar: 0,
         scoreZanit: 0,
-        scoreTeam: 0
+        scoreTeam: 0,
+        totalFilledHoles: 0,
+        totalholes: 9,
+        victoriousScore: 0,
+        victoriousText: "Aucun",
+        victoriousLegend: "à remporté la première épreuve",
+        iconSrc: "icon-stone@2x.png",
+        victoriousPlayer: "Aucun"
     }),
     props: {
         roomId: String,
@@ -170,6 +204,7 @@ export default {
             } else {
                 console.log("Winner is not possible >>>", winner)
             }
+            this.totalFilledHoles ++
         },
         playerHoleProgress(hole){
             if(hole.color === "Cyan"){
@@ -177,18 +212,45 @@ export default {
             } else if(hole.color === "Pink"){
                 this.$refs.pinkProgression.style.strokeDasharray = `${hole.progress}, 100`;
             }
+        },
+        checkVictoriousPlayer() {
+            let victoriousPlayer = null
+                // Check white
+            if (this.totalFilledHoles > this.totalholes / 2) {
+                if (this.scoreTeam >= this.totalFilledHoles / 2) {
+                    victoriousPlayer = "team"
+                } else {
+                    if (this.scoreLamar > this.scoreZanit) {
+                        victoriousPlayer = "lamar"
+                    } else if (this.scoreZanit > this.scoreLamar) {
+                        victoriousPlayer = "zanit"
+                    } else {
+                        victoriousPlayer = "egalite"
+                    }
+                }
+            } else {
+                victoriousPlayer = "egalite"
+            }
+
+            return victoriousPlayer
+        },
+        getVictoriousIcon(){
+            return `assets/img/${this.iconSrc}`
         }
     },
     watch:{
         roomState: {
             handler: function(currentRoomState, oldRoomState) {
                 // Show good UI relative to current step
+                // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
                     this.canShowUIGlobale = false;
                     setTimeout(() => {
                         this.canShowUITuto = true
                     }, this.getTransitionEnd())
                 }
+
+                // UI XP EN COURS 
                 if (currentRoomState.currentStep.name === "trial_1_tuto") {
                     this.canShowUITuto = false
                     setTimeout(() => {
@@ -197,6 +259,55 @@ export default {
 
                     threeBus.$on("holeFilled", this.addHoleWinnerScore)    
                     threeBus.$on("holeScaling", this.playerHoleProgress)    
+                }
+
+                // UI END STEP 1
+                if (currentRoomState.currentStep.name === "trial_1_end") {
+                    this.canShowUIStep = false
+                    this.victoriousPlayer = this.checkVictoriousPlayer()
+                    let color
+
+                    if(this.victoriousPlayer === "lamar"){
+                        this.victoriousText = "Lamar"
+                        this.victoriousScore = this.scoreLamar
+                        this.iconSrc = "icon-stone-lamar.png"
+                        color = CSS.cyan
+                    } else if(this.victoriousPlayer === "zanit"){
+                        this.victoriousText = "Zanit"
+                        this.victoriousScore = this.scoreZanit
+                        this.iconSrc = "icon-stone-zanit.png"
+                        color = CSS.pink
+                    } else if(this.victoriousPlayer=== "team"){
+                        this.victoriousText = "Bravo"
+                        this.victoriousLegend = "Vous avez réussi à reconstruire la tour"
+                        this.victoriousScore = this.scoreTeam
+                        color = CSS.white
+                    } else {
+                        this.victoriousText = "Egalité"
+                        this.victoriousLegend = "Vous ferez mieux une prochaine fois"
+                        this.victoriousScore = this.scoreTeam
+                        color = CSS.white
+                    }
+
+                    for(let i=0; i < this.victoriousScore; i++){
+                        this.$refs.victoriousScore.children[i].style.backgroundColor = color
+                    }
+
+                    setTimeout(()=>{
+                        this.canShowUIEnd = true
+                        console.log("the transiton has finished", this.canShowUIEnd)
+                    }, this.getTransitionEnd())
+                }
+
+                // UI END GLOBALE
+                if (currentRoomState.currentStep.name === "global_ending") {
+                    console.log("GLOBALL ENDING")
+                    this.canShowUIEnd = false
+
+                    setTimeout(()=>{
+                        this.canShowUIGlobale = true;
+                        bus.$emit('trigger ending', this.victoriousPlayer)
+                    }, this.getTransitionEnd())
                 }
             },
             deep: true
@@ -491,6 +602,55 @@ div {
                 div{
                     width: 11.111%;
                     border: solid 2px white;
+                }
+            }
+        }
+    }
+
+    .step1End{
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        position: absolute;
+        right: 10%;
+        top: 40%;
+        transform: translateY(-50%);
+        text-align: center;
+        font-size: 25px;
+
+        p.victorious{
+            max-width: 250px;
+            margin: 0 auto;
+
+            span{
+                font-size: 70px;
+                font-weight: bold;
+            }
+        }
+
+        img{
+            margin:  25px 0;
+        }
+
+        div.score{
+            border-radius: 50px;
+            width: 300px;
+            height: 20px;
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.5);
+
+            div{
+                width: 11.111%;
+                border: solid 2px white;
+
+
+                &:first-child{
+                    border-top-left-radius: 50px;
+                    border-bottom-left-radius: 50px;
+                }
+
+                &:last-child{
+                    border-top-right-radius: 50px;
+                    border-bottom-right-radius: 50px;
                 }
             }
         }

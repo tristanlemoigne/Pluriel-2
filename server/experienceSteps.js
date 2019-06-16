@@ -188,13 +188,22 @@ module.exports = [
     {
         name: "trial_1_end",
         cameraTransition: {
+            // camPos: {
+            //     delay: 0,
+            //     time: 1,
+            //     // Je sais pas ce que je met ici lol mais c'est pour faire apparaitre mon UI
+            // },
             camTarget: {
                 point: "Target06",
                 delay: 0,
                 time: 2,
                 easing: ["Power2", "easeInOut"]
             }
-        }
+        },
+        addedThreeGroupsDsk: [
+            { asset: "lamarRigged", delay: 0, time: 0.5 },
+            { asset: "zanitRigged", delay: 0, time: 0.5 }
+        ]
     },
 
     {

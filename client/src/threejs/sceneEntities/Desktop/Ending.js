@@ -45,12 +45,12 @@ function Ending(scene, camera, assets, timeVars) {
         })
 
         //LISTENERS
-        bus.$on("trigger ending", animateEnding) // receive "team", "cyan" or "pink"
+        bus.$on("trigger ending", animateEnding) // receive "team", "lamar", "zanit", or "egalite"
     }
 
     function animateEnding(winnerStr) {
         console.log("winnerStr in animateEnding(): ", winnerStr)
-        if (winnerStr === "cyan" || winnerStr === "pink") {
+        if (winnerStr === "lamar" || winnerStr === "zanit" || winnerStr === "egalite") {
             loseAnimation()
         } else if (winnerStr === "team") {
             winAnimation()

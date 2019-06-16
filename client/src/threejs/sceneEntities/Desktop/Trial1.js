@@ -106,7 +106,17 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // LISTENERS
         threeBus.$on("track", refreshTrackedDatas)
-        bus.$on("logTrial1Victorious", checkVictoriousPlayer)
+        // bus.$on("logTrial1Victorious", checkVictoriousPlayer)
+
+        positionPersos()
+    }
+
+    function positionPersos(){
+        console.log("BASETOUR", baseTour)
+        assets.zanitRigged.position.copy(baseTour.position.clone())
+        assets.lamarRigged.position.copy(baseTour.position.clone())
+
+        assets.zanitRigged.scale.set(10, 10, 10)
     }
 
     /* ----------------------- SPOTLIGHTS ----------------------- */
@@ -351,39 +361,39 @@ function Trial1(scene, camera, assets, timeVars) {
         })
     }
 
-    function checkVictoriousPlayer() {
-        const nbTotalHoles = holesArr.length
-        const nbFilledHoles =
-            nbTotalHoles - holesArr.filter((hole) => hole.winner === "None").length
-        const nbWhite = holesArr.filter((hole) => hole.winner === "White").length
-        const nbCyan = holesArr.filter((hole) => hole.winner === "Cyan").length
-        const nbPink = holesArr.filter((hole) => hole.winner === "Pink").length
+    // function checkVictoriousPlayer() {
+    //     const nbTotalHoles = holesArr.length
+    //     const nbFilledHoles =
+    //         nbTotalHoles - holesArr.filter((hole) => hole.winner === "None").length
+    //     const nbWhite = holesArr.filter((hole) => hole.winner === "White").length
+    //     const nbCyan = holesArr.filter((hole) => hole.winner === "Cyan").length
+    //     const nbPink = holesArr.filter((hole) => hole.winner === "Pink").length
 
-        let victoriousPlayer = null
-        if (nbFilledHoles > nbTotalHoles / 2) {
-            // Check white
-            if (nbWhite >= nbFilledHoles / 2) {
-                console.log("Tour color is white")
-                victoriousPlayer = "team"
-            } else {
-                if (nbCyan > nbPink) {
-                    console.log("Tour color is cyan")
-                    victoriousPlayer = "cyan"
-                } else if (nbPink > nbCyan) {
-                    console.log("Tour color is pink")
-                    victoriousPlayer = "pink"
-                } else {
-                    console.log("Restart bitch (vous n'êtes pas départagés)")
-                }
-            }
-        } else {
-            console.log("Restart bitch (need more FilledHoles)")
-        }
+    //     let victoriousPlayer = null
+    //     if (nbFilledHoles > nbTotalHoles / 2) {
+    //         // Check white
+    //         if (nbWhite >= nbFilledHoles / 2) {
+    //             console.log("Tour color is white")
+    //             victoriousPlayer = "team"
+    //         } else {
+    //             if (nbCyan > nbPink) {
+    //                 console.log("Tour color is cyan")
+    //                 victoriousPlayer = "cyan"
+    //             } else if (nbPink > nbCyan) {
+    //                 console.log("Tour color is pink")
+    //                 victoriousPlayer = "pink"
+    //             } else {
+    //                 console.log("Restart bitch (vous n'êtes pas départagés)")
+    //             }
+    //         }
+    //     } else {
+    //         console.log("Restart bitch (need more FilledHoles)")
+    //     }
 
-        if (victoriousPlayer != null) {
-            bus.$emit("trigger ending", victoriousPlayer)
-        }
-    }
+    //     if (victoriousPlayer != null) {
+    //         bus.$emit("trigger ending", victoriousPlayer)
+    //     }
+    // }
 
     function update(timeVars, mobileQuaternions) {
         applyLastTrackedDatas()
