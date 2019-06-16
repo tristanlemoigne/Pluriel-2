@@ -73,7 +73,7 @@ function SceneManager(canvas, assets) {
         camera = CameraGroup()
         // camera.position.copy(firstStep.cameraPos) // initial camera's position, should be were the first camPath (OBJ file) begins
 
-        const initialTarget = assets.camTargetPoints.children.find((Object3D) =>
+        const initialTarget = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes("Target00")
         )
         camera.target.position.copy(initialTarget.position)
@@ -131,7 +131,7 @@ function SceneManager(canvas, assets) {
         sceneR.add(testSphere2) // TODO: add to assets.pinkStone instead (and position it correctly) => implies handling uniforms of glowMaterial in a more costly way
 
         // Set glow material
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("Glow")) {
                 child.material = glowMaterial
             }
@@ -141,9 +141,9 @@ function SceneManager(canvas, assets) {
         masterScene.add(assets.nuagesLights)
         // masterScene.add(assets.islands)
 
-        Object.keys(assets).map((assetName) => {
+        Object.keys(assets).map(assetName => {
             setTimeout(() => {
-                assets[assetName].traverse((child) => {
+                assets[assetName].traverse(child => {
                     if (child.intensity) {
                         child.intensity *= 1
                         child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
@@ -152,15 +152,15 @@ function SceneManager(canvas, assets) {
             }, 0)
         })
 
-        // ---- this is a temporary fix ---- TODO: remove this when the blender file has the right light values
-        assets.islands.traverse((child) => {
-            if (child.intensity) {
-                if (child.intensity >= 100) {
-                    child.intensity = reMap(child.intensity, 100, 90000, 100, 900)
-                }
-                child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
-            }
-        })
+        // // ---- this is a temporary fix ---- TODO: remove this when the blender file has the right light values
+        // assets.islands.traverse((child) => {
+        //     if (child.intensity) {
+        //         if (child.intensity >= 100) {
+        //             child.intensity = reMap(child.intensity, 100, 90000, 100, 900)
+        //         }
+        //         child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
+        //     }
+        // })
 
         sceneEntities = {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
@@ -198,10 +198,10 @@ function SceneManager(canvas, assets) {
         window.addEventListener("resize", onWindowResize)
         onWindowResize()
 
-        socket.on("dispatch cyan quaternion", (Quaternion) => {
+        socket.on("dispatch cyan quaternion", Quaternion => {
             mobileQuaternions.cyan = Quaternion
         })
-        socket.on("dispatch pink quaternion", (Quaternion) => {
+        socket.on("dispatch pink quaternion", Quaternion => {
             mobileQuaternions.pink = Quaternion
         })
     }
@@ -232,7 +232,7 @@ function SceneManager(canvas, assets) {
     }
 
     function animateCamOnPath({ path, delay, time, easing }) {
-        const cameraPathGeometry = assets.camPaths.children.find((child) => {
+        const cameraPathGeometry = assets.camPaths.children.find(child => {
             return child.name.includes(path) // must be something like NurbsPath00 in the blender file
         }).geometry
 
@@ -257,7 +257,7 @@ function SceneManager(canvas, assets) {
 
     function animateCamTarget({ point: targetName, delay, time, easing }) {
         // TODO: use "easing" values from experienceSteps
-        const nextTargetPos = assets.camTargetPoints.children.find((Object3D) =>
+        const nextTargetPos = assets.camTargetPoints.children.find(Object3D =>
             Object3D.name.includes(targetName)
         ).position
 
@@ -286,7 +286,7 @@ function SceneManager(canvas, assets) {
             }
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
 
-            assets[addedAssetName].traverse((child) => {
+            assets[addedAssetName].traverse(child => {
                 if (child.intensity && child.normalIntensity) {
                     TweenLite.fromTo(
                         child,
@@ -305,7 +305,7 @@ function SceneManager(canvas, assets) {
                 } else if (child.material) {
                     /* NOTE: this can be an array!! */
                     if (child.material.map) {
-                        child.material.map((actualMaterial) => {
+                        child.material.map(actualMaterial => {
                             actualMaterial.side = THREE.FrontSide
                             // actualMaterial.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
                             actualMaterial.transparent = true
@@ -336,11 +336,11 @@ function SceneManager(canvas, assets) {
                 // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
                 delay: delay + 0.2,
                 onUpdate: () => {
-                    assets[addedAssetName].traverse((child) => {
+                    assets[addedAssetName].traverse(child => {
                         if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeInPercentage
                                 })
@@ -356,21 +356,23 @@ function SceneManager(canvas, assets) {
     }
 
     function fadeOut(fadeOutInfos) {
-        fadeOutInfos.map(({ asset: removedAssetName, delay, time }) => {
+        fadeOutInfos.map(({ asset: removedAssetName, delay, time, hidden }) => {
             let localTweenedVar = { fadeOutPercentage: 1 } // 1 -> 0
 
             if (!assets[removedAssetName]) {
-                console.error(`Can't remove "${removedAssetName}", asset not found`)
+                console.error(
+                    `Can't remove "${removedAssetName}", asset not found`
+                )
             }
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
                 delay: delay,
                 onStart: () => {
-                    assets[removedAssetName].traverse((child) => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.side = THREE.FrontSide
                                     actualMaterial.transparent = true
                                 })
@@ -382,7 +384,7 @@ function SceneManager(canvas, assets) {
                     })
                 },
                 onUpdate: () => {
-                    assets[removedAssetName].traverse((child) => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.intensity) {
                             child.intensity =
                                 child.normalIntensity *
@@ -390,7 +392,7 @@ function SceneManager(canvas, assets) {
                         } else if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeOutPercentage
                                 })
@@ -406,9 +408,11 @@ function SceneManager(canvas, assets) {
                     sceneL.remove(assets[removedAssetName])
                     masterScene.remove(assets[removedAssetName])
 
-                    assets[removedAssetName].traverse((child) => {
-                        if (child.dispose) child.dispose()
-                    })
+                    if (hidden === true) {
+                        assets[removedAssetName].traverse(child => {
+                            if (child.dispose) child.dispose()
+                        })
+                    }
                 }
             })
         })
@@ -459,7 +463,10 @@ function SceneManager(canvas, assets) {
             if (step.cameraTransition.camTarget) {
                 animateCamTarget(step.cameraTransition.camTarget)
             }
-            if (!step.cameraTransition.camPos && !step.cameraTransition.camTarget) {
+            if (
+                !step.cameraTransition.camPos &&
+                !step.cameraTransition.camTarget
+            ) {
                 console.error("step.cameraTransition is not as expected")
             }
         }
@@ -477,7 +484,9 @@ function SceneManager(canvas, assets) {
         updateTime()
 
         if (isMovingCamera) {
-            const camDir = neutralCamDir.clone().applyQuaternion(camera.quaternion)
+            const camDir = neutralCamDir
+                .clone()
+                .applyQuaternion(camera.quaternion)
             glowMaterial.uniforms.camDir.value = [camDir.x, camDir.y, camDir.z]
             camera.position.copy(
                 // currentCameraPathSpacedPoints[

@@ -71,11 +71,11 @@ function Trial1(scene, camera, assets, timeVars) {
         // scene.add(camera.target)
 
         // Get tour base
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.material) {
                 child.material.metalness = 0
                 child.material.roughness = 1
@@ -83,13 +83,13 @@ function Trial1(scene, camera, assets, timeVars) {
         })
 
         // Get all holes
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("HoleFill")) {
                 child.material = child.material.clone() // clone material so that it is not shared with other meshes
                 holesArr.push(child)
             }
         })
-        holesArr.forEach((hole) => {
+        holesArr.forEach(hole => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -111,7 +111,7 @@ function Trial1(scene, camera, assets, timeVars) {
         positionPersos()
     }
 
-    function positionPersos(){
+    function positionPersos() {
         console.log("BASETOUR", baseTour)
         assets.zanitRigged.position.copy(baseTour.position.clone())
         assets.lamarRigged.position.copy(baseTour.position.clone())
@@ -269,7 +269,9 @@ function Trial1(scene, camera, assets, timeVars) {
                 .normalize()
 
             spotLightRaycaster.set(spotPos, raycastDir)
-            const intersects = spotLightRaycaster.intersectObjects(baseTour.children)
+            const intersects = spotLightRaycaster.intersectObjects(
+                baseTour.children
+            )
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -304,8 +306,10 @@ function Trial1(scene, camera, assets, timeVars) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
-                    hole.cyanValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.pinkValue +=
+                        timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.cyanValue +=
+                        timeVars.DELTA_TIME * fusionScaleDuration * 2
                     threeBus.$emit("holeScaling", {
                         color: "White",
                         progress: (hole.cyanValue + hole.pinkValue) * 100
@@ -319,7 +323,7 @@ function Trial1(scene, camera, assets, timeVars) {
                         })
                     }
 
-                    if (distanceHoleToPink < maxDistanceFromHole){
+                    if (distanceHoleToPink < maxDistanceFromHole) {
                         hole.pinkValue += 1 / (60 * defaultScaleDuration)
                         threeBus.$emit("holeScaling", {
                             color: "Pink",
@@ -334,12 +338,10 @@ function Trial1(scene, camera, assets, timeVars) {
                     .clone()
                     .lerp(hole.scaleMax, hole.progress)
                 hole.scale.copy(newScale)
-             
             } else {
                 // HOLE IS FILLED > CHECK VICTORIOUS
                 // console.log("HOLE FILLED")
                 console.log("HOLE FILLED")
-
 
                 if (hole.cyanValue >= maxColorScale) {
                     // Cyan winner
@@ -355,7 +357,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     hole.material.color.set(colors.white)
                 }
 
-                holesArr.splice(holesArr.indexOf(hole), 1);
+                holesArr.splice(holesArr.indexOf(hole), 1)
                 threeBus.$emit("holeFilled", hole.winner)
             }
         })
@@ -482,7 +484,7 @@ function Trial1(scene, camera, assets, timeVars) {
         // Gui
         const gui = new dat.GUI()
 
-        gui.add(debug, "video").onChange((boolean) => {
+        gui.add(debug, "video").onChange(boolean => {
             if (boolean) {
                 video.style.opacity = 1
             } else {
