@@ -18,7 +18,7 @@
         <!-- Commencer l'expérience Mobile-->
         <form class="mobile" v-if="isMobile" action @submit.prevent="joinRoom">
             <p class="textGlow">Connectez-vous sur <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché</p>
-            <input class="inputText textGlow" type="text" v-model="requestedRoom" placeholder="Code"><br/>
+            <input class="inputText textGlow" type="number" v-model="requestedRoom" placeholder="Code"><br/>
 
             <button type="submit">
                 <div class="outerCircle">
@@ -167,14 +167,16 @@ export default {
             color: $white;
             text-transform: uppercase;
             border-bottom: solid 2px $white;
-            font-size: 20px;
+            font-size: 40px;
             text-align: center;
             padding-bottom: 5px;
-            width: 80px;
+            width: 180px;
+            letter-spacing: 20px;
+            padding-left: 5px;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-            color: $white;
-            opacity: 1; /* Firefox */
+                color: $white;
+                opacity: 1; /* Firefox */
             }
 
         }

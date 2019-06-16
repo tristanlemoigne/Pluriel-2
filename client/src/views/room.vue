@@ -1,10 +1,11 @@
 <template>
     <div class="roomUI">
-        <!-- TUTO DISPOSITIF -->
+        <!-- TUTO DISPOSITIF DESKTOP -->
         <div
             class="dispositif"
             ref="dispositif"
             v-show="roomState.currentStep.name === 'room_waiting'"
+            v-if="!isMobile"
         >
             <div class="description textGlow">
                 Vous devrez être
@@ -27,8 +28,8 @@
             </div>
         </div>
 
-        <!-- CONNEXION ROOM -->
-        <div ref="connexion" class="connexion">
+        <!-- CONNEXION ROOM DESKTOP-->
+        <div v-if="!isMobile" ref="connexion" class="connexion">
             <div v-if="roomState.currentStep.name === 'room_waiting'">
                 <div class="description textGlow">
                     Connectez-vous grâce à votre mobile sur
@@ -64,11 +65,25 @@
             </div>
         </div>
 
-        <!--<button
-            class="bigTextButton"
-            v-if="roomState.currentStep.name === 'room_ready'"
-            @click="setRoomState({currentStep: { name:'NEXT' }})"
-        >Let's go</button>-->
+        <!-- UN MOBILE A REJOINT -->
+
+        <div class="mobile textGlow" v-if="isMobile">
+            <div class="player">
+                Vous êtes <span v-bind:class="{ visible: mobileUsersCount === 1 }">Joueur 1</span><span v-bind:class="{ visible: mobileUsersCount > 1 }">Joueur 2</span>
+            </div>
+
+            <img src="/assets/img/mobileConnected.svg" alt/>
+
+            <div>
+                <p>
+                    Vous avez rejoins l'expérience
+                </p>
+
+                <p>
+                    En attente du deuxième joueur...
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -245,6 +260,36 @@ export default {
                     font-size: 15px;
                 }
             }
+        }
+    }
+
+    div.mobile{
+        font-size: 17px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+
+        div.player{
+            margin-bottom: 20%;
+            span.visible{
+                display: inline;
+            }
+
+            span{
+                display: none;
+                // font-style: italic;
+                font-weight: bold;
+            }
+        }
+      
+        p:nth-child(1){
+            font-weight: bold;
+        }
+
+        p:nth-child(2){
+            margin-top: 100px;
         }
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="162px" height="162px" viewBox="0 0 162 162" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-39.0%" y="-39.0%" width="178.1%" height="178.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="01.Parcours-Debut-XP" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01.02-Connexion_m" transform="translate(-107.000000, -143.000000)">
+            <g id="Group-2" filter="url(#filter-1)" transform="translate(131.226236, 167.226371)">
+                <path d="M83.5714548,30.3645333 L42.7856929,75.4447476 L29.9245024,61.2304857 C28.5470024,59.7046048 26.1910024,59.5910571 24.6687405,60.9662952 C23.1460262,62.3456048 23.0252405,64.6997952 24.4063595,66.224319 L39.3846929,82.7778429 C40.07005,83.7753429 41.2073357,84.359819 42.4133833,84.359819 C42.5490976,84.359819 42.6848119,84.3037238 42.8227881,84.2869857 C42.9177881,84.2946762 43.0087167,84.3467 43.1019071,84.3467 C44.2039071,84.3467 45.2719786,83.8517952 45.9957881,82.9972476 L89.09005,35.3601762 C90.471169,33.8338429 90.3517405,31.4796524 88.827669,30.1003429 C87.3054071,28.7210333 84.9507643,28.834581 83.5714548,30.3645333" id="Fill-1" fill="#FFFFFF"></path>
+                <path d="M112.295881,45.0784048 C113.083024,48.8444762 113.4965,52.7480714 113.4965,56.7484762 C113.4965,88.0894286 88.0894286,113.4965 56.7484762,113.4965 C25.4070714,113.4965 9.9475983e-14,88.0894286 9.9475983e-14,56.7484762 C9.9475983e-14,25.4070714 25.4070714,8.52651283e-14 56.7484762,8.52651283e-14 C74.2542619,8.52651283e-14 89.9089048,7.92661905 100.31819,20.3860952" id="Stroke-3" stroke="#FFFFFF" stroke-width="7.72649993" stroke-linecap="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>
