@@ -46,7 +46,6 @@ export default {
             this.pinkAmulette.src = "/assets/img/AmuletteZanit.png";
         },
         updateAmulette(amulette, blob){
-            console.log(blob.x)
             this.context.drawImage(amulette, blob.x, blob.y     , blob.width, blob.height);
         }
     },

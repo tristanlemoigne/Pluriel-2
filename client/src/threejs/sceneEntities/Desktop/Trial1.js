@@ -296,13 +296,26 @@ function Trial1(scene, camera, assets, timeVars) {
                 ) {
                     hole.pinkValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
                     hole.cyanValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    threeBus.$emit("holeScaling", {
+                        color: "White",
+                        progress: (hole.cyanValue + hole.pinkValue) * 100
+                    })
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
                         hole.cyanValue += 1 / (60 * defaultScaleDuration)
+                        threeBus.$emit("holeScaling", {
+                            color: "Cyan",
+                            progress: hole.cyanValue * 100
+                        })
                     }
 
-                    if (distanceHoleToPink < maxDistanceFromHole)
+                    if (distanceHoleToPink < maxDistanceFromHole){
                         hole.pinkValue += 1 / (60 * defaultScaleDuration)
+                        threeBus.$emit("holeScaling", {
+                            color: "Pink",
+                            progress: hole.pinkValue * 100
+                        })
+                    }
                 }
 
                 // Scale the hole
@@ -310,8 +323,8 @@ function Trial1(scene, camera, assets, timeVars) {
                 const newScale = hole.scaleMin
                     .clone()
                     .lerp(hole.scaleMax, hole.progress)
-
                 hole.scale.copy(newScale)
+             
             } else {
                 // HOLE IS FILLED > CHECK VICTORIOUS
                 // console.log("HOLE FILLED")
@@ -322,7 +335,6 @@ function Trial1(scene, camera, assets, timeVars) {
                     // Cyan winner
                     hole.winner = "Cyan"
                     hole.material.color.set(colors.cyan)
-                    console.log("WINNER : cyan")
                 } else if (hole.pinkValue >= maxColorScale) {
                     // Pink winner
                     hole.winner = "Pink"
@@ -332,6 +344,9 @@ function Trial1(scene, camera, assets, timeVars) {
                     hole.winner = "White"
                     hole.material.color.set(colors.white)
                 }
+
+                holesArr.splice(holesArr.indexOf(hole), 1);
+                threeBus.$emit("holeFilled", hole.winner)
             }
         })
     }

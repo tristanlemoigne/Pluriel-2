@@ -28,10 +28,14 @@
             <div class="uiStep1" v-bind:class="{ visible: canShowUIStep }">
                 <div class="scoreLamar">
                     <div class="stone">
+                        <svg  width="100" height="100">
+                            <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
+                            <circle class="circleFill" ref="cyanProgression" stroke="#00ffff" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                        </svg>
                         <img src="assets/img/icon-stone-lamar.png" alt>
                     </div>
 
-                    <div class="score">
+                    <div ref="scoreLamar" class="score">
                         <div></div>
                         <div></div>
                         <div></div>
@@ -44,11 +48,11 @@
                     </div>
                 </div>
 
-                <div class="scoreGlobal">
+                <div class="scoreTeam">
                     <img src="assets/img/icon-stone.png" alt>
 
                     <div class="gradient">
-                        <div class="team">
+                        <div ref="scoreTeam" class="score">
                             <div class="one"></div>
                             <div class="two"></div>
                             <div class="three"></div>
@@ -64,7 +68,6 @@
                             <defs>
                                 <clipPath clipPathUnits="objectBoundingBox" id="sector">
                                     <!-- ICI ON CALCULE LANGLE LOLILOL  pi:4.5 -->
-                                    <!-- <path class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.8830222216,.1786061952 z"></path> -->
                                     <path class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.9045084972,.2061073739 z"></path>
                                 </clipPath>
                             </defs>
@@ -73,7 +76,7 @@
                 </div>
 
                 <div class="scoreZanit">
-                    <div class="score">
+                    <div ref="scoreZanit" class="score">
                         <div></div>
                         <div></div>
                         <div></div>
@@ -86,6 +89,10 @@
                     </div>
 
                     <div class="stone">
+                         <svg  width="100" height="100">
+                            <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
+                            <circle class="circleFill" ref="pinkProgression" stroke="#ff00ff" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                        </svg>
                         <img src="assets/img/icon-stone-zanit.png" alt>
                     </div>
                 </div>
@@ -109,8 +116,9 @@
 <script>
 import TrackerVideo from "@/components/TrackerVideo.vue";
 import socket from "@/socket.js";
-import { bus } from "../main";
+import { threeBus, bus } from "../main";
 import { setTimeout } from "timers";
+import CSS from "@/config/styles.scss"
 
 export default {
     name: "experience",
@@ -126,7 +134,10 @@ export default {
         character: undefined,
         canShowUIGlobale: false,
         canShowUITuto: false,
-        canShowUIStep: false
+        canShowUIStep: false,
+        scoreLamar: 0,
+        scoreZanit: 0,
+        scoreTeam: 0
     }),
     props: {
         roomId: String,
@@ -143,6 +154,29 @@ export default {
         },
         getTransitionEnd(){
             return (this.roomState.currentStep.cameraTransition.camPos.time + this.roomState.currentStep.cameraTransition.camPos.delay) * 1000 - 2000
+        },
+        addHoleWinnerScore(winner){
+            // winner = Cyan / Pink / White
+            if(winner === "Cyan") {
+                console.log(this.$refs.scoreLamar.children[0], this.scoreLamar)
+                this.$refs.scoreLamar.children[this.scoreLamar].style.backgroundColor = CSS.cyan
+                this.scoreLamar ++
+            } else if (winner === "Pink"){
+                this.$refs.scoreZanit.children[this.scoreZanit].style.backgroundColor = CSS.pink
+                this.scoreZanit ++
+            } else if(winner === "White"){
+                this.$refs.scoreTeam.children[this.scoreTeam].style.backgroundColor = CSS.white
+                this.scoreTeam ++
+            } else {
+                console.log("Winner is not possible >>>", winner)
+            }
+        },
+        playerHoleProgress(hole){
+            if(hole.color === "Cyan"){
+                this.$refs.cyanProgression.style.strokeDasharray = `${hole.progress}, 100`;
+            } else if(hole.color === "Pink"){
+                this.$refs.pinkProgression.style.strokeDasharray = `${hole.progress}, 100`;
+            }
         }
     },
     watch:{
@@ -160,6 +194,9 @@ export default {
                     setTimeout(() => {
                         this.canShowUIStep = true
                     }, this.getTransitionEnd())
+
+                    threeBus.$on("holeFilled", this.addHoleWinnerScore)    
+                    threeBus.$on("holeScaling", this.playerHoleProgress)    
                 }
             },
             deep: true
@@ -298,18 +335,18 @@ div {
         align-items: center;
         justify-content: center;
 
-        .scoreGlobal{
+        .scoreTeam{
             position: relative;
             margin: 0 20px;
 
             div.gradient{
-                    .team {
+                .score {
                     list-style: none;
                     position: relative;
                     width: 100px;
                     height: 100px;
-                    border: solid 2px $white;
-                    background-color: $white;
+                    border: solid 2px $black;
+                    background-color: $black;
                     border-radius: 50%;
 
                     div { 
@@ -320,34 +357,33 @@ div {
                         height: 100%;
                         clip-path: url(#sector);
 
+                        background-color: rgba(227,227,227,0.5);
 
-                        background-color: rgba(227,227,227, 0.5);
-
-                        &.one {
-                            transform: rotate(0deg);
-                        }
-                        &.two {
+                        &.one {                 
                             transform: rotate(-40deg);
                         }
-                        &.three {
+                        &.two {
+                            transform: rotate(0deg);
+                        }
+                        &.nine {
                             transform: rotate(-80deg);
                         }
-                        &.four {
+                        &.height {
                             transform: rotate(-120deg);
                         }
-                        &.five {
+                        &.seven {
                             transform: rotate(-160deg);
                         }
                         &.six {
                             transform: rotate(-200deg);
                         }
-                        &.seven {
+                        &.five {
                             transform: rotate(-240deg);
                         }
-                        &.height {
+                        &.four {
                             transform: rotate(-280deg);
                         }
-                        &.nine {
+                        &.three {
                             transform: rotate(-320deg);
                         }
                     }
@@ -373,23 +409,75 @@ div {
             justify-content: center;
             align-items: center;
 
-            &.scoreLamar .stone::before{
-                content: "Lamar";
+            &.scoreLamar{
+                .stone::before{
+                    content: "Lamar";
+                }
+
+                div.score{
+                    div:first-child{
+                        border-top-left-radius: 50px;
+                        border-bottom-left-radius: 50px;
+                    }
+
+                    div:last-child{
+                        border-top-right-radius: 50px;
+                        border-bottom-right-radius: 50px;
+                    }
+                }
             }
-            &.scoreZanit .stone::before{
-                content: "Zanit";
+
+            &.scoreZanit{
+                .stone::before{
+                    content: "Zanit";
+                }
+
+                div.score{
+                    flex-direction: row-reverse;
+
+                    div:last-child{
+                        border-top-left-radius: 50px;
+                        border-bottom-left-radius: 50px;
+                    }
+
+                    div:first-child{
+                        border-top-right-radius: 50px;
+                        border-bottom-right-radius: 50px;
+                    }
+                }
             }
 
             .stone{
                 margin: 0 10px;
                 position: relative;
+                width: 80px;
+                height: 80px;
 
                 &::before{
                     position: absolute;
-                    top: -30px; 
+                    top: -40px; 
                     left: 50%;;
                     font-weight: bold;
                     transform: translateX(-50%);
+                }
+
+                img, svg{
+                    top: 50%;
+                    left: 50%;
+                    position: absolute;
+                    transform: translate(-50%, -50%);
+                }
+
+                svg{
+                    z-index: 3;
+                    transform-origin: center left;
+                    transform: rotate(-90deg);
+
+                    circle{
+                        transform-origin: 3px 3px;
+
+                        transform: scale(2.8);
+                    }
                 }
             }
 
@@ -403,16 +491,6 @@ div {
                 div{
                     width: 11.111%;
                     border: solid 2px white;
-
-                    &:first-child{
-                        border-top-left-radius: 50px;
-                        border-bottom-left-radius: 50px;
-                    }
-
-                    &:last-child{
-                        border-top-right-radius: 50px;
-                        border-bottom-right-radius: 50px;
-                    }
                 }
             }
         }
