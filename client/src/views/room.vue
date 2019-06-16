@@ -66,7 +66,6 @@
         </div>
 
         <!-- UN MOBILE A REJOINT -->
-
         <div class="mobile textGlow" v-if="isMobile">
             <div class="player">
                 Vous êtes <span v-bind:class="{ visible: mobileUsersCount === 1 }">Joueur 1</span><span v-bind:class="{ visible: mobileUsersCount > 1 }">Joueur 2</span>

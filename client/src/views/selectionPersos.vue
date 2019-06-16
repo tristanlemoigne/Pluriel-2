@@ -14,9 +14,13 @@
         </div>
 
         <!-- CHOIX DES PERSOS MOBILE-->
-        <div v-if="isMobile">
-            <button v-if="isMobile" @click.once="choosePerso">LAMAR</button>
+        <div class="textGlow" v-if="isMobile">
+            <p>
+                <span>{{lamarPlayer}}</span><br/><br/>
+                Choisissez votre personnage
+            </p>
 
+            <button v-if="isMobile" @click.once="choosePerso">LAMAR</button>
             <button v-if="isMobile" @click.once="choosePerso">ZANIT</button>
         </div>
     </div>
@@ -35,20 +39,18 @@ export default {
         isMobile: Boolean,
         roomState: Object
     },
-    data: () => ({
-        lamarPlayer: undefined,
-        zanitPlayer: undefined
-    }),
+    data: function() {
+        return {
+            lamarPlayer: (this.roomState.player1 === socket.id) ? "Joueur 1" : "Joueur 2",
+            zanitPlayer: (this.roomState.player2 === socket.id)? "Joueur 2" : "Joueur 1",
+        }
+    },
     computed: {},
     watch: {
         "roomState.lamar": {
             handler: function(currentLamar, oldLamar) {
                 if (currentLamar !== oldLamar && currentLamar !== undefined) {
                     threeBus.$emit("animate perso", "lamar");
-                    this.$data.lamarPlayer =
-                        currentLamar === this.$props.roomState.player1
-                            ? "Joueur 1"
-                            : "Joueur 2";
                     this.$refs.player1.style.opacity = 1;
                 }
             },
@@ -58,10 +60,6 @@ export default {
             handler: function(currentZanit, oldZanit) {
                 if (currentZanit !== oldZanit && currentZanit !== undefined) {
                     threeBus.$emit("animate perso", "zanit");
-                    this.$data.zanitPlayer =
-                        currentZanit === this.$props.roomState.player1
-                            ? "Joueur 1"
-                            : "Joueur 2";
                     this.$refs.player2.style.opacity = 1;
                 }
             },
@@ -97,6 +95,9 @@ export default {
         setRoomState(stateObj) {
             bus.$emit("setRoomState", stateObj);
         }
+    },
+    mounted(){
+        console.log("hinbo", this.$props.roomState)
     }
 };
 </script>
