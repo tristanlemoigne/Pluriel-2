@@ -129,14 +129,14 @@ class Serveur{
                             currentRoom.roomState.player1 = socket.id
                             server
                                 .in(currentRoom.id)
-                                .emit("playerOneReady")
+                                .emit("playerOneReady", socket.id)
                         }
 
                         if(mobileUsersCount() === 2) {
                             currentRoom.roomState.player2 = socket.id
                             server
                                 .in(currentRoom.id)
-                                .emit("playerTwoReady")
+                                .emit("playerTwoReady", socket.id)
                         }
 
                         // If, after this connection, the room is full, then go to next step

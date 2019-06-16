@@ -68,7 +68,8 @@
         <!-- UN MOBILE A REJOINT -->
         <div class="mobile textGlow" v-if="isMobile">
             <div class="player">
-                Vous êtes <span v-bind:class="{ visible: mobileUsersCount === 1 }">Joueur 1</span><span v-bind:class="{ visible: mobileUsersCount > 1 }">Joueur 2</span>
+                Vous êtes <span v-bind:class="{ visible: isPlayer(player1) }">Joueur 1</span>
+                <span v-bind:class="{ visible: isPlayer(player2) }">Joueur 2</span>
             </div>
 
             <img src="/assets/img/mobileConnected.svg" alt/>
@@ -91,7 +92,6 @@ import { TweenMax, Power2 } from "gsap/TweenMax"
 import PictoDesktop from "../components/PictoDesktop"
 import PictoMobile from "../components/PictoMobile"
 import socket from "@/socket"
-
 import { bus } from "@/main"
 
 export default {
@@ -108,7 +108,9 @@ export default {
     },
     data() {
         return {
-            isDebugMode: true
+            isDebugMode: true,
+            player1: "otot",
+            player2: undefined
         }
     },
     computed: {
@@ -121,45 +123,57 @@ export default {
             return mobileCount
         }
     },
+    methods: {
+        isPlayer(playerId){
+            return playerId === socket.id
+        }
+    },
     mounted: function() {
+        // Socket listeners
+        socket.on("playerOneReady", (playerID) => {
+            this.player1 = playerID
+            if(!this.isMobile){
+                TweenMax.to(this.$refs.player1ready, 1, {
+                    opacity: 1,
+                    ease: Power2.easeOut
+                })
+            }
+        })
+
+        socket.on("playerTwoReady", (playerID) => {
+            this.player2 = playerID
+            if(!this.isMobile){
+                TweenMax.to(this.$refs.player2ready, 1, {
+                    opacity: 1,
+                    ease: Power2.easeOut
+                })
+            }
+        })
+
         if (this.isMobile) {
             var noSleep = new NoSleep()
             noSleep.enable() // keep the screen on!
         }
 
-        // TODO: use CSS and the current step name instead of GSAP?
-        const tl = new TimelineLite()
+        if(!this.isMobile){
+            // TODO: use CSS and the current step name instead of GSAP?
+            const tl = new TimelineLite()
 
-        tl.to(this.$refs.dispositif, 2, {
-            opacity: 0,
-            delay: 0.5,
-            ease: Power2.easeIn,
-            onComplete: () => {
-                if (this.$refs.dispositif) {
-                    this.$refs.dispositif.style.display = "none"
-                    this.$refs.connexion.style.display = "flex"
+            tl.to(this.$refs.dispositif, 2, {
+                opacity: 0,
+                delay: 0.5,
+                ease: Power2.easeIn,
+                onComplete: () => {
+                    if (this.$refs.dispositif) {
+                        this.$refs.dispositif.style.display = "none"
+                        this.$refs.connexion.style.display = "flex"
+                    }
                 }
-            }
-        })
-
-        tl.to(this.$refs.connexion, 1, { opacity: 1, ease: Power2.easeOut })
-
-        // Socket listeners
-        socket.on("playerOneReady", () => {
-            console.log("the player one is ready")
-            TweenMax.to(this.$refs.player1ready, 1, {
-                opacity: 1,
-                ease: Power2.easeOut
             })
-        })
 
-        socket.on("playerTwoReady", () => {
-            console.log("the player two is ready")
-            TweenMax.to(this.$refs.player2ready, 1, {
-                opacity: 1,
-                ease: Power2.easeOut
-            })
-        })
+            tl.to(this.$refs.connexion, 1, { opacity: 1, ease: Power2.easeOut })
+        }
+
     }
 }
 </script>

@@ -486,8 +486,8 @@ div {
                     position: relative;
                     width: 100px;
                     height: 100px;
-                    border: solid 2px $black;
-                    background-color: $black;
+                    // border: solid 2px $black;
+                    // background-color: $black;
                     border-radius: 50%;
 
                     div { 
