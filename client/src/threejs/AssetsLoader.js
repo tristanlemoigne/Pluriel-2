@@ -50,7 +50,7 @@ function AssetsLoader() {
                     } else {
                         this.assets[ref] = gltf
                     }
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -65,7 +65,7 @@ function AssetsLoader() {
             if (path && ref) {
                 this._OBJLoader.load(path, obj => {
                     this.assets[ref] = obj
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -80,7 +80,7 @@ function AssetsLoader() {
             if (path && ref) {
                 this._FBXLoader.load(path, fbx => {
                     this.assets[ref] = fbx
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -95,7 +95,7 @@ function AssetsLoader() {
             return new Promise(resolve => {
                 const texture = this._TextureLoader.load(path)
                 this.assets[ref] = texture
-                console.log("resolved:", ref)
+                // console.log("resolved:", ref)
                 resolve()
             })
         } else {
@@ -132,7 +132,7 @@ function AssetsLoader() {
                     }
 
                     this.assets[ref] = group
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {

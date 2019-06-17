@@ -77,6 +77,13 @@ function Ending(scene, camera, assets, timeVars) {
             // }
         })
 
+        // console.log(
+        //     { pierreLeft },
+        //     { pierreRight },
+        //     { buildingLightsLeft },
+        //     { buildingLightsRight }
+        // )
+
         // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
         // pierreLeft.material.emissiveIntensity = 10
         // pierreRight.material.emissive = new THREE.Color(0x80ff00)
@@ -101,21 +108,38 @@ function Ending(scene, camera, assets, timeVars) {
             winnerStr === "zanit" ||
             winnerStr === "egalite"
         ) {
-            loseAnimation()
+            loseAnimation(6)
         } else if (winnerStr === "team") {
-            winAnimation()
+            winAnimation(11)
         }
         // distance APART : originalPos + 9
         // distance TOGETHER : originalPos -13.9
     }
 
-    function loseAnimation() {
+    function loseAnimation(animDuration) {
+        const gradientDivs = document.body.getElementsByClassName("gradient")
+        for (let i = 0; i < gradientDivs.length; i++) {
+            if (gradientDivs[i].classList.contains("loseGradient")) {
+                gradientDivs[
+                    i
+                ].style.transition = `opacity ${animDuration}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 1
+                gradientDivs[i].style.zIndex = -1
+            } else {
+                gradientDivs[i].style.transition = `opacity ${animDuration *
+                    2}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 0
+                gradientDivs[i].style.zIndex = -2
+            }
+        }
+
         const losingTweens = new TimelineLite()
         losingTweens
             // .delay(
             //     experienceSteps[experienceSteps.length - 1].cameraTransition
             //         .camPos.time - 1.5
             // )
+            .duration(animDuration)
             .add("moveX", 0)
             .to(
                 islandLeft.position,
@@ -132,6 +156,26 @@ function Ending(scene, camera, assets, timeVars) {
                 {
                     x: islandRight.originalPos.x + 9.5,
                     ease: Power2.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                scene.fog,
+                7,
+                {
+                    density: 0.0115,
+                    ease: Power1.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                scene.fog.color,
+                7,
+                {
+                    r: 0.55,
+                    g: 0.45,
+                    b: 0.55,
+                    ease: Power1.easeInOut
                 },
                 "moveX"
             )
@@ -154,15 +198,50 @@ function Ending(scene, camera, assets, timeVars) {
                 },
                 "moveY"
             )
+            .to(
+                tourCentrale,
+                5,
+                {
+                    angularVelocity: 0,
+                    ease: Power1.easeIn
+                },
+                "moveY"
+            )
+            .to(
+                tourCentrale.position,
+                5,
+                {
+                    y: tourCentrale.originalPos.y,
+                    ease: Power2.easeInOut
+                },
+                "moveY"
+            )
     }
 
-    function winAnimation() {
+    function winAnimation(animDuration) {
+        const gradientDivs = document.body.getElementsByClassName("gradient")
+        for (let i = 0; i < gradientDivs.length; i++) {
+            if (gradientDivs[i].classList.contains("winGradient")) {
+                gradientDivs[
+                    i
+                ].style.transition = `opacity ${animDuration}s ease-in-out`
+                gradientDivs[i].style.opacity = 1
+                gradientDivs[i].style.zIndex = -1
+            } else {
+                gradientDivs[i].style.transition = `opacity ${animDuration *
+                    2}s ease-in-out`
+                gradientDivs[i].style.opacity = 0
+                gradientDivs[i].style.zIndex = -2
+            }
+        }
+
         const winningTweens = new TimelineLite()
         winningTweens
             // .delay(
             //     experienceSteps[experienceSteps.length - 1].cameraTransition
             //         .camPos.time - 1.5
             // )
+            .duration(animDuration)
             .add("move", 0)
             .to(
                 islandLeft.position,
@@ -180,6 +259,26 @@ function Ending(scene, camera, assets, timeVars) {
                 {
                     x: islandRight.originalPos.x - 13.9,
                     y: islandRight.originalPos.y,
+                    ease: Power1.easeInOut
+                },
+                "move"
+            )
+            .to(
+                scene.fog,
+                8,
+                {
+                    density: 0.004,
+                    ease: Power1.easeInOut
+                },
+                "move"
+            )
+            .to(
+                scene.fog.color,
+                8,
+                {
+                    r: 0.95,
+                    g: 0.8,
+                    b: 0.95,
                     ease: Power1.easeInOut
                 },
                 "move"

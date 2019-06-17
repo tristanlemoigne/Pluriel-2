@@ -163,11 +163,11 @@ function HomeDskSceneEntity([sceneL, sceneR], assets) {
     }
 
     function update() {
-        assets.pinkStone.rotation.y += 0.001
-        assets.pinkStone.rotation.x += 0.001
+        assets.pinkStone.rotation.y += 0.0014
+        assets.pinkStone.rotation.x += 0.0014
 
-        assets.cyanStone.rotation.y += 0.001
-        assets.cyanStone.rotation.x += 0.001
+        assets.cyanStone.rotation.y += 0.0014
+        assets.cyanStone.rotation.x += 0.0014
 
         let delta = clock.getDelta()
         if (lamarMixer && zanitMixer) {
