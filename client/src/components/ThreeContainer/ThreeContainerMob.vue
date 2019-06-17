@@ -28,7 +28,7 @@ export default {
     watch: {
         "roomState.currentStep": {
             handler: function(currentStep, oldStep) {
-                if (currentStep.hasMobileThreeScene) {
+                if (oldStep.name !== currentStep.name){
                     threeBus.$emit("change to step", currentStep)
                 }
             },
@@ -49,5 +49,6 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 </style>

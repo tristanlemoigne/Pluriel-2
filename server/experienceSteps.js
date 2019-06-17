@@ -56,7 +56,9 @@ module.exports = [
         ],
         addedThreeGroupsMob: [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
-            { asset: "zanitRigged", delay: 0, time: 0.5 }
+            { asset: "zanitRigged", delay: 0, time: 0.5 },
+            { asset: "lamarSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 },
         ]
     },
 
@@ -68,6 +70,12 @@ module.exports = [
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
             { asset: "persosLights", delay: 0, time: 0.8 }
+        ],
+        removedThreeGroupsMob: [
+            { asset: "lamarRigged", delay: 0, time: 0.5 },
+            { asset: "zanitRigged", delay: 0, time: 0.5 },
+            { asset: "lamarSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 },
         ]
     },
 

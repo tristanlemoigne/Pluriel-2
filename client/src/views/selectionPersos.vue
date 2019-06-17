@@ -7,21 +7,32 @@
             <div class="textGlow">Sélectionnez un personnage sur votre téléphone</div>
 
             <div class="playerContainer">
-                <p ref="player1" class="textGlow">{{lamarPlayer}} est Lamar</p>
+                <p ref="lamarPlayer" class="textGlow">{{lamarPlayer}} est Lamar</p>
                 <p></p>
-                <p ref="player2" class="textGlow">{{zanitPlayer}} est Zanit</p>
+                <p ref="zanitPlayer" class="textGlow">{{zanitPlayer}} est Zanit</p>
             </div>
         </div>
 
         <!-- CHOIX DES PERSOS MOBILE-->
-        <div class="textGlow" v-if="isMobile">
-            <p>
-                <span>{{lamarPlayer}}</span><br/><br/>
+        <div class="mobile textGlow" v-if="isMobile">
+            <p class="textContent">
+                <span>{{player}}</span>
                 Choisissez votre personnage
             </p>
 
-            <button v-if="isMobile" @click.once="choosePerso">LAMAR</button>
-            <button v-if="isMobile" @click.once="choosePerso">ZANIT</button>
+            <div ref="carousel" class="carousel">
+                <div class="previous" v-bind:class="{ hide: canClickNext }" @click="slidePerso('previous', -10)">
+                    <img src="/assets/img/selectionPrevious.png" alt/><br/>
+                    Précédent
+                </div>
+
+                <div class="next" v-bind:class="{ hide: !canClickNext }" @click="slidePerso('next', 10)">
+                    <img src="/assets/img/selectionNext.png" alt/><br/>
+                    Suivant
+                </div>
+            </div>
+
+            <button v-bind:class="{ hide: (!canChooseLamar && canClickNext )|| (!canChooseZanit && !canClickNext ) }" v-if="isMobile" @click.once="choosePerso">Choisir ce personnage</button>
         </div>
     </div>
 </template>
@@ -29,8 +40,7 @@
 <script>
 import { TweenMax, Power2 } from "gsap/TweenMax";
 import socket from "@/socket";
-import { bus } from "@/main";
-import { threeBus } from "@/main";
+import { bus, threeBus } from "@/main";
 
 export default {
     name: "room",
@@ -41,8 +51,12 @@ export default {
     },
     data: function() {
         return {
-            lamarPlayer: (this.roomState.player1 === socket.id) ? "Joueur 1" : "Joueur 2",
-            zanitPlayer: (this.roomState.player2 === socket.id)? "Joueur 2" : "Joueur 1",
+            canClickNext: true,
+            player: (this.roomState.player1 === socket.id) ? "Joueur 1" : "Joueur 2",
+            lamarPlayer: "undefined",
+            zanitPlayer: "undefined",
+            canChooseLamar: true,
+            canChooseZanit: true
         }
     },
     computed: {},
@@ -51,7 +65,23 @@ export default {
             handler: function(currentLamar, oldLamar) {
                 if (currentLamar !== oldLamar && currentLamar !== undefined) {
                     threeBus.$emit("animate perso", "lamar");
-                    this.$refs.player1.style.opacity = 1;
+                    this.canChooseLamar = false
+
+                    if(this.isMobile){
+                        if(currentLamar === socket.id){
+                            for (let i = 0; i < this.$refs.carousel.children.length; i++) {
+                                this.$refs.carousel.children[i].classList.add("hide")
+                            }
+                        }
+                    } else {
+                        if(this.roomState.player1 === currentLamar){
+                            this.lamarPlayer = "Joueur 1"
+                        } else {
+                            this.lamarPlayer = "Joueur 2"
+                        }
+
+                        this.$refs.lamarPlayer.style.opacity = 1;
+                    }
                 }
             },
             deep: true
@@ -60,7 +90,23 @@ export default {
             handler: function(currentZanit, oldZanit) {
                 if (currentZanit !== oldZanit && currentZanit !== undefined) {
                     threeBus.$emit("animate perso", "zanit");
-                    this.$refs.player2.style.opacity = 1;
+                    this.canChooseZanit = false
+
+                    if(this.isMobile){
+                        if(currentZanit === socket.id){
+                            for (let i = 0; i < this.$refs.carousel.children.length; i++) {
+                                this.$refs.carousel.children[i].classList.add("hide")
+                            }
+                        }
+                    } else {
+                        if(this.roomState.player1 === currentZanit){
+                            this.zanitPlayer = "Joueur 1"
+                        } else {
+                            this.zanitPlayer = "Joueur 2"
+                        }
+
+                        this.$refs.zanitPlayer.style.opacity = 1;
+                    }
                 }
             },
             deep: true
@@ -81,23 +127,23 @@ export default {
     },
     methods: {
         choosePerso(e) {
-            const perso = e.target.innerText;
-
-            if (perso === "LAMAR") {
-                e.target.style.opacity = "0.2";
+            if (this.canClickNext) { // Perso = Lamar
                 this.setRoomState({ lamar: socket.id });
-            } else if (perso === "ZANIT") {
-                e.target.style.opacity = "0.2";
+            } else{
                 this.setRoomState({ zanit: socket.id });
             }
         },
-
+        slidePerso(slide, slideValue){
+            if(slide === "next"){
+                this.canClickNext = false
+            } else if(slide === "previous"){
+                this.canClickNext = true
+            }
+            threeBus.$emit("slidePerso", slideValue);
+        },
         setRoomState(stateObj) {
             bus.$emit("setRoomState", stateObj);
         }
-    },
-    mounted(){
-        console.log("hinbo", this.$props.roomState)
     }
 };
 </script>
@@ -108,15 +154,6 @@ export default {
 .selectionPerso {
     color: $white;
     text-align: center;
-
-    button {
-        border: solid 1px red;
-        background-color: $black;
-        color: $white;
-        display: block;
-        margin: 50px auto;
-        padding: 25px 50px;
-    }
 
     .playerContainer {
         display: flex;
@@ -130,6 +167,53 @@ export default {
             font-style: italic;
             font-size: 18px;
             transition: opacity 1s ease;
+        }
+    }
+
+    .hide{
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+    .mobile{
+        p.textContent{
+            margin-top: 50px;
+
+            span{
+                display: block;
+                font-style: italic;
+                font-weight: lighter;
+                margin-bottom: 10px;
+            }
+        }
+
+        div.carousel{
+            // border: solid 1px red;
+            display: flex;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            padding: 0 10px;
+            justify-content: space-between;
+            text-transform: uppercase;
+            font-size: 12px;
+
+            img{
+                margin-bottom: 8px;
+            }
+        }
+
+        button{
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            padding-bottom: 4px;
+            font-weight: bold;
+            border-bottom: solid 2px $white;
         }
     }
 }
