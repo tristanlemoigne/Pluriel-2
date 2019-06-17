@@ -112,13 +112,16 @@ function Ending(scene, camera, assets, timeVars) {
     function loseAnimation() {
         const losingTweens = new TimelineLite()
         losingTweens
-            .shiftChildren(5, true)
-            .add("moveX")
+            .delay(
+                experienceSteps[experienceSteps.length - 1].cameraTransition
+                    .camPos.time - 1.5
+            )
+            .add("moveX", 0)
             .to(
                 islandLeft.position,
                 6,
                 {
-                    x: islandLeft.originalPos.x - 9,
+                    x: islandLeft.originalPos.x - 9.5,
                     ease: Power2.easeInOut
                 },
                 "moveX"
@@ -127,26 +130,26 @@ function Ending(scene, camera, assets, timeVars) {
                 islandRight.position,
                 6,
                 {
-                    x: islandRight.originalPos.x + 9,
+                    x: islandRight.originalPos.x + 9.5,
                     ease: Power2.easeInOut
                 },
                 "moveX"
             )
-            .add("moveY")
+            .add("moveY", 1)
             .to(
                 islandLeft.position,
-                4,
+                5,
                 {
-                    y: islandLeft.originalPos.y - 3,
+                    y: islandLeft.originalPos.y - 4,
                     ease: Power1.easeInOut
                 },
                 "moveY"
             )
             .to(
                 islandRight.position,
-                4,
+                5,
                 {
-                    y: islandRight.originalPos.y + 4,
+                    y: islandRight.originalPos.y + 4.5,
                     ease: Power1.easeInOut
                 },
                 "moveY"
@@ -156,8 +159,11 @@ function Ending(scene, camera, assets, timeVars) {
     function winAnimation() {
         const winningTweens = new TimelineLite()
         winningTweens
-            .shiftChildren(5, true)
-            .add("move")
+            .delay(
+                experienceSteps[experienceSteps.length - 1].cameraTransition
+                    .camPos.time - 1.5
+            )
+            .add("move", 0)
             .to(
                 islandLeft.position,
                 8,
