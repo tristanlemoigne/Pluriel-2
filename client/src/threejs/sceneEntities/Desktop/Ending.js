@@ -37,28 +37,28 @@ function Ending(scene, camera, assets, timeVars) {
                 islandLeft.originalPos = new THREE.Vector3()
                 islandLeft.originalPos.copy(islandLeft.position)
 
-                // islandLeft.traverse(islandLeftChild => {
-                //     if (
-                //         islandLeftChild.material &&
-                //         islandLeftChild.material.name.includes("Emission")
-                //     ) {
-                //         buildingLightsLeft.push(islandLeftChild)
-                //     }
-                // })
+                islandLeft.traverse(islandLeftChild => {
+                    if (
+                        islandLeftChild.material &&
+                        islandLeftChild.material.name.includes("Emission")
+                    ) {
+                        buildingLightsLeft.push(islandLeftChild)
+                    }
+                })
             }
             if (child.name.includes("-IleDroite")) {
                 islandRight = child
                 islandRight.originalPos = new THREE.Vector3()
                 islandRight.originalPos.copy(islandRight.position)
 
-                // islandRight.traverse(islandRightChild => {
-                //     if (
-                //         islandRightChild.material &&
-                //         islandRightChild.material.name.includes("Emission")
-                //     ) {
-                //         buildingLightsRight.push(islandRightChild)
-                //     }
-                // })
+                islandRight.traverse(islandRightChild => {
+                    if (
+                        islandRightChild.material &&
+                        islandRightChild.material.name.includes("Emission")
+                    ) {
+                        buildingLightsRight.push(islandRightChild)
+                    }
+                })
             }
             if (child.name.includes("TourCentrale")) {
                 tourCentrale = child
@@ -67,16 +67,24 @@ function Ending(scene, camera, assets, timeVars) {
                 tourCentrale.angularVelocity = 0
             }
 
-            if (child.material && child.name.includes("Pierre")) {
-                console.log(child)
-                pierreLeft = child
-            } else if (child.material && child.name.includes("PierreIleD")) {
-                console.log(child)
-                pierreRight = child
-            }
+            // if (child.material && child.name.includes("Pierre")) {
+            //     console.log(child)
+            //     pierreLeft = child
+            // }
+            // else if (child.material && child.name.includes("PierreIleD")) {
+            //     console.log(child)
+            //     pierreRight = child
+            // }
         })
 
-        // material.emissive = new THREE.Color(0x00ff80)
+        // console.log(
+        //     { pierreLeft },
+        //     { pierreRight },
+        //     { buildingLightsLeft },
+        //     { buildingLightsRight }
+        // )
+
+        // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
         // pierreLeft.material.emissiveIntensity = 10
         // pierreRight.material.emissive = new THREE.Color(0x80ff00)
         // pierreRight.material.emissiveIntensity = 10
@@ -100,21 +108,38 @@ function Ending(scene, camera, assets, timeVars) {
             winnerStr === "zanit" ||
             winnerStr === "egalite"
         ) {
-            loseAnimation()
+            loseAnimation(6)
         } else if (winnerStr === "team") {
-            winAnimation()
+            winAnimation(11)
         }
         // distance APART : originalPos + 9
         // distance TOGETHER : originalPos -13.9
     }
 
-    function loseAnimation() {
+    function loseAnimation(animDuration) {
+        const gradientDivs = document.body.getElementsByClassName("gradient")
+        for (let i = 0; i < gradientDivs.length; i++) {
+            if (gradientDivs[i].classList.contains("loseGradient")) {
+                gradientDivs[
+                    i
+                ].style.transition = `opacity ${animDuration}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 1
+                gradientDivs[i].style.zIndex = -1
+            } else {
+                gradientDivs[i].style.transition = `opacity ${animDuration *
+                    2}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 0
+                gradientDivs[i].style.zIndex = -2
+            }
+        }
+
         const losingTweens = new TimelineLite()
         losingTweens
-            .delay(
-                experienceSteps[experienceSteps.length - 1].cameraTransition
-                    .camPos.time - 1.5
-            )
+            // .delay(
+            //     experienceSteps[experienceSteps.length - 1].cameraTransition
+            //         .camPos.time - 1.5
+            // )
+            .duration(animDuration)
             .add("moveX", 0)
             .to(
                 islandLeft.position,
@@ -131,6 +156,26 @@ function Ending(scene, camera, assets, timeVars) {
                 {
                     x: islandRight.originalPos.x + 9.5,
                     ease: Power2.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                scene.fog,
+                7,
+                {
+                    density: 0.0115,
+                    ease: Power1.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                scene.fog.color,
+                7,
+                {
+                    r: 0.55,
+                    g: 0.45,
+                    b: 0.55,
+                    ease: Power1.easeInOut
                 },
                 "moveX"
             )
@@ -153,15 +198,50 @@ function Ending(scene, camera, assets, timeVars) {
                 },
                 "moveY"
             )
+            .to(
+                tourCentrale,
+                5,
+                {
+                    angularVelocity: 0,
+                    ease: Power1.easeIn
+                },
+                "moveY"
+            )
+            .to(
+                tourCentrale.position,
+                5,
+                {
+                    y: tourCentrale.originalPos.y,
+                    ease: Power2.easeInOut
+                },
+                "moveY"
+            )
     }
 
-    function winAnimation() {
+    function winAnimation(animDuration) {
+        const gradientDivs = document.body.getElementsByClassName("gradient")
+        for (let i = 0; i < gradientDivs.length; i++) {
+            if (gradientDivs[i].classList.contains("winGradient")) {
+                gradientDivs[
+                    i
+                ].style.transition = `opacity ${animDuration}s ease-in-out`
+                gradientDivs[i].style.opacity = 1
+                gradientDivs[i].style.zIndex = -1
+            } else {
+                gradientDivs[i].style.transition = `opacity ${animDuration *
+                    2}s ease-in-out`
+                gradientDivs[i].style.opacity = 0
+                gradientDivs[i].style.zIndex = -2
+            }
+        }
+
         const winningTweens = new TimelineLite()
         winningTweens
-            .delay(
-                experienceSteps[experienceSteps.length - 1].cameraTransition
-                    .camPos.time - 1.5
-            )
+            // .delay(
+            //     experienceSteps[experienceSteps.length - 1].cameraTransition
+            //         .camPos.time - 1.5
+            // )
+            .duration(animDuration)
             .add("move", 0)
             .to(
                 islandLeft.position,
@@ -179,6 +259,26 @@ function Ending(scene, camera, assets, timeVars) {
                 {
                     x: islandRight.originalPos.x - 13.9,
                     y: islandRight.originalPos.y,
+                    ease: Power1.easeInOut
+                },
+                "move"
+            )
+            .to(
+                scene.fog,
+                8,
+                {
+                    density: 0.004,
+                    ease: Power1.easeInOut
+                },
+                "move"
+            )
+            .to(
+                scene.fog.color,
+                8,
+                {
+                    r: 0.95,
+                    g: 0.8,
+                    b: 0.95,
                     ease: Power1.easeInOut
                 },
                 "move"

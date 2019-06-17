@@ -314,8 +314,6 @@ function Trial1(scene, camera, assets, timeVars) {
                         (timeVars.DELTA_TIME / fusionScaleDuration) *
                         0.001 *
                         0.5
-                    // hole.pinkValue += 1 / (60 * fusionScaleDuration)
-                    // hole.cyanValue += 1 / (60 * fusionScaleDuration)
 
                     threeBus.$emit("holeScaling", {
                         color: "White",
@@ -445,8 +443,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     cyanSpotLight.target.position,
                     dummyVec
                 )
-                cyanSpotLight.quaternion.slerp(dummyQuat, 0.05)
-                // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             cyanSpotLightHelper.update()
         }
@@ -475,8 +473,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     pinkSpotLight.target.position,
                     dummyVec
                 )
-                pinkSpotLight.quaternion.slerp(dummyQuat, 0.05)
-                // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             pinkSpotLightHelper.update()
         }

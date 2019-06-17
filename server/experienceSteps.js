@@ -54,7 +54,7 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
-            { asset: "persosLights", delay: 0, time: 0.5},
+            { asset: "persosLights", delay: 0, time: 0.5 },
             { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
@@ -73,7 +73,7 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
-            { asset: "persosLights", delay: 0, time: 0.5},
+            { asset: "persosLights", delay: 0, time: 0.5 },
             { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
@@ -108,7 +108,7 @@ module.exports = [
         fog: {
             delay: 4,
             time: 6,
-            density: 0.009,
+            density: 0.01,
             easing: ["Power1", "easeInOut"]
         }
     },
@@ -133,7 +133,7 @@ module.exports = [
         fog: {
             delay: 1,
             time: 10,
-            density: 0.016,
+            density: 0.018,
             easing: ["Power1", "easeInOut"]
         }
     },

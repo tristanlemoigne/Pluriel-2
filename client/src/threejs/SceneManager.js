@@ -88,7 +88,7 @@ function SceneManager(canvas, assets) {
             depthTest: true,
             depthWrite: true,
             uniforms: {
-                glowColor: { value: [0, 0.5, 1] },
+                glowColor: { value: [0, 0.33, 1] },
                 camDir: { value: [camDir.x, camDir.y, camDir.z] },
                 luminosity: { value: 0.45 }
             },
@@ -101,7 +101,7 @@ function SceneManager(canvas, assets) {
             {
                 vec3 vNormal = normalize( normalMatrix * normal );
                 vec3 vNormel = normalize( normalMatrix * camDir );
-                intensity = pow( 0.08 - dot(vNormal, vNormel), 6. ); // For FrontSide
+                intensity = pow( 0.06 - dot(vNormal, vNormel), 6. ); // For FrontSide
                 // intensity = pow( 0.7 - dot(vNormal, vNormel), 3.0 ); // For BackSide
 
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );

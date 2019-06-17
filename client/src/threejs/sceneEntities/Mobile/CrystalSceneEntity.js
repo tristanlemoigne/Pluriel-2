@@ -8,10 +8,10 @@ import { threeBus } from "../../../main.js"
  *
  * @param {*} assets
  */
-function CrystalSceneEntity(assets, character) {
+function CrystalSceneEntity(character) {
     /* ----------------------- DECLARATIONS + ASSIGNATIONS ----------------------- */
     const scenes = []
-    
+
     let characterColor = character === "zanit" ? "pink" : "cyan"
     let sceneCyan, scenePink
     let meshCyan, meshPink
@@ -32,46 +32,46 @@ function CrystalSceneEntity(assets, character) {
 
     /* ----------------------- FUNCTIONS ----------------------- */
     function init() {
-        sceneCyan = new THREE.Scene()
-        sceneCyan.background = new THREE.Color(0x115599)
+        // sceneCyan = new THREE.Scene()
+        // sceneCyan.background = new THREE.Color(0x115599)
 
-        scenePink = new THREE.Scene()
-        scenePink.background = new THREE.Color(0x551199)
+        // scenePink = new THREE.Scene()
+        // scenePink.background = new THREE.Color(0x551199)
 
         console.log(characterColor)
 
-        if (characterColor === "cyan") {
-            scenes.push(sceneCyan)
-        } else if (characterColor === "pink") {
-            scenes.push(scenePink)
-        }
+        // if (characterColor === "cyan") {
+        //     scenes.push(sceneCyan)
+        // } else if (characterColor === "pink") {
+        //     scenes.push(scenePink)
+        // }
 
-        initMeshes()
+        // initMeshes()
     }
 
-    function initMeshes() {
-        var geoCyan = new THREE.IcosahedronBufferGeometry(1.33, 0)
-        var matCyan = new THREE.MeshBasicMaterial({ color: 0x00dddd })
-        meshCyan = new THREE.Mesh(geoCyan, matCyan)
-        sceneCyan.add(meshCyan)
+    // function initMeshes() {
+    //     var geoCyan = new THREE.IcosahedronBufferGeometry(1.33, 0)
+    //     var matCyan = new THREE.MeshBasicMaterial({ color: 0x00dddd })
+    //     meshCyan = new THREE.Mesh(geoCyan, matCyan)
+    //     sceneCyan.add(meshCyan)
 
-        var geoPink = new THREE.IcosahedronBufferGeometry(1.33, 0)
-        var matPink = new THREE.MeshBasicMaterial({ color: 0xdd00dd })
-        meshPink = new THREE.Mesh(geoPink, matPink)
-        scenePink.add(meshPink)
-    }
+    //     var geoPink = new THREE.IcosahedronBufferGeometry(1.33, 0)
+    //     var matPink = new THREE.MeshBasicMaterial({ color: 0xdd00dd })
+    //     meshPink = new THREE.Mesh(geoPink, matPink)
+    //     scenePink.add(meshPink)
+    // }
 
     // function toggleGyro(bool = !usingGyro) {
     //     usingGyro = bool
     // }
 
     function update() {
-        meshCyan.rotation.y += 0.001
-        meshPink.rotation.x += 0.001
+        // meshCyan.rotation.y += 0.001
+        // meshPink.rotation.x += 0.001
 
         controls.update()
 
-        console.log("crystalSceneEntity")
+        // console.log("crystalSceneEntity")
 
         if (hasGyro && usingGyro) {
             socket.emit(`gyro ${characterColor}`, GyroObject3D.quaternion)

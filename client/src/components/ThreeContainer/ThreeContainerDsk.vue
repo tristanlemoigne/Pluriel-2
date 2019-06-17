@@ -1,6 +1,9 @@
 <template>
     <div class="canvasContainer">
         <canvas ref="canvas"></canvas>
+        <div class="gradient normalGradient"></div>
+        <div class="gradient loseGradient"></div>
+        <div class="gradient winGradient"></div>
     </div>
 </template>
 
@@ -46,8 +49,30 @@ export default {
 <style lang="scss" scoped>
 @import "@/config/styles.scss";
 
-.canvasContainer {
+.gradient {
+    transition: 6s ease;
+    z-index: -1;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.normalGradient {
     background: linear-gradient(#3e3fac, #f177be);
+}
+.winGradient {
+    opacity: 0;
+    background: linear-gradient(#5e9fdf, #f199df);
+}
+.loseGradient {
+    opacity: 0;
+    background: linear-gradient(#8080d8, #af5060);
+}
+
+.canvasContainer {
     position: absolute;
     display: flex;
     justify-content: center;
