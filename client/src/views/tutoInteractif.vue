@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="tutoInteractif"  v-if="!isMobile">
-            <div class="camDetection" :class="camIsActive === true ? 'camIsActive' : ''">
+            <div class="camDetection" v-bind:class="{ visible: !camIsActive }">
                 <p class="textGlow">Vous avez besoin de la webcam pour profiter de l’expérience</p>
                 <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
                 <p class="textGlow">Activez votre webcam pour continuer</p>
             </div>
 
-            <div class="tutoExplanation" :class="camIsActive === true ? 'camIsActive' : ''">
+            <div class="tutoExplanation" v-bind:class="{ visible: camIsActive }">
                 <h2 class="textGlow">Faites à présent usage de vos amulettes</h2>
 
                 <div class="explanationContainer">
@@ -26,8 +26,11 @@
         </div>
 
         <div class="tutoInteractifMobile" v-if="isMobile">
-            ACTIVE TA CAM SUR DESKTOP
+            <div class="camDetection" v-bind:class="{ visible: !camIsActive }">
+                ACTIVE TA CAM SUR DESKTOP
+            </div>
 
+            <div class="amulettes" v-bind:class="{ visible: camIsActive }">
                 <div v-if="character === 'lamar'">
                     JE SUIS LAMAR
                     <img src="assets/img/AmuletteLamarGlow.png" alt>
@@ -36,6 +39,7 @@
                     JE SUIS ZANIT
                     <img src="assets/img/AmuletteZanitGlow.png" alt>
                 </div>
+            </div>
         </div>
     </div>
 
@@ -44,8 +48,9 @@
 <script>
 import TrackerVideo from "@/components/TrackerVideo.vue";
 import { TweenMax, Power2, TimelineLite } from "gsap/TweenMax";
-import { threeBus } from "@/main";
+import { threeBus, bus } from "@/main";
 import socket from "@/socket.js";
+import { setInterval } from 'timers';
 
 export default {
     name: "experience",
@@ -53,49 +58,58 @@ export default {
     props: {
         roomState: Object
     },
-    data: () => ({
-        uiDatas: {
-            isDebugMode: true
-        },
-        camIsActive: Boolean,
-        character: undefined
-    }),
+    data: function(){
+        return{
+            uiDatas: {
+                isDebugMode: true
+            },
+            camIsActive: false,
+            character: undefined,
+            checkCameraIsActivated: null
+        }
+    },
     props: {
         roomId: String,
         isMobile: Boolean,
         users: Array,
-        roomState: Object
+        roomState: Object,
+    },
+    watch: {
+        "roomState.currentStep": {
+            handler: function(currentStep, oldStep) {
+                if (currentStep !== oldStep && currentStep !== undefined) {
+                    console.log("step HAS CHANGEd", currentStep, this)
+                    clearInterval(this.checkCameraIsActivated)
+
+                    // this.$data.camIsActive = true;
+                }
+            },
+            deep: true
+        }
     },
     methods: {},
-    mounted() {
+    created(){
         //  Check if user has activated his camera
         if (!this.isMobile) {
-            const checkCameraIsActivated = setInterval(() => {
+            this.$data.checkCameraIsActivated = setInterval(()=>{
+                console.log("check")
                 navigator.getMedia =
                     navigator.getUserMedia ||
                     navigator.webkitGetUserMedia ||
                     navigator.mozGetUserMedia ||
                     navigator.msGetUserMedia;
 
-                navigator.getMedia(
-                    { video: true },
-                    () => {
-                        if (
-                            this.$props.roomState.currentStep.activatesCam ===
-                            true
-                        ) {
-                            // Start tracking
-                            this.$data.camIsActive = true;
-                            clearInterval(checkCameraIsActivated);
-                        }
-                    },
-                    function() {
-                        console.error("webcam is not available");
-                    }
-                );
-            }, 500);
+                    navigator.getMedia({ video: true },()=>{
+                        // Start tracking
+                        console.log("CAM IS ACTIVATED", this)
+                        bus.$emit("setRoomState", {currentStep: {name: "tuto_interactif"}})
+                    },function(){
+                        console.error("webcam is not available")
+                    })
+            }, 500)
         }
-
+    }, 
+    mounted() {
         if (this.roomState.lamar === socket.id) {
             this.character = "lamar";
         } else if (this.roomState.zanit === socket.id) {
@@ -103,7 +117,6 @@ export default {
         } else {
             this.character = undefined;
         }
-        // bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
     }
 };
 </script>
@@ -111,8 +124,14 @@ export default {
 <style scoped lang="scss">
 @import "@/config/styles.scss";
 
+
 .tutoInteractif {
+    div.visible{
+        opacity: 1;
+    }
+
     .camDetection {
+        opacity: 0;
         transition: opacity 0.5s ease-in;
         display: flex;
         flex-direction: column;
@@ -121,13 +140,10 @@ export default {
         text-align: center;
         max-width: 300px;
         margin: 0 auto;
-        position: relative;
+        position: absolute;
         top: 50%;
-        transform: translateY(-50%);
-
-        &.camIsActive {
-            opacity: 0;
-        }
+        left: 50%;
+        transform: translate(-50%, -50%);
 
         img {
             margin: 30px 0;
@@ -168,8 +184,18 @@ export default {
 }
 
 .tutoInteractifMobile{
-    img{
-        background-color: $black;
+    div.visible{
+        opacity: 1;
+    }
+
+    .camDetection{
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+    }
+
+    .amulettes{
+        transition: opacity 0.5s ease-in;
+        opacity: 0;
     }
 }
 </style>

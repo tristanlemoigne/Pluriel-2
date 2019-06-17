@@ -20,7 +20,7 @@ function Ending(scene, camera, assets, timeVars) {
     // let isWinAnimFinished = false
 
     init()
-    initGui()
+    // initGui()
 
     /* ----------------------- INIT ----------------------- */
     function init() {

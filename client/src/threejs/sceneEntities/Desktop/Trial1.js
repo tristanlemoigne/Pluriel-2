@@ -61,7 +61,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
     init()
     createSpotlights()
-    initGui()
+    // initGui()
 
     /* ----------------------- INIT ----------------------- */
     function init() {

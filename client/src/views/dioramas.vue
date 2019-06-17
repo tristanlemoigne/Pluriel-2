@@ -1,12 +1,12 @@
 <template>
     <div class="dioramas" v-if="roomState.currentStep.name.slice(0,7) === 'diorama'">
         <div class="videoContainer" v-bind:class="{ desktop: !isMobile }" >
-            <video ref="video" src="/assets/videos/pluriel.mp4" @loadedmetadata="videoLoaded" @timeupdate="onVideoTimeUpdate" autoplay loop></video>
+            <video ref="video" src="/assets/videos/pluriel.mp4" @loadedmetadata="videoLoaded" @timeupdate="onVideoTimeUpdate" autoplay></video>
         </div>
 
-        <button class="skip" @click.once="onSkip">Passer</button>
+        <button class="skip" v-if="!isMobile" @click.once="onSkip">Passer</button>
 
-        <div class="interfaceMobile" v-if="isMobile">
+        <div class="interfaceMobile textGlow" v-if="isMobile">
             Histoire
 
             <div class="circleTime">
@@ -65,8 +65,7 @@ export default {
             bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
         },
         onVideoTimeUpdate(event){
-            
-            if(this.isMobile){
+            if(this.isMobile && this.$refs.video){
                 this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
                 this.$refs.videoProgression.style.strokeDasharray = `${this.videoProgress}, 100`;
             }
@@ -126,7 +125,6 @@ div.dioramas {
     }
 
     .interfaceMobile{
-        border: solid 1px red;
         position: absolute;
         top: 50%;
         left: 50%;

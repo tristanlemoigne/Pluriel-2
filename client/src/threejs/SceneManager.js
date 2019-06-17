@@ -182,7 +182,7 @@ function SceneManager(canvas, assets) {
 
         threeBus.$on("change to step", changeToStep)
 
-        initGui()
+        // initGui()
     }
 
     function onWindowResize() {
