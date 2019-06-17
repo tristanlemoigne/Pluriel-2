@@ -314,8 +314,6 @@ function Trial1(scene, camera, assets, timeVars) {
                         (timeVars.DELTA_TIME / fusionScaleDuration) *
                         0.001 *
                         0.5
-                    // hole.pinkValue += 1 / (60 * fusionScaleDuration)
-                    // hole.cyanValue += 1 / (60 * fusionScaleDuration)
 
                     threeBus.$emit("holeScaling", {
                         color: "White",
