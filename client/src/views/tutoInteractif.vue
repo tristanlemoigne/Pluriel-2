@@ -1,34 +1,51 @@
 <template>
-    <div class="tutoInteractif">
-        <div class="camDetection" :class="camIsActive === true ? 'camIsActive' : ''">
-            <p class="textGlow">Vous avez besoin de la webcam pour profiter de l’expérience</p>
-            <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
-            <p class="textGlow">Activez votre webcam pour continuer</p>
-        </div>
+    <div>
+        <div class="tutoInteractif"  v-if="!isMobile">
+            <div class="camDetection" :class="camIsActive === true ? 'camIsActive' : ''">
+                <p class="textGlow">Vous avez besoin de la webcam pour profiter de l’expérience</p>
+                <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
+                <p class="textGlow">Activez votre webcam pour continuer</p>
+            </div>
 
-        <div class="tutoExplanation" :class="camIsActive === true ? 'camIsActive' : ''">
-            <h2 class="textGlow">Faites à présent usage de vos amulettes</h2>
+            <div class="tutoExplanation" :class="camIsActive === true ? 'camIsActive' : ''">
+                <h2 class="textGlow">Faites à présent usage de vos amulettes</h2>
 
-            <div class="explanationContainer">
-                <TrackerVideo
-                    v-if="!isMobile"
-                    :hasStarted="camIsActive"
-                    v-show="this.uiDatas.isDebugMode"
-                />
+                <div class="explanationContainer">
+                    <TrackerVideo
+                        v-if="!isMobile"
+                        :hasStarted="camIsActive"
+                        v-show="this.uiDatas.isDebugMode"
+                    />
 
-                <div>
-                    <p>Orientez l’écran de vos téléphones face à la webcam</p>
-                    <img class="svgGlow mobile" src="/assets/img/tuto.svg" alt>
+                    <div>
+                        <p>Orientez l’écran de vos téléphones face à la webcam</p>
+                        <img class="svgGlow mobile" src="/assets/img/tuto.svg" alt>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="tutoInteractifMobile" v-if="isMobile">
+            ACTIVE TA CAM SUR DESKTOP
+
+                <div v-if="character === 'lamar'">
+                    JE SUIS LAMAR
+                    <img src="assets/img/AmuletteLamarGlow.png" alt>
+                </div>
+                <div v-if="character === 'zanit'">
+                    JE SUIS ZANIT
+                    <img src="assets/img/AmuletteZanitGlow.png" alt>
+                </div>
+        </div>
     </div>
+
 </template>
 
 <script>
 import TrackerVideo from "@/components/TrackerVideo.vue";
 import { TweenMax, Power2, TimelineLite } from "gsap/TweenMax";
 import { threeBus } from "@/main";
+import socket from "@/socket.js";
 
 export default {
     name: "experience",
@@ -40,7 +57,8 @@ export default {
         uiDatas: {
             isDebugMode: true
         },
-        camIsActive: Boolean
+        camIsActive: Boolean,
+        character: undefined
     }),
     props: {
         roomId: String,
@@ -78,6 +96,13 @@ export default {
             }, 500);
         }
 
+        if (this.roomState.lamar === socket.id) {
+            this.character = "lamar";
+        } else if (this.roomState.zanit === socket.id) {
+            this.character = "zanit";
+        } else {
+            this.character = undefined;
+        }
         // bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
     }
 };
@@ -135,17 +160,16 @@ export default {
             align-items: center;
             justify-content: space-between;
 
-            // video {
-            //     width: 40vw;
-            //     height: auto;
-            //     margin-right: 100px;
-            //     // filter: grayscale(100%);
-            // }
-
             p {
                 font-weight: bold;
             }
         }
+    }
+}
+
+.tutoInteractifMobile{
+    img{
+        background-color: $black;
     }
 }
 </style>

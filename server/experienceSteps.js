@@ -47,7 +47,6 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
-            // { asset: "persos", delay: 0, time: 0.5, scene: "sceneR" },
             { asset: "persosLights", delay: 0, time: 0.5, scene: "sceneR" }
         ],
         addedThreeGroupsMob: [
@@ -55,6 +54,8 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "persosLights", delay: 0, time: 0.5},
+            { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
 
@@ -72,6 +73,8 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "persosLights", delay: 0, time: 0.5},
+            { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
 
@@ -87,7 +90,6 @@ module.exports = [
             { asset: "nuages", delay: 5, time: 0 },
             { asset: "nuagesLights", delay: 2, time: 5 }
         ],
-        removedThreeGroupsMob: [{ asset: "nuages", delay: 0, time: 3 }],
         cameraTransition: {
             camPos: {
                 path: "NurbsPath00",
