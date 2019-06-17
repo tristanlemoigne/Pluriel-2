@@ -68,31 +68,28 @@
         <!-- UN MOBILE A REJOINT -->
         <div class="mobile textGlow" v-if="isMobile">
             <div class="player">
-                Vous êtes <span v-bind:class="{ visible: isPlayer(player1) }">Joueur 1</span>
+                Vous êtes
+                <span v-bind:class="{ visible: isPlayer(player1) }">Joueur 1</span>
                 <span v-bind:class="{ visible: isPlayer(player2) }">Joueur 2</span>
             </div>
 
-            <img src="/assets/img/mobileConnected.svg" alt/>
+            <img src="/assets/img/mobileConnected.svg" alt>
 
             <div>
-                <p>
-                    Vous avez rejoins l'expérience
-                </p>
+                <p>Vous avez rejoins l'expérience</p>
 
-                <p>
-                    En attente du deuxième joueur...
-                </p>
+                <p>En attente du deuxième joueur...</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { TweenMax, Power2 } from "gsap/TweenMax"
-import PictoDesktop from "../components/PictoDesktop"
-import PictoMobile from "../components/PictoMobile"
-import socket from "@/socket"
-import { bus } from "@/main"
+import { TweenMax, Power2 } from "gsap/TweenMax";
+import PictoDesktop from "../components/PictoDesktop";
+import PictoMobile from "../components/PictoMobile";
+import socket from "@/socket";
+import { bus } from "@/main";
 
 export default {
     name: "room",
@@ -111,53 +108,53 @@ export default {
             isDebugMode: true,
             player1: "otot",
             player2: undefined
-        }
+        };
     },
     computed: {
         desktopUsersCount() {
-            return this.$props.users.filter(user => !user.isMobile).length
+            return this.$props.users.filter(user => !user.isMobile).length;
         },
         mobileUsersCount() {
             const mobileCount = this.$props.users.filter(user => user.isMobile)
-                .length
-            return mobileCount
+                .length;
+            return mobileCount;
         }
     },
     methods: {
-        isPlayer(playerId){
-            return playerId === socket.id
+        isPlayer(playerId) {
+            return playerId === socket.id;
         }
     },
     mounted: function() {
         // Socket listeners
-        socket.on("playerOneReady", (playerID) => {
-            this.player1 = playerID
-            if(!this.isMobile){
+        socket.on("playerOneReady", playerID => {
+            this.player1 = playerID;
+            if (!this.isMobile) {
                 TweenMax.to(this.$refs.player1ready, 1, {
                     opacity: 1,
                     ease: Power2.easeOut
-                })
+                });
             }
-        })
+        });
 
-        socket.on("playerTwoReady", (playerID) => {
-            this.player2 = playerID
-            if(!this.isMobile){
+        socket.on("playerTwoReady", playerID => {
+            this.player2 = playerID;
+            if (!this.isMobile) {
                 TweenMax.to(this.$refs.player2ready, 1, {
                     opacity: 1,
                     ease: Power2.easeOut
-                })
+                });
             }
-        })
+        });
 
         if (this.isMobile) {
-            var noSleep = new NoSleep()
-            noSleep.enable() // keep the screen on!
+            var noSleep = new NoSleep();
+            noSleep.enable(); // keep the screen on!
         }
 
-        if(!this.isMobile){
+        if (!this.isMobile) {
             // TODO: use CSS and the current step name instead of GSAP?
-            const tl = new TimelineLite()
+            const tl = new TimelineLite();
 
             tl.to(this.$refs.dispositif, 2, {
                 opacity: 0,
@@ -165,17 +162,19 @@ export default {
                 ease: Power2.easeIn,
                 onComplete: () => {
                     if (this.$refs.dispositif) {
-                        this.$refs.dispositif.style.display = "none"
-                        this.$refs.connexion.style.display = "flex"
+                        this.$refs.dispositif.style.display = "none";
+                        this.$refs.connexion.style.display = "flex";
                     }
                 }
-            })
+            });
 
-            tl.to(this.$refs.connexion, 1, { opacity: 1, ease: Power2.easeOut })
+            tl.to(this.$refs.connexion, 1, {
+                opacity: 1,
+                ease: Power2.easeOut
+            });
         }
-
     }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -236,7 +235,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: rgba(0, 0, 0, 0.35);
+        background: rgba(0, 0, 0, 0.5);
 
         .roomId {
             font-size: 100px;
@@ -276,7 +275,7 @@ export default {
         }
     }
 
-    div.mobile{
+    div.mobile {
         font-size: 17px;
         position: absolute;
         top: 50%;
@@ -284,24 +283,24 @@ export default {
         transform: translate(-50%, -50%);
         width: 100%;
 
-        div.player{
+        div.player {
             margin-bottom: 20%;
-            span.visible{
+            span.visible {
                 display: inline;
             }
 
-            span{
+            span {
                 display: none;
                 // font-style: italic;
                 font-weight: bold;
             }
         }
-      
-        p:nth-child(1){
+
+        p:nth-child(1) {
             font-weight: bold;
         }
 
-        p:nth-child(2){
+        p:nth-child(2) {
             margin-top: 100px;
         }
     }

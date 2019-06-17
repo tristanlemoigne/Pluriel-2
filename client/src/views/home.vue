@@ -1,6 +1,6 @@
 <template>
     <div id="home" @mousemove="sliderMove">
-        <div  v-if="!isMobile" ref="sliderBar" class="sliderBar"></div>
+        <div v-if="!isMobile" ref="sliderBar" class="sliderBar"></div>
 
         <div v-if="!isMobile" class="titles">
             <h1>{{title}}</h1>
@@ -17,8 +17,17 @@
 
         <!-- Commencer l'expérience Mobile-->
         <form class="mobile" v-if="isMobile" action @submit.prevent="joinRoom">
-            <p class="textGlow">Connectez-vous sur <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché</p>
-            <input class="inputText textGlow" type="number" v-model="requestedRoom" placeholder="Code"><br/>
+            <p class="textGlow">
+                Connectez-vous sur
+                <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché
+            </p>
+            <input
+                class="inputText textGlow"
+                type="number"
+                v-model="requestedRoom"
+                placeholder="Code"
+            >
+            <br>
 
             <button type="submit">
                 <div class="outerCircle">
@@ -65,8 +74,11 @@ export default {
         }
     },
     mounted() {
-        if(!this.isMobile){
-            CanvasRotator().rotateCSS(this.$refs.sliderBar, firstStep.canvasAngle);
+        if (!this.isMobile) {
+            CanvasRotator().rotateCSS(
+                this.$refs.sliderBar,
+                firstStep.canvasAngle
+            );
         }
     }
 };
@@ -89,7 +101,7 @@ export default {
 
     .sliderBar {
         position: absolute;
-        width: 5px;
+        width: 6px;
         height: 40vw;
         background-color: #cbb2ff;
         left: 50%;
@@ -159,8 +171,8 @@ export default {
         }
     }
 
-    .mobile{
-        input{
+    .mobile {
+        input {
             margin-top: 10%;
             background: none;
             border: none;
@@ -174,13 +186,13 @@ export default {
             letter-spacing: 20px;
             padding-left: 5px;
 
-            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            &::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
                 color: $white;
                 opacity: 1; /* Firefox */
             }
-
         }
-        button{
+        button {
             position: absolute;
             bottom: 5%;
             left: 50%;

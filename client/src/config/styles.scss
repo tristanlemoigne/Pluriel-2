@@ -41,8 +41,7 @@
 
 @font-face {
     font-family: "Poppins";
-    src: url("/assets/fonts/poppins/light/Poppins-Light.woff2")
-            format("woff2"),
+    src: url("/assets/fonts/poppins/light/Poppins-Light.woff2") format("woff2"),
         url("/assets/fonts/poppins/light/Poppins-Light.woff") format("woff"),
         url("/assets/fonts/poppins/light/Poppins-Light.eot") format("eot"),
         url("/assets/fonts/poppins/light/Poppins-Light.ttf") format("ttf");
@@ -88,8 +87,8 @@ $grey: #e3e3e3;
 
 // $cyan: #00ffff;
 // $pink: #ff00ff;
-$cyan: #356BFF;
-$pink: #FF1A54;
+$cyan: #356bff;
+$pink: #ff1a54;
 $blue: #0000ff;
 $red: #ff0000;
 
@@ -151,8 +150,8 @@ img {
     user-drag: none;
 }
 
-
-a, button {
+a,
+button {
     color: $white;
     transition: text-shadow 0.25s ease;
     text-transform: uppercase;
@@ -170,6 +169,9 @@ a, button {
 .svgGlow {
     filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.7));
     -webkit-filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.7));
+
+    // A mettre pour le glow du mobile (lorsqu'on se connecte sur la room :
+    // filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5)) drop-shadow(0px 0px 12px rgba(255, 255, 255, 1));
 }
 
 :export {

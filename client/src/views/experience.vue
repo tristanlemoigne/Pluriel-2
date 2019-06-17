@@ -252,8 +252,10 @@ export default {
         getTransitionEnd() {
             if (
                 this.roomState.currentStep.cameraTransition.camPos &&
-                this.roomState.currentStep.cameraTransition.camPos.time !== undefined &&
-                this.roomState.currentStep.cameraTransition.camPos.delay !== undefined
+                this.roomState.currentStep.cameraTransition.camPos.time !==
+                    undefined &&
+                this.roomState.currentStep.cameraTransition.camPos.delay !==
+                    undefined
             ) {
                 return (
                     (this.roomState.currentStep.cameraTransition.camPos.time +
@@ -264,8 +266,10 @@ export default {
                 );
             } else if (
                 this.roomState.currentStep.cameraTransition.camTarget &&
-                this.roomState.currentStep.cameraTransition.camTarget.time !== undefined &&
-                this.roomState.currentStep.cameraTransition.camTarget.delay !== undefined
+                this.roomState.currentStep.cameraTransition.camTarget.time !==
+                    undefined &&
+                this.roomState.currentStep.cameraTransition.camTarget.delay !==
+                    undefined
             ) {
                 return (
                     (this.roomState.currentStep.cameraTransition.camTarget
@@ -565,7 +569,7 @@ div {
 
         .scoreTeam {
             position: relative;
-            margin: 0 20px;
+            margin: 0 4vw;
 
             div.gradient {
                 .score {
