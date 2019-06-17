@@ -189,11 +189,9 @@
         <!-- Mobile stuff -->
         <div class="mobile" v-if="isMobile">
             <div v-if="character === 'lamar'">
-                JE SUIS LAMAR
                 <img src="assets/img/AmuletteLamarGlow.png" alt>
             </div>
             <div v-if="character === 'zanit'">
-                JE SUIS ZANIT
                 <img src="assets/img/AmuletteZanitGlow.png" alt>
             </div>
         </div>
@@ -795,13 +793,19 @@ div {
     }
 
     .mobile {
-        img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+
+        img{
+            width: 110%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 }

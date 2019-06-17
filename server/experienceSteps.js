@@ -79,8 +79,7 @@ module.exports = [
     },
 
     {
-        name: "tuto_interactif",
-        camIsActive: false
+        name: "tuto_interactif"
     },
 
     {

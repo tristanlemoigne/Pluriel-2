@@ -25,18 +25,17 @@
             </div>
         </div>
 
-        <div class="tutoInteractifMobile" v-if="isMobile">
+        <div class="tutoInteractifMobile textGlow" v-if="isMobile">
             <div class="camDetection" v-bind:class="{ visible: !camIsActive }">
-                ACTIVE TA CAM SUR DESKTOP
+                <p>Activez la webcam sur votre ordinateur pour poursuivre l’expérience</p>
+                <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
             </div>
 
             <div class="amulettes" v-bind:class="{ visible: camIsActive }">
                 <div v-if="character === 'lamar'">
-                    JE SUIS LAMAR
                     <img src="assets/img/AmuletteLamarGlow.png" alt>
                 </div>
                 <div v-if="character === 'zanit'">
-                    JE SUIS ZANIT
                     <img src="assets/img/AmuletteZanitGlow.png" alt>
                 </div>
             </div>
@@ -65,7 +64,7 @@ export default {
             },
             camIsActive: false,
             character: undefined,
-            checkCameraIsActivated: null
+            isCameraActivated: null
         }
     },
     props: {
@@ -78,20 +77,16 @@ export default {
         "roomState.currentStep": {
             handler: function(currentStep, oldStep) {
                 if (currentStep !== oldStep && currentStep !== undefined) {
-                    console.log("step HAS CHANGEd", currentStep, this)
-                    clearInterval(this.checkCameraIsActivated)
-
-                    // this.$data.camIsActive = true;
+                    window.clearInterval(this.isCameraActivated)
+                    this.camIsActive = true;
                 }
             },
             deep: true
         }
     },
-    methods: {},
-    created(){
-        //  Check if user has activated his camera
-        if (!this.isMobile) {
-            this.$data.checkCameraIsActivated = setInterval(()=>{
+    methods: {
+        checkCameraIsActivated() {
+            this.isCameraActivated = window.setInterval(function(){
                 console.log("check")
                 navigator.getMedia =
                     navigator.getUserMedia ||
@@ -99,17 +94,23 @@ export default {
                     navigator.mozGetUserMedia ||
                     navigator.msGetUserMedia;
 
-                    navigator.getMedia({ video: true },()=>{
-                        // Start tracking
-                        console.log("CAM IS ACTIVATED", this)
-                        bus.$emit("setRoomState", {currentStep: {name: "tuto_interactif"}})
-                    },function(){
-                        console.error("webcam is not available")
-                    })
+                navigator.getMedia({ video: true },function(){
+                    // Start tracking
+                    bus.$emit("setRoomState", {currentStep: {
+                        camIsActive: true
+                    }})
+                },function(){
+                    console.error("webcam is not available")
+                })
             }, 500)
         }
-    }, 
+    },
     mounted() {
+         //  Check if user has activated his camera
+        if (!this.isMobile) {
+            this.checkCameraIsActivated()
+        }
+
         if (this.roomState.lamar === socket.id) {
             this.character = "lamar";
         } else if (this.roomState.zanit === socket.id) {
@@ -123,7 +124,6 @@ export default {
 
 <style scoped lang="scss">
 @import "@/config/styles.scss";
-
 
 .tutoInteractif {
     div.visible{
@@ -191,11 +191,34 @@ export default {
     .camDetection{
         opacity: 0;
         transition: opacity 0.5s ease-in;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        text-align: center;
+        transform: translateY(-50%);
+
+        p{
+            padding: 25px;
+        }
     }
 
     .amulettes{
         transition: opacity 0.5s ease-in;
         opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+
+        img{
+            width: 110%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 }
 </style>
