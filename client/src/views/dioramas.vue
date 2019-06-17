@@ -65,9 +65,9 @@ export default {
             bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
         },
         onVideoTimeUpdate(event){
-            this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
-
+            
             if(this.isMobile){
+                this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
                 this.$refs.videoProgression.style.strokeDasharray = `${this.videoProgress}, 100`;
             }
         },

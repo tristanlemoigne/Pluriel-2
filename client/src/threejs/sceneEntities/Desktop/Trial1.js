@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const colors = {
         cyan: "#00ffff",
         pink: "#ff00ff",
-        blue: "#0000ff",
-        red: "#ff0000",
+        blue: "#214CFF",
+        red: "#FF1B38",
         white: "#ff99ff"
     }
 
@@ -49,8 +49,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const easingFactor = 0.15
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.2 // 5
-    const fusionScaleDuration = 0.9 // 2
+    const defaultScaleDuration = 2.6 // 5
+    const fusionScaleDuration = 1.2 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
@@ -132,7 +132,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // CYAN
         cyanSpotLight = new THREE.SpotLight(
-            colors.cyan,
+            colors.blue,
             ...Object.values(spotLightParams)
         )
         cyanSpotLight.position.set(0, 0, 0)
@@ -158,7 +158,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // PINK
         pinkSpotLight = new THREE.SpotLight(
-            colors.pink,
+            colors.red,
             ...Object.values(spotLightParams)
         )
         pinkSpotLight.position.set(0, 0, 0)
@@ -306,19 +306,25 @@ function Trial1(scene, camera, assets, timeVars) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue += 1 / (60 * defaultScaleDuration)
-                    hole.cyanValue += 1 / (60 * defaultScaleDuration)
-                    // hole.pinkValue +=
-                    //     timeVars.DELTA_TIME * fusionScaleDuration * 2
-                    // hole.cyanValue +=
-                    //     timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.pinkValue +=
+                        (timeVars.DELTA_TIME / fusionScaleDuration) *
+                        0.001 *
+                        0.5
+                    hole.cyanValue +=
+                        (timeVars.DELTA_TIME / fusionScaleDuration) *
+                        0.001 *
+                        0.5
+                    // hole.pinkValue += 1 / (60 * fusionScaleDuration)
+                    // hole.cyanValue += 1 / (60 * fusionScaleDuration)
+
                     threeBus.$emit("holeScaling", {
                         color: "White",
                         progress: (hole.cyanValue + hole.pinkValue) * 100
                     })
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
-                        hole.cyanValue += 1 / (60 * defaultScaleDuration)
+                        hole.cyanValue +=
+                            (timeVars.DELTA_TIME / defaultScaleDuration) * 0.001
                         threeBus.$emit("holeScaling", {
                             color: "Cyan",
                             progress: hole.cyanValue * 100
@@ -326,7 +332,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     }
 
                     if (distanceHoleToPink < maxDistanceFromHole) {
-                        hole.pinkValue += 1 / (60 * defaultScaleDuration)
+                        hole.pinkValue +=
+                            (timeVars.DELTA_TIME / defaultScaleDuration) * 0.001
                         threeBus.$emit("holeScaling", {
                             color: "Pink",
                             progress: hole.pinkValue * 100
@@ -416,7 +423,7 @@ function Trial1(scene, camera, assets, timeVars) {
             cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
             cyanSpotLight.target.position.z = -cameraTargetDist
 
-            cyanSpotLight.intensity = 10 + cameraTargetDist * 5
+            cyanSpotLight.intensity = 20 + cameraTargetDist * 5
 
             rotationHelper.scale.set(
                 cameraTargetDist * 2,
@@ -452,7 +459,7 @@ function Trial1(scene, camera, assets, timeVars) {
             )
             pinkSpotLight.target.position.z = -cameraTargetDist
 
-            pinkSpotLight.intensity = 10 + cameraTargetDist * 10
+            pinkSpotLight.intensity = 20 + cameraTargetDist * 10
 
             if (mobileQuaternions.pink) {
                 // TODO: remove dummy stuff (optimize)

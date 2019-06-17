@@ -4,6 +4,7 @@ import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
 import { TimelineLite, Power0, Sine, Power1, Power2, Power3 } from "gsap"
+import experienceSteps from "../../../../../server/experienceSteps" // this is reference a file outside client folder, so it's the same as the server's
 
 function Ending(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
@@ -36,28 +37,28 @@ function Ending(scene, camera, assets, timeVars) {
                 islandLeft.originalPos = new THREE.Vector3()
                 islandLeft.originalPos.copy(islandLeft.position)
 
-                islandLeft.traverse(islandLeftChild => {
-                    if (
-                        islandLeftChild.material &&
-                        islandLeftChild.material.name.includes("Emission")
-                    ) {
-                        buildingLightsLeft.push(islandLeftChild)
-                    }
-                })
+                // islandLeft.traverse(islandLeftChild => {
+                //     if (
+                //         islandLeftChild.material &&
+                //         islandLeftChild.material.name.includes("Emission")
+                //     ) {
+                //         buildingLightsLeft.push(islandLeftChild)
+                //     }
+                // })
             }
             if (child.name.includes("-IleDroite")) {
                 islandRight = child
                 islandRight.originalPos = new THREE.Vector3()
                 islandRight.originalPos.copy(islandRight.position)
 
-                islandRight.traverse(islandRightChild => {
-                    if (
-                        islandRightChild.material &&
-                        islandRightChild.material.name.includes("Emission")
-                    ) {
-                        buildingLightsRight.push(islandRightChild)
-                    }
-                })
+                // islandRight.traverse(islandRightChild => {
+                //     if (
+                //         islandRightChild.material &&
+                //         islandRightChild.material.name.includes("Emission")
+                //     ) {
+                //         buildingLightsRight.push(islandRightChild)
+                //     }
+                // })
             }
             if (child.name.includes("TourCentrale")) {
                 tourCentrale = child
@@ -75,26 +76,25 @@ function Ending(scene, camera, assets, timeVars) {
             }
         })
 
-        pierreLeft.material.emissive = new THREE.Color(0x00ff80)
-        pierreLeft.material.emissiveIntensity = 10
-        pierreRight.material.emissive = new THREE.Color(0x80ff00)
-        pierreRight.material.emissiveIntensity = 10
+        // material.emissive = new THREE.Color(0x00ff80)
+        // pierreLeft.material.emissiveIntensity = 10
+        // pierreRight.material.emissive = new THREE.Color(0x80ff00)
+        // pierreRight.material.emissiveIntensity = 10
 
-        buildingLightsLeft.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0x00ffff)
-            buildingLight.material.emissiveIntensity = 10
-        })
-        buildingLightsRight.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0xffff00)
-            buildingLight.material.emissiveIntensity = 10
-        })
+        // buildingLightsLeft.map(buildingLight => {
+        //     buildingLight.material.emissive = new THREE.Color(0x00ffff)
+        //     buildingLight.material.emissiveIntensity = 10
+        // })
+        // buildingLightsRight.map(buildingLight => {
+        //     buildingLight.material.emissive = new THREE.Color(0xffff00)
+        //     buildingLight.material.emissiveIntensity = 10
+        // })
 
         //LISTENERS
         bus.$on("trigger ending", animateEnding) // receive "team", "lamar", "zanit", or "egalite"
     }
 
     function animateEnding(winnerStr) {
-        console.log("winnerStr in animateEnding(): ", winnerStr)
         if (
             winnerStr === "lamar" ||
             winnerStr === "zanit" ||
@@ -111,12 +111,16 @@ function Ending(scene, camera, assets, timeVars) {
     function loseAnimation() {
         const losingTweens = new TimelineLite()
         losingTweens
+            .delay(
+                experienceSteps[experienceSteps.length - 1].cameraTransition
+                    .camPos.time - 1.5
+            )
             .add("moveX", 0)
             .to(
                 islandLeft.position,
                 6,
                 {
-                    x: islandLeft.originalPos.x - 9,
+                    x: islandLeft.originalPos.x - 9.5,
                     ease: Power2.easeInOut
                 },
                 "moveX"
@@ -125,24 +129,24 @@ function Ending(scene, camera, assets, timeVars) {
                 islandRight.position,
                 6,
                 {
-                    x: islandRight.originalPos.x + 9,
+                    x: islandRight.originalPos.x + 9.5,
                     ease: Power2.easeInOut
                 },
                 "moveX"
             )
-            .add("moveY", 2)
+            .add("moveY", 1)
             .to(
                 islandLeft.position,
-                4,
+                5,
                 {
-                    y: islandLeft.originalPos.y - 3,
+                    y: islandLeft.originalPos.y - 3.5,
                     ease: Power1.easeInOut
                 },
                 "moveY"
             )
             .to(
                 islandRight.position,
-                4,
+                5,
                 {
                     y: islandRight.originalPos.y + 4,
                     ease: Power1.easeInOut
@@ -154,7 +158,11 @@ function Ending(scene, camera, assets, timeVars) {
     function winAnimation() {
         const winningTweens = new TimelineLite()
         winningTweens
-            .add("move", 2)
+            .delay(
+                experienceSteps[experienceSteps.length - 1].cameraTransition
+                    .camPos.time - 1.5
+            )
+            .add("move", 0)
             .to(
                 islandLeft.position,
                 8,

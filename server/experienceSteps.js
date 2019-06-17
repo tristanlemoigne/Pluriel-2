@@ -108,7 +108,7 @@ module.exports = [
         fog: {
             delay: 4,
             time: 6,
-            density: 0.006,
+            density: 0.009,
             easing: ["Power1", "easeInOut"]
         }
     },
