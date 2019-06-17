@@ -8,8 +8,6 @@ const firstStep = require("../../../../../server/experienceSteps.js")[0]
 
 function HomeMobSceneEntity(scene, assets) {
     /* ----------------------- INPUTS ----------------------- */
-    let lamarMixer, lamarIdle, lamarReady
-    let zanitMixer, zanitIdle, zanitReady
     let mouseDown = false, mouseX = 0, mouseY = 0;
     let sliderProgress = 0
     let canslide = false
@@ -18,43 +16,18 @@ function HomeMobSceneEntity(scene, assets) {
     const scenes = [scene]
 
     /* ----------------------- DECLARATIONS + ASSIGNATIONS ----------------------- */
-    let mixer, action
-    var clock = new THREE.Clock()
-
     init()
 
     /* ----------------------- FUNCTIONS ----------------------- */
     function init() {
-        // CLONE GENERATE A WARNING
-        // const axesHelpers = new THREE.AxesHelper(10)
-        // scene.add(axesHelpers)
-        // sceneR.add(axesHelpers.clone())
-
         initLights()
         initPersos()
-        initAnimationMixer()
         addMouseHandler()
     }
 
     function initLights() {
+        scene.add(assets.persoLights)
         scene.add(assets.stoneLights)
-        scene.add(assets.stoneLights.clone())
-    }
-
-    function initAnimationMixer() {
-        lamarMixer = new THREE.AnimationMixer(assets.lamarRigged)
-        lamarIdle = lamarMixer.clipAction(assets.lamarRigged.animations[0])
-        lamarReady = lamarMixer.clipAction(
-            assets.lamarReadyAnimation.animations[0]
-        )
-        lamarIdle.play()
-
-        zanitMixer = new THREE.AnimationMixer(assets.zanitRigged)
-        zanitIdle = zanitMixer.clipAction(assets.zanitRigged.animations[0])
-        zanitReady = zanitMixer.clipAction(
-            assets.zanitReadyAnimation.animations[0]
-        )
-        zanitIdle.play()
     }
 
     function initPersos() {
@@ -76,18 +49,7 @@ function HomeMobSceneEntity(scene, assets) {
         assets.zanitSVG.position.set(-7.5, 3, 18)
 
         slider.push(assets.lamarRigged, assets.zanitRigged, assets.lamarSVG, assets.zanitSVG)
-        
-        // slider.add(assets.lamarRigged, assets.zanitRigged, assets.lamarSVG, assets.zanitSVG)
 
-        threeBus.$on("animate perso", perso => {
-            if (perso === "lamar") {
-                lamarIdle.stop()
-                lamarReady.play()
-            } else if (perso === "zanit") {
-                zanitIdle.stop()
-                zanitReady.play()
-            }
-        })
         threeBus.$on("slidePerso", slideValue => {
             canslide = true
             sliderProgress = 0
@@ -95,7 +57,6 @@ function HomeMobSceneEntity(scene, assets) {
             slider.forEach(obj => {
                 let objPos = obj.position.clone()
                 obj.targetPosition = new THREE.Vector3(objPos.x + slideValue, objPos.y, objPos.z)
-
             })
         })
     }
@@ -130,9 +91,7 @@ function HomeMobSceneEntity(scene, assets) {
         mouseY = evt.touches[0].clientY;
     }
 
-    function onMouseUp(evt) {
-        // evt.preventDefault();
-
+    function onMouseUp() {
         mouseDown = false;
     }
 
@@ -141,19 +100,7 @@ function HomeMobSceneEntity(scene, assets) {
         assets.zanitRigged.rotation.y += deltaX / 100;
     }
 
-    function update() {
-        assets.pinkStone.rotation.y += 0.001
-        assets.pinkStone.rotation.x += 0.001
-
-        assets.cyanStone.rotation.y += 0.001
-        assets.cyanStone.rotation.x += 0.001
-
-        let delta = clock.getDelta()
-        if (lamarMixer && zanitMixer) {
-            zanitMixer.update(delta)
-            lamarMixer.update(delta)
-        }
-
+    function update(timeVars) {
         slider.forEach(obj => {
             if(obj.targetPosition){
                 obj.position.lerp(obj.targetPosition, sliderProgress)
@@ -161,7 +108,7 @@ function HomeMobSceneEntity(scene, assets) {
         })
 
         if(canslide){
-            sliderProgress += 0.001
+            sliderProgress += timeVars.DELTA_TIME * 0.00015
         }
     }
 

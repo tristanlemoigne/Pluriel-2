@@ -28,10 +28,12 @@ function SceneManagerMob(canvas, assets) {
     let character
     const masterScene = new THREE.Scene()
 
-    let LAST_TIME = Date.now()
-    let DELTA_TIME
-    let mstime = 0
-    let time = 0
+    let timeVars = {
+        time: 0,
+        mstime: 0,
+        DELTA_TIME: undefined,
+        LAST_TIME:Date.now()
+    }
 
     function init() {
         // Post processing
@@ -242,16 +244,18 @@ function SceneManagerMob(canvas, assets) {
 
         camera.lookAt(new THREE.Vector3(0, 0, 1))
 
-        currentSceneEntity.update()
+        // currentSceneEntity.update()
+        currentSceneEntity.update(timeVars)
+
         customRenderer.render([masterScene], camera)
         // customRenderer.render(currentSceneEntity.scene, camera)
     }
 
     function updateTime() {
-        DELTA_TIME = Date.now() - LAST_TIME
-        LAST_TIME = Date.now()
-        mstime += DELTA_TIME
-        time = mstime * 0.001 // convert from millis to seconds
+        timeVars.DELTA_TIME = Date.now() - timeVars.LAST_TIME
+        timeVars.LAST_TIME = Date.now()
+        timeVars.mstime += timeVars.DELTA_TIME
+        timeVars.time = timeVars.mstime * 0.001 // convert from millis to seconds
     }
 
     return {

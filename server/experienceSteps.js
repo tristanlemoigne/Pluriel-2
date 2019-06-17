@@ -37,10 +37,6 @@ module.exports = [
             { asset: "pinkStone", delay: 0, time: 0.8, scene: "sceneR" },
             { asset: "cyanStone", delay: 0, time: 0.8, scene: "sceneL" },
             { asset: "stoneLights", delay: 0, time: 0.8 }
-        ],
-        removedThreeGroupsMob: [
-            { asset: "pinkStone", delay: 0, time: 0.8, scene: "sceneR" },
-            { asset: "cyanStone", delay: 0, time: 0.8, scene: "sceneL" }
         ]
     },
 
