@@ -8,6 +8,10 @@ import { TimelineLite, Power0, Sine, Power1, Power2, Power3 } from "gsap"
 function Ending(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
     let islandLeft, islandRight, tourCentrale
+    let buildingLightsLeft = []
+    let buildingLightsRight = []
+    let pierreLeft, pierreRight
+
     let datguiVars = {
         spaceOffs: 0
     }
@@ -25,16 +29,35 @@ function Ending(scene, camera, assets, timeVars) {
         // scene.add(camera.target)
 
         // GET ISLANDS
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
+            // TODO: avoid traversing multiple times
             if (child.name.includes("-IleGauche")) {
                 islandLeft = child
                 islandLeft.originalPos = new THREE.Vector3()
                 islandLeft.originalPos.copy(islandLeft.position)
+
+                islandLeft.traverse(islandLeftChild => {
+                    if (
+                        islandLeftChild.material &&
+                        islandLeftChild.material.name.includes("Emission")
+                    ) {
+                        buildingLightsLeft.push(islandLeftChild)
+                    }
+                })
             }
             if (child.name.includes("-IleDroite")) {
                 islandRight = child
                 islandRight.originalPos = new THREE.Vector3()
                 islandRight.originalPos.copy(islandRight.position)
+
+                islandRight.traverse(islandRightChild => {
+                    if (
+                        islandRightChild.material &&
+                        islandRightChild.material.name.includes("Emission")
+                    ) {
+                        buildingLightsRight.push(islandRightChild)
+                    }
+                })
             }
             if (child.name.includes("TourCentrale")) {
                 tourCentrale = child
@@ -42,6 +65,28 @@ function Ending(scene, camera, assets, timeVars) {
                 tourCentrale.originalPos.copy(tourCentrale.position)
                 tourCentrale.angularVelocity = 0
             }
+
+            if (child.material && child.name.includes("Pierre")) {
+                console.log(child)
+                pierreLeft = child
+            } else if (child.material && child.name.includes("PierreIleD")) {
+                console.log(child)
+                pierreRight = child
+            }
+        })
+
+        pierreLeft.material.emissive = new THREE.Color(0x00ff80)
+        pierreLeft.material.emissiveIntensity = 10
+        pierreRight.material.emissive = new THREE.Color(0x80ff00)
+        pierreRight.material.emissiveIntensity = 10
+
+        buildingLightsLeft.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0x00ffff)
+            buildingLight.material.emissiveIntensity = 10
+        })
+        buildingLightsRight.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0xffff00)
+            buildingLight.material.emissiveIntensity = 10
         })
 
         //LISTENERS
@@ -50,7 +95,11 @@ function Ending(scene, camera, assets, timeVars) {
 
     function animateEnding(winnerStr) {
         console.log("winnerStr in animateEnding(): ", winnerStr)
-        if (winnerStr === "lamar" || winnerStr === "zanit" || winnerStr === "egalite") {
+        if (
+            winnerStr === "lamar" ||
+            winnerStr === "zanit" ||
+            winnerStr === "egalite"
+        ) {
             loseAnimation()
         } else if (winnerStr === "team") {
             winAnimation()
@@ -111,6 +160,7 @@ function Ending(scene, camera, assets, timeVars) {
                 8,
                 {
                     x: islandLeft.originalPos.x + 13.9,
+                    y: islandLeft.originalPos.y,
                     ease: Power1.easeInOut
                 },
                 "move"
@@ -120,6 +170,7 @@ function Ending(scene, camera, assets, timeVars) {
                 8,
                 {
                     x: islandRight.originalPos.x - 13.9,
+                    y: islandRight.originalPos.y,
                     ease: Power1.easeInOut
                 },
                 "move"
@@ -138,10 +189,10 @@ function Ending(scene, camera, assets, timeVars) {
                 12,
                 {
                     angularVelocity: 0.0008,
-                    ease: Power1.easeIn,
-                    onComplete: () => {
-                        isWinAnimFinished = true
-                    }
+                    ease: Power1.easeIn
+                    // onComplete: () => {
+                    //     isWinAnimFinished = true
+                    // }
                 },
                 "move"
             )
@@ -151,7 +202,8 @@ function Ending(scene, camera, assets, timeVars) {
 
     function update(timeVars, mobileQuaternions) {
         // if (isWinAnimFinished) {
-        tourCentrale.rotation.y += tourCentrale.angularVelocity * timeVars.DELTA_TIME
+        tourCentrale.rotation.y +=
+            tourCentrale.angularVelocity * timeVars.DELTA_TIME
         // }
     }
 
