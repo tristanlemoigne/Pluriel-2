@@ -443,7 +443,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     cyanSpotLight.target.position,
                     dummyVec
                 )
-                cyanSpotLight.quaternion.slerp(dummyQuat, 0.05)
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.1)
                 // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
             }
             cyanSpotLightHelper.update()
@@ -473,7 +473,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     pinkSpotLight.target.position,
                     dummyVec
                 )
-                pinkSpotLight.quaternion.slerp(dummyQuat, 0.05)
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.1)
                 // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
             }
             pinkSpotLightHelper.update()
