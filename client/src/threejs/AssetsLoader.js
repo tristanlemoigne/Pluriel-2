@@ -35,7 +35,7 @@ function AssetsLoader() {
     }
 
     this._loadGLTF = function(path, ref, childArr) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._GLTFLoader.load(path, gltf => {
@@ -60,7 +60,7 @@ function AssetsLoader() {
     }
 
     this._loadOBJ = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._OBJLoader.load(path, obj => {
@@ -75,7 +75,7 @@ function AssetsLoader() {
     }
 
     this._loadFBX = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._FBXLoader.load(path, fbx => {
@@ -104,7 +104,7 @@ function AssetsLoader() {
     }
 
     this._loadSVG = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 // console.log("load svg")
@@ -142,7 +142,7 @@ function AssetsLoader() {
     }
 
     this.onComplete = function(callback) {
-        console.log("this._promises:", this._promises)
+        // console.log("this._promises:", this._promises)
         Promise.all(this._promises)
             .then(() => {
                 callback(this.assets)

@@ -8,7 +8,7 @@
         <button
             class="debugButton"
             v-if="isDebugMode"
-            @click="setRoomState({currentStep: {camIsActive:true}})"
+            @click="setRoomState({currentStep: { name: 'NEXT' }})"
         >NEXT STEP</button>
 
         <!-- <button
