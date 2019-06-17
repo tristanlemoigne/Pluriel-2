@@ -54,7 +54,7 @@ module.exports = [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
-            { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 }
         ]
     },
 
@@ -71,7 +71,7 @@ module.exports = [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
-            { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 }
         ]
     },
 
@@ -106,7 +106,7 @@ module.exports = [
         fog: {
             delay: 4,
             time: 6,
-            density: 0.006,
+            density: 0.009,
             easing: ["Power1", "easeInOut"]
         }
     },

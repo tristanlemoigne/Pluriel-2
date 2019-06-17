@@ -140,7 +140,7 @@ function Ending(scene, camera, assets, timeVars) {
                 islandLeft.position,
                 5,
                 {
-                    y: islandLeft.originalPos.y - 4,
+                    y: islandLeft.originalPos.y - 3.5,
                     ease: Power1.easeInOut
                 },
                 "moveY"
@@ -149,7 +149,7 @@ function Ending(scene, camera, assets, timeVars) {
                 islandRight.position,
                 5,
                 {
-                    y: islandRight.originalPos.y + 4.5,
+                    y: islandRight.originalPos.y + 4,
                     ease: Power1.easeInOut
                 },
                 "moveY"
