@@ -17,7 +17,6 @@ function ThreeEntryPointMob(canvas) {
     loader.load("/assets/models/home/stoneLights.glb", "stoneLights", ["scene"])
 
     // SELECTION PERSO
-    // loader.load("//assets/models/home/persos.glb", "persos", ["scene"])
     loader.load("/assets/models/home/persosLights.glb", "persosLights", [
         "scene"
     ])

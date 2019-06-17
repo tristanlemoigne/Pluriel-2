@@ -1,17 +1,11 @@
 import * as THREE from "three"
-import CSS from "@/config/styles.scss"
 import { threeBus } from "@/main"
-import socket from "@/socket"
-const firstStep = require("../../../../../server/experienceSteps.js")[0]
-
-
 
 function HomeMobSceneEntity(scene, assets) {
     /* ----------------------- INPUTS ----------------------- */
     let mouseDown = false, mouseX = 0, mouseY = 0;
     let sliderProgress = 0
     let canslide = false
-    var clock = new THREE.Clock()
     const slider = []
     const scenes = [scene]
 
@@ -20,14 +14,8 @@ function HomeMobSceneEntity(scene, assets) {
 
     /* ----------------------- FUNCTIONS ----------------------- */
     function init() {
-        initLights()
         initPersos()
         addMouseHandler()
-    }
-
-    function initLights() {
-        scene.add(assets.persoLights)
-        scene.add(assets.stoneLights)
     }
 
     function initPersos() {
@@ -61,7 +49,7 @@ function HomeMobSceneEntity(scene, assets) {
         })
     }
 
-    function addMouseHandler(canvas) {
+    function addMouseHandler() {
         window.addEventListener('touchmove', function (e) {
             onMouseMove(e);
         }, false);
@@ -95,7 +83,7 @@ function HomeMobSceneEntity(scene, assets) {
         mouseDown = false;
     }
 
-    function rotateScene(deltaX, deltaY) {
+    function rotateScene(deltaX) {
         assets.lamarRigged.rotation.y += deltaX / 100;
         assets.zanitRigged.rotation.y += deltaX / 100;
     }

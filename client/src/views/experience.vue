@@ -252,8 +252,8 @@ export default {
         getTransitionEnd() {
             if (
                 this.roomState.currentStep.cameraTransition.camPos &&
-                this.roomState.currentStep.cameraTransition.camPos.time &&
-                this.roomState.currentStep.cameraTransition.camPos.delay
+                this.roomState.currentStep.cameraTransition.camPos.time !== undefined &&
+                this.roomState.currentStep.cameraTransition.camPos.delay !== undefined
             ) {
                 return (
                     (this.roomState.currentStep.cameraTransition.camPos.time +
@@ -264,8 +264,8 @@ export default {
                 );
             } else if (
                 this.roomState.currentStep.cameraTransition.camTarget &&
-                this.roomState.currentStep.cameraTransition.camTarget.time &&
-                this.roomState.currentStep.cameraTransition.camTarget.delay
+                this.roomState.currentStep.cameraTransition.camTarget.time !== undefined &&
+                this.roomState.currentStep.cameraTransition.camTarget.delay !== undefined
             ) {
                 return (
                     (this.roomState.currentStep.cameraTransition.camTarget
@@ -282,7 +282,6 @@ export default {
         addHoleWinnerScore(winner) {
             // winner = Cyan / Pink / White
             if (winner === "Cyan") {
-                console.log(this.$refs.scoreLamar.children[0], this.scoreLamar);
                 this.$refs.scoreLamar.children[
                     this.scoreLamar
                 ].style.backgroundColor = CSS.cyan;
@@ -408,9 +407,7 @@ export default {
 
                 // UI END GLOBALE
                 if (currentRoomState.currentStep.name === "global_ending") {
-                    console.log("GLOBAL ENDING");
                     this.canShowUIEnd = false;
-                    console.log("plUrIEL MERGED", this.plurielMerged);
 
                     setTimeout(() => {
                         this.canShowUIGlobale = true;

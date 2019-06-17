@@ -95,7 +95,6 @@ function Ending(scene, camera, assets, timeVars) {
     }
 
     function animateEnding(winnerStr) {
-        console.log("winnerStr in animateEnding(): ", winnerStr)
         if (
             winnerStr === "lamar" ||
             winnerStr === "zanit" ||
