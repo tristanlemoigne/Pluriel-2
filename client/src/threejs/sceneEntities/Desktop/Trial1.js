@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const colors = {
         cyan: "#00ffff",
         pink: "#ff00ff",
-        blue: "#0000ff",
-        red: "#ff0000",
+        blue: "#214CFF",
+        red: "#FF1B38",
         white: "#ff99ff"
     }
 
@@ -132,7 +132,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // CYAN
         cyanSpotLight = new THREE.SpotLight(
-            colors.cyan,
+            colors.blue,
             ...Object.values(spotLightParams)
         )
         cyanSpotLight.position.set(0, 0, 0)
@@ -158,7 +158,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // PINK
         pinkSpotLight = new THREE.SpotLight(
-            colors.pink,
+            colors.red,
             ...Object.values(spotLightParams)
         )
         pinkSpotLight.position.set(0, 0, 0)
@@ -416,7 +416,7 @@ function Trial1(scene, camera, assets, timeVars) {
             cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
             cyanSpotLight.target.position.z = -cameraTargetDist
 
-            cyanSpotLight.intensity = 10 + cameraTargetDist * 5
+            cyanSpotLight.intensity = 20 + cameraTargetDist * 5
 
             rotationHelper.scale.set(
                 cameraTargetDist * 2,
@@ -452,7 +452,7 @@ function Trial1(scene, camera, assets, timeVars) {
             )
             pinkSpotLight.target.position.z = -cameraTargetDist
 
-            pinkSpotLight.intensity = 10 + cameraTargetDist * 10
+            pinkSpotLight.intensity = 20 + cameraTargetDist * 10
 
             if (mobileQuaternions.pink) {
                 // TODO: remove dummy stuff (optimize)

@@ -250,22 +250,33 @@ export default {
             this.setRoomState({ currentStep: { name: "NEXT" } });
         },
         getTransitionEnd() {
-            if(this.roomState.currentStep.cameraTransition.camPos.delay && this.roomState.currentStep.cameraTransition.camPos.time){
+            if (
+                this.roomState.currentStep.cameraTransition.camPos &&
+                this.roomState.currentStep.cameraTransition.camPos.time &&
+                this.roomState.currentStep.cameraTransition.camPos.delay
+            ) {
                 return (
                     (this.roomState.currentStep.cameraTransition.camPos.time +
-                        this.roomState.currentStep.cameraTransition.camPos.delay) *
+                        this.roomState.currentStep.cameraTransition.camPos
+                            .delay) *
                         1000 -
                     2000
                 );
-            } else if(this.roomState.currentStep.cameraTransition.camTarget.delay && this.roomState.currentStep.cameraTransition.camTarget.time){
-                  return (
-                    (this.roomState.currentStep.cameraTransition.camTarget.time +
-                        this.roomState.currentStep.cameraTransition.camTarget.delay) *
+            } else if (
+                this.roomState.currentStep.cameraTransition.camTarget &&
+                this.roomState.currentStep.cameraTransition.camTarget.time &&
+                this.roomState.currentStep.cameraTransition.camTarget.delay
+            ) {
+                return (
+                    (this.roomState.currentStep.cameraTransition.camTarget
+                        .time +
+                        this.roomState.currentStep.cameraTransition.camTarget
+                            .delay) *
                         1000 -
                     2000
                 );
             } else {
-                return 0
+                return 0;
             }
         },
         addHoleWinnerScore(winner) {
