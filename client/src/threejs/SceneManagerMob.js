@@ -32,7 +32,7 @@ function SceneManagerMob(canvas, assets) {
         time: 0,
         mstime: 0,
         DELTA_TIME: undefined,
-        LAST_TIME:Date.now()
+        LAST_TIME: Date.now()
     }
 
     function init() {
@@ -72,7 +72,8 @@ function SceneManagerMob(canvas, assets) {
 
     function initScenesEntities() {
         const sceneEntities = {
-            home: () => HomeMobSceneEntity(masterScene, assets)
+            home: () => HomeMobSceneEntity(masterScene, assets),
+            trial_1_intro: () => CrystalSceneEntity(character) // is needed to send Gyroscop informations
         }
         return sceneEntities
     }
@@ -111,7 +112,7 @@ function SceneManagerMob(canvas, assets) {
             }
             let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
 
-            assets[addedAssetName].traverse((child) => {
+            assets[addedAssetName].traverse(child => {
                 if (child.intensity && child.normalIntensity) {
                     TweenLite.fromTo(
                         child,
@@ -130,7 +131,7 @@ function SceneManagerMob(canvas, assets) {
                 } else if (child.material) {
                     /* NOTE: this can be an array!! */
                     if (child.material.map) {
-                        child.material.map((actualMaterial) => {
+                        child.material.map(actualMaterial => {
                             actualMaterial.side = THREE.FrontSide
                             // actualMaterial.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
                             actualMaterial.transparent = true
@@ -161,11 +162,11 @@ function SceneManagerMob(canvas, assets) {
                 // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
                 delay: delay + 0.2,
                 onUpdate: () => {
-                    assets[addedAssetName].traverse((child) => {
+                    assets[addedAssetName].traverse(child => {
                         if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeInPercentage
                                 })
@@ -185,17 +186,19 @@ function SceneManagerMob(canvas, assets) {
             let localTweenedVar = { fadeOutPercentage: 1 } // 1 -> 0
 
             if (!assets[removedAssetName]) {
-                console.error(`Can't remove "${removedAssetName}", asset not found`)
+                console.error(
+                    `Can't remove "${removedAssetName}", asset not found`
+                )
             }
             TweenLite.to(localTweenedVar, time, {
                 fadeOutPercentage: 0,
                 delay: delay,
                 onStart: () => {
-                    assets[removedAssetName].traverse((child) => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.side = THREE.FrontSide
                                     actualMaterial.transparent = true
                                 })
@@ -207,7 +210,7 @@ function SceneManagerMob(canvas, assets) {
                     })
                 },
                 onUpdate: () => {
-                    assets[removedAssetName].traverse((child) => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.intensity) {
                             child.intensity =
                                 child.normalIntensity *
@@ -215,7 +218,7 @@ function SceneManagerMob(canvas, assets) {
                         } else if (child.material) {
                             /* NOTE: this can be an array!! */
                             if (child.material.map) {
-                                child.material.map((actualMaterial) => {
+                                child.material.map(actualMaterial => {
                                     actualMaterial.opacity =
                                         localTweenedVar.fadeOutPercentage
                                 })
@@ -229,14 +232,13 @@ function SceneManagerMob(canvas, assets) {
                 onComplete: () => {
                     masterScene.remove(assets[removedAssetName])
 
-                    assets[removedAssetName].traverse((child) => {
+                    assets[removedAssetName].traverse(child => {
                         if (child.dispose) child.dispose()
                     })
                 }
             })
         })
     }
-
 
     function update() {
         requestAnimationFrame(update)
