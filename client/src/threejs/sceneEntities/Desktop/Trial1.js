@@ -306,10 +306,12 @@ function Trial1(scene, camera, assets, timeVars) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue +=
-                        timeVars.DELTA_TIME * fusionScaleDuration * 2
-                    hole.cyanValue +=
-                        timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.pinkValue += 1 / (60 * defaultScaleDuration)
+                    hole.cyanValue += 1 / (60 * defaultScaleDuration)
+                    // hole.pinkValue +=
+                    //     timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    // hole.cyanValue +=
+                    //     timeVars.DELTA_TIME * fusionScaleDuration * 2
                     threeBus.$emit("holeScaling", {
                         color: "White",
                         progress: (hole.cyanValue + hole.pinkValue) * 100
