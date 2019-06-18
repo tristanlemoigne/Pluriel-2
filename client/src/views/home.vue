@@ -15,12 +15,11 @@
             </div>
         </button>
 
-
         <!-- Home Mobile -->
-        <div class="homeMobile textGlow" v-if="isMobile && !canShowMobileForm" >
+        <div class="homeMobile textGlow" v-if="isMobile && !canShowMobileForm">
             <div class="main">
                 <Logo/>
-                <h2 >{{subtitle}}</h2>
+                <h2>{{subtitle}}</h2>
             </div>
 
             <button @click.once="showMobileForm">
@@ -31,7 +30,12 @@
         </div>
 
         <!-- Commencer l'expérience Mobile-->
-        <form class="formMobile" v-if="isMobile && canShowMobileForm" action @submit.prevent="joinRoom">
+        <form
+            class="formMobile"
+            v-if="isMobile && canShowMobileForm"
+            action
+            @submit.prevent="joinRoom"
+        >
             <p class="textGlow">
                 Connectez-vous sur
                 <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché
@@ -88,8 +92,8 @@ export default {
                     e.pageX
                 }px - 50%) * 0.45)`;
         },
-        showMobileForm(){
-            this.canShowMobileForm = true
+        showMobileForm() {
+            this.canShowMobileForm = true;
         }
     },
     mounted() {
@@ -121,7 +125,7 @@ export default {
     .sliderBar {
         position: absolute;
         width: 6px;
-        height: 40vw;
+        height: calc((40vw + 55vh) / 2);
         background-color: #cbb2ff;
         left: 50%;
         top: 50%;
@@ -160,7 +164,7 @@ export default {
         }
     }
 
-    .homeMobile{
+    .homeMobile {
         border: solid 1px red;
         width: 100%;
         height: 100%;
@@ -169,24 +173,24 @@ export default {
         background-size: cover;
         background-repeat: no-repeat;
 
-        div.main{
+        div.main {
             position: relative;
             top: 40%;
             transform: translateY(-50%);
 
-            h2{
+            h2 {
                 margin: 0;
             }
         }
 
-        button{
+        button {
             position: absolute;
             bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
         }
     }
-  
+
     .formMobile {
         input {
             margin-top: 10%;
@@ -215,7 +219,7 @@ export default {
             transform: translateX(-50%);
         }
 
-        img{
+        img {
             position: absolute;
             top: 0;
             left: 0;
@@ -252,7 +256,6 @@ export default {
             }
         }
     }
-
 
     @keyframes pulse {
         0% {
