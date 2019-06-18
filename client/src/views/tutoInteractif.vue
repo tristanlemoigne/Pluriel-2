@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="tutoInteractif"  v-if="!isMobile">
-            <div class="camDetection" :class="camIsActive === true ? 'camIsActive' : ''">
+            <div class="camDetection" v-bind:class="{ visible: !camIsActive }">
                 <p class="textGlow">Vous avez besoin de la webcam pour profiter de l’expérience</p>
                 <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
                 <p class="textGlow">Activez votre webcam pour continuer</p>
             </div>
 
-            <div class="tutoExplanation" :class="camIsActive === true ? 'camIsActive' : ''">
+            <div class="tutoExplanation" v-bind:class="{ visible: camIsActive }">
                 <h2 class="textGlow">Faites à présent usage de vos amulettes</h2>
 
                 <div class="explanationContainer">
@@ -25,17 +25,20 @@
             </div>
         </div>
 
-        <div class="tutoInteractifMobile" v-if="isMobile">
-            ACTIVE TA CAM SUR DESKTOP
+        <div class="tutoInteractifMobile textGlow" v-if="isMobile">
+            <div class="camDetection" v-bind:class="{ visible: !camIsActive }">
+                <p>Activez la webcam sur votre ordinateur pour poursuivre l’expérience</p>
+                <img class="svgGlow mobile" src="/assets/img/webcam.svg" alt>
+            </div>
 
+            <div class="amulettes" v-bind:class="{ visible: camIsActive }">
                 <div v-if="character === 'lamar'">
-                    JE SUIS LAMAR
                     <img src="assets/img/AmuletteLamarGlow.png" alt>
                 </div>
                 <div v-if="character === 'zanit'">
-                    JE SUIS ZANIT
                     <img src="assets/img/AmuletteZanitGlow.png" alt>
                 </div>
+            </div>
         </div>
     </div>
 
@@ -44,8 +47,9 @@
 <script>
 import TrackerVideo from "@/components/TrackerVideo.vue";
 import { TweenMax, Power2, TimelineLite } from "gsap/TweenMax";
-import { threeBus } from "@/main";
+import { threeBus, bus } from "@/main";
 import socket from "@/socket.js";
+import { setInterval } from 'timers';
 
 export default {
     name: "experience",
@@ -53,47 +57,58 @@ export default {
     props: {
         roomState: Object
     },
-    data: () => ({
-        uiDatas: {
-            isDebugMode: true
-        },
-        camIsActive: Boolean,
-        character: undefined
-    }),
+    data: function(){
+        return{
+            uiDatas: {
+                isDebugMode: true
+            },
+            camIsActive: false,
+            character: undefined,
+            isCameraActivated: null
+        }
+    },
     props: {
         roomId: String,
         isMobile: Boolean,
         users: Array,
-        roomState: Object
+        roomState: Object,
     },
-    methods: {},
-    mounted() {
-        //  Check if user has activated his camera
-        if (!this.isMobile) {
-            const checkCameraIsActivated = setInterval(() => {
+    watch: {
+        "roomState.currentStep": {
+            handler: function(currentStep, oldStep) {
+                if (currentStep !== oldStep && currentStep !== undefined) {
+                    window.clearInterval(this.isCameraActivated)
+                    this.camIsActive = true;
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        checkCameraIsActivated() {
+            this.isCameraActivated = window.setInterval(function(){
+                console.log("check")
                 navigator.getMedia =
                     navigator.getUserMedia ||
                     navigator.webkitGetUserMedia ||
                     navigator.mozGetUserMedia ||
                     navigator.msGetUserMedia;
 
-                navigator.getMedia(
-                    { video: true },
-                    () => {
-                        if (
-                            this.$props.roomState.currentStep.activatesCam ===
-                            true
-                        ) {
-                            // Start tracking
-                            this.$data.camIsActive = true;
-                            clearInterval(checkCameraIsActivated);
-                        }
-                    },
-                    function() {
-                        console.error("webcam is not available");
-                    }
-                );
-            }, 500);
+                navigator.getMedia({ video: true },function(){
+                    // Start tracking
+                    bus.$emit("setRoomState", {currentStep: {
+                        camIsActive: true
+                    }})
+                },function(){
+                    console.error("webcam is not available")
+                })
+            }, 500)
+        }
+    },
+    mounted() {
+         //  Check if user has activated his camera
+        if (!this.isMobile) {
+            this.checkCameraIsActivated()
         }
 
         if (this.roomState.lamar === socket.id) {
@@ -103,7 +118,6 @@ export default {
         } else {
             this.character = undefined;
         }
-        // bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
     }
 };
 </script>
@@ -112,7 +126,12 @@ export default {
 @import "@/config/styles.scss";
 
 .tutoInteractif {
+    div.visible{
+        opacity: 1;
+    }
+
     .camDetection {
+        opacity: 0;
         transition: opacity 0.5s ease-in;
         display: flex;
         flex-direction: column;
@@ -121,13 +140,10 @@ export default {
         text-align: center;
         max-width: 300px;
         margin: 0 auto;
-        position: relative;
+        position: absolute;
         top: 50%;
-        transform: translateY(-50%);
-
-        &.camIsActive {
-            opacity: 0;
-        }
+        left: 50%;
+        transform: translate(-50%, -50%);
 
         img {
             margin: 30px 0;
@@ -168,8 +184,41 @@ export default {
 }
 
 .tutoInteractifMobile{
-    img{
+    div.visible{
+        opacity: 1;
+    }
+
+    .camDetection{
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        text-align: center;
+        transform: translateY(-50%);
+
+        p{
+            padding: 25px;
+        }
+    }
+
+    .amulettes{
+        transition: opacity 0.5s ease-in;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background-color: $black;
+
+        img{
+            width: 110%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 }
 </style>

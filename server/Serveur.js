@@ -224,11 +224,19 @@ class Serveur {
                     .emit("set user room state", currentRoom.roomState)
             })
 
+            // GET DESKTOP VIDEO PROGRESSION
+            socket.on("video update", function(videoProgression){
+                if (currentRoom) {
+                    server
+                        .in(currentRoom.id)
+                        .emit("video updating", videoProgression)
+                }
+            })
+
             // THREE LOOP UPDATED
             socket.on("gyro cyan", function(Quaternion) {
-                // console.log("GYRO CYAN")
+                console.log("GYRO CYAN")
                 if (currentRoom) {
-                    console.log("GYRO CYAN", Quaternion)
                     server
                         .in(currentRoom.id)
                         .emit("dispatch cyan quaternion", Quaternion)
