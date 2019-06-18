@@ -138,7 +138,6 @@ div.dioramas {
         .circleTime {
             margin-top: 20px;
             position: relative;
-            border: solid 1px red;
             width: 200px;
             height: 200px;
 

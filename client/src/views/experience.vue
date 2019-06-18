@@ -5,12 +5,6 @@
             <div class="uiGlobale" v-bind:class="{ visible: canShowUIGlobale }">
                 <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
-                <button v-if="!isMobile" @click="onFirstStepClick()">
-                    <div class="outerCircle">
-                        <div class="innerCircle"></div>
-                    </div>
-                </button>
-
                 <p
                     class="textGlow"
                     v-bind:class="{ visible: !canShowUIGlobaleEnd }"
@@ -187,12 +181,25 @@
         </div>
 
         <!-- Mobile stuff -->
-        <div class="mobile" v-if="isMobile">
-            <div v-if="character === 'lamar'">
-                <img src="assets/img/AmuletteLamarGlow.png" alt>
+        <div class="mobile textGlow" v-if="isMobile">
+            <div class="uiGlobaleMobile" v-bind:class="{ visible: canShowUIGlobale }">
+                <p>Commencer<br/><b>la première étape</b></p>
+                <button class="cta" @click="onFirstStepClick()">
+                    <div class="outerCircle">
+                        <div class="innerCircle"></div>
+                    </div>
+                </button>
+
+                <img src="assets/img/tour1mobile.png" alt>
             </div>
-            <div v-if="character === 'zanit'">
-                <img src="assets/img/AmuletteZanitGlow.png" alt>
+
+            <div class="amulettes" v-bind:class="{ visible: canShowUITuto }">     
+                <div v-if="character === 'lamar'">
+                    <img src="assets/img/AmuletteLamarGlow.png" alt>
+                </div>
+                <div v-if="character === 'zanit'">
+                    <img src="assets/img/AmuletteZanitGlow.png" alt>
+                </div>
             </div>
         </div>
     </div>
@@ -448,6 +455,45 @@ div {
         opacity: 1;
     }
 
+    button.cta {
+        color: $white;
+        text-transform: uppercase;
+        padding: 15px 25px;
+
+        div.outerCircle {
+            border: solid 4px $white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+            position: relative;
+
+            &:hover {
+                transform: scale(1.15);
+            }
+
+            div.innerCircle {
+                width: 100%;
+                height: 100%;
+                border: solid 1px $white;
+                border-radius: 100%;
+
+                animation: pulse 1.5s infinite ease-in;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+    }
+
+
     .uiGlobale {
         opacity: 0;
         transition: opacity 0.5s ease;
@@ -463,46 +509,6 @@ div {
             top: 0;
             left: 0;
             opacity: 0;
-        }
-
-        button {
-            color: $white;
-            text-transform: uppercase;
-            padding: 15px 25px;
-            justify-self: center;
-            align-self: flex-end;
-
-            div.outerCircle {
-                border: solid 4px $white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                transition: transform 0.5s ease;
-                position: relative;
-
-                &:hover {
-                    transform: scale(1.15);
-                }
-
-                div.innerCircle {
-                    width: 100%;
-                    height: 100%;
-                    border: solid 1px $white;
-                    border-radius: 100%;
-
-                    animation: pulse 1.5s infinite ease-in;
-                }
-            }
-
-            @keyframes pulse {
-                0% {
-                    transform: scale(1.1);
-                }
-                100% {
-                    transform: scale(1.8);
-                    opacity: 0;
-                }
-            }
         }
 
         p.visible {
@@ -799,13 +805,59 @@ div {
         width: 100%;
         height: 100%;
         background-color: $black;
+        border: solid 1px red;
+        text-align: center;
 
         img{
-            width: 110%;
+            width: 100%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+
+        .uiGlobaleMobile{
+            transition: opacity 0.5s ease-in;
+            opacity: 0;
+            border: solid 1px yellow;
+
+            &.visible{
+                opacity: 1;
+            }
+
+            button.cta, p{
+                position: absolute;
+                z-index: 3;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            button.cta{
+                bottom: 50px;
+            }
+            
+            p{
+                top: 80px;
+            }
+        }
+
+        .amulettes{
+            transition: opacity 0.5s ease-in;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $black;
+
+            &.visible{
+                opacity: 1;
+            }
+
+            img{
+                width: 110%;
+            }
         }
     }
 }
