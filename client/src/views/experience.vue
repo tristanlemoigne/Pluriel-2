@@ -2,6 +2,11 @@
     <div>
         <!--Desktop stuff -->
         <div v-if="!isMobile">
+            <div class="indice textGlow" v-bind:class="{ visible: canShowIndice }">
+                <p>Il est maintenant temps pour vous de changer la destiné de Pluriel.</p>
+                <p>Arriverez-vous à associer vos deux visions afin de lui redonner sa splendeur ?</p>
+            </div>
+
             <div class="uiGlobale" v-bind:class="{ visible: canShowUIGlobale }">
                 <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
@@ -224,6 +229,7 @@ export default {
         },
         camIsActive: true,
         character: undefined,
+        canShowIndice: true,
         canShowUIGlobale: false,
         canShowUITuto: false,
         canShowUIStep: false,
@@ -439,6 +445,7 @@ export default {
 
         setTimeout(() => {
             this.canShowUIGlobale = true;
+            this.canShowIndice = false
         }, this.getTransitionEnd());
         // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }
@@ -493,6 +500,22 @@ div {
         }
     }
 
+    .indice{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 800px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        font-size: 24px;
+
+        p:nth-of-type(2){
+            line-height: 55px;
+            font-size: 50px;
+        }
+    }
 
     .uiGlobale {
         opacity: 0;
@@ -684,7 +707,7 @@ div {
             }
 
             .stone {
-                margin: 0 10px;
+                margin: 0 30px;
                 position: relative;
                 width: 80px;
                 height: 80px;
