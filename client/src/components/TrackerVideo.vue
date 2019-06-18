@@ -100,6 +100,7 @@ div.trackerVideo{
     position: relative;
 
     canvas{
+        opacity: 0.8;
         position: absolute;
         top: 0; 
         left: 0;
