@@ -64,8 +64,10 @@ export default {
             bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
         },
         onVideoTimeUpdate(event){
-            this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
-            socket.emit("video update", this.videoProgress)
+            if(this.$refs.video){
+                this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
+                socket.emit("video update", this.videoProgress)
+            }
         },
         videoLoaded(){
             this.videoDuration = this.$refs.video.duration

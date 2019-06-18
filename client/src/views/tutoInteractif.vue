@@ -87,7 +87,6 @@ export default {
     methods: {
         checkCameraIsActivated() {
             this.isCameraActivated = window.setInterval(function(){
-                console.log("check")
                 navigator.getMedia =
                     navigator.getUserMedia ||
                     navigator.webkitGetUserMedia ||

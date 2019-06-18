@@ -21,7 +21,7 @@
 
                 <div class="stones">
                     <img ref="victoriousStep" src="assets/img/icon-stone.png" alt>
-                    <img src="assets/img/icon-stone@2x.png" alt>
+                    <img src="assets/img/icon-stone-victorious.png" alt>
                     <img src="assets/img/icon-stone.png" alt>
                 </div>
             </div>
