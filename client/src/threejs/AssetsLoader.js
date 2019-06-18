@@ -35,7 +35,7 @@ function AssetsLoader() {
     }
 
     this._loadGLTF = function(path, ref, childArr) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._GLTFLoader.load(path, gltf => {
@@ -50,7 +50,7 @@ function AssetsLoader() {
                     } else {
                         this.assets[ref] = gltf
                     }
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -60,12 +60,12 @@ function AssetsLoader() {
     }
 
     this._loadOBJ = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._OBJLoader.load(path, obj => {
                     this.assets[ref] = obj
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -75,12 +75,12 @@ function AssetsLoader() {
     }
 
     this._loadFBX = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 this._FBXLoader.load(path, fbx => {
                     this.assets[ref] = fbx
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -95,7 +95,7 @@ function AssetsLoader() {
             return new Promise(resolve => {
                 const texture = this._TextureLoader.load(path)
                 this.assets[ref] = texture
-                console.log("resolved:", ref)
+                // console.log("resolved:", ref)
                 resolve()
             })
         } else {
@@ -104,7 +104,7 @@ function AssetsLoader() {
     }
 
     this._loadSVG = function(path, ref) {
-        console.log(path, ref)
+        // console.log(path, ref)
         return new Promise((resolve, reject) => {
             if (path && ref) {
                 // console.log("load svg")
@@ -132,7 +132,7 @@ function AssetsLoader() {
                     }
 
                     this.assets[ref] = group
-                    console.log("resolved:", ref)
+                    // console.log("resolved:", ref)
                     resolve()
                 })
             } else {
@@ -142,7 +142,7 @@ function AssetsLoader() {
     }
 
     this.onComplete = function(callback) {
-        console.log("this._promises:", this._promises)
+        // console.log("this._promises:", this._promises)
         Promise.all(this._promises)
             .then(() => {
                 callback(this.assets)

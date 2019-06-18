@@ -2,17 +2,22 @@
     <div>
         <!--Desktop stuff -->
         <div v-if="!isMobile">
+            <div class="indice textGlow" v-bind:class="{ visible: canShowIndice }">
+                <p>Il est maintenant temps pour vous de changer la destiné de Pluriel.</p>
+                <p>Arriverez-vous à associer vos deux visions afin de lui redonner sa splendeur ?</p>
+            </div>
+
             <div class="uiGlobale" v-bind:class="{ visible: canShowUIGlobale }">
                 <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
-                <button v-if="!isMobile" @click="onFirstStepClick()">
-                    <div class="outerCircle">
-                        <div class="innerCircle"></div>
-                    </div>
-                </button>
-
-                <p class="textGlow" v-bind:class="{ visible: !canShowUIGlobaleEnd }">Accédez à la 1ère étape grâce à votre téléphone.</p>
-                <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">Recommencer <br/>l'expérience</p>
+                <p
+                    class="textGlow"
+                    v-bind:class="{ visible: !canShowUIGlobaleEnd }"
+                >Accédez à la 1ère étape grâce à votre téléphone.</p>
+                <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
+                    Recommencer
+                    <br>l'expérience
+                </p>
 
                 <div class="stones">
                     <img ref="victoriousStep" src="assets/img/icon-stone.png" alt>
@@ -22,16 +27,38 @@
             </div>
 
             <div class="recapTuto" v-bind:class="{ visible: canShowUITuto }">
-                <p class="textGlow">Cette tour a besoin d’être réanimée, seule <b>la lumière de vos amulettes</b> permettra de rétablir son énergie.</p>
+                <p class="textGlow">
+                    Cette tour a besoin d’être réanimée, seule
+                    <b>la lumière de vos amulettes</b> permettra de rétablir son énergie.
+                </p>
                 <img class="svgGlow" src="/assets/img/tuto.svg" alt>
             </div>
 
             <div class="uiStep1" v-bind:class="{ visible: canShowUIStep }">
                 <div class="scoreLamar">
                     <div class="stone">
-                        <svg  width="100" height="100">
-                            <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
-                            <circle class="circleFill" ref="cyanProgression" stroke="#356BFF" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                        <svg width="100" height="100">
+                            <circle
+                                class="circleBg"
+                                stroke="#efefef"
+                                opacity="0.5"
+                                stroke-width="2"
+                                fill="none"
+                                cx="20"
+                                cy="20"
+                                r="15.91549431"
+                            ></circle>
+                            <circle
+                                class="circleFill"
+                                ref="cyanProgression"
+                                stroke="#356BFF"
+                                stroke-width="2"
+                                stroke-dasharray="0 100"
+                                fill="none"
+                                cx="20"
+                                cy="20"
+                                r="15.91549431"
+                            ></circle>
                         </svg>
                         <img src="assets/img/icon-stone-lamar.png" alt>
                     </div>
@@ -69,7 +96,10 @@
                             <defs>
                                 <clipPath clipPathUnits="objectBoundingBox" id="sector">
                                     <!-- ICI ON CALCULE LANGLE LOLILOL  pi:4.5 -->
-                                    <path class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.9045084972,.2061073739 z"></path>
+                                    <path
+                                        class="sector"
+                                        d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.9045084972,.2061073739 z"
+                                    ></path>
                                 </clipPath>
                             </defs>
                         </svg>
@@ -90,9 +120,28 @@
                     </div>
 
                     <div class="stone">
-                         <svg  width="100" height="100">
-                            <circle class="circleBg" stroke="#efefef" opacity=0.5 stroke-width="2" fill="none" cx="20" cy="20" r="15.91549431" />
-                            <circle class="circleFill" ref="pinkProgression" stroke="#FF1A54" stroke-width="2" stroke-dasharray="0,100" fill="none" cx="20" cy="20" r="15.91549431" />
+                        <svg width="100" height="100">
+                            <circle
+                                class="circleBg"
+                                stroke="#efefef"
+                                opacity="0.5"
+                                stroke-width="2"
+                                fill="none"
+                                cx="20"
+                                cy="20"
+                                r="15.91549431"
+                            ></circle>
+                            <circle
+                                class="circleFill"
+                                ref="pinkProgression"
+                                stroke="#FF1A54"
+                                stroke-width="2"
+                                stroke-dasharray="0 100"
+                                fill="none"
+                                cx="20"
+                                cy="20"
+                                r="15.91549431"
+                            ></circle>
                         </svg>
                         <img src="assets/img/icon-stone-zanit.png" alt>
                     </div>
@@ -101,7 +150,8 @@
 
             <div class="step1End" v-bind:class="{ visible: canShowUIEnd }">
                 <p class="victorious textGlow">
-                    <span>{{victoriousText}}</span><br/>
+                    <span>{{victoriousText}}</span>
+                    <br>
                     {{victoriousLegend}}
                 </p>
 
@@ -120,32 +170,41 @@
                     <div></div>
                 </div>
 
-                <p class="totalHoles textGlow">
-                    {{victoriousScore}}/9 trous
-                </p>
+                <p class="totalHoles textGlow">{{victoriousScore}}/9 trous</p>
             </div>
 
             <div class="globalEnd textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
                 <p v-bind:class="{ visible: !plurielMerged }">
-                    Malheureusement, <br/>
-                    Votre collaboration n’a pas été suffisante
+                    Malheureusement,
+                    <br>Votre collaboration n’a pas été suffisante
                 </p>
                 <p v-bind:class="{ visible: plurielMerged }">
-                    Félicitations, <br/>
-                    Vous avez crée votre Pluriel
+                    Félicitations,
+                    <br>Vous avez crée votre Pluriel
                 </p>
             </div>
-        </div>  
+        </div>
 
         <!-- Mobile stuff -->
-        <div class="mobile" v-if="isMobile">
-            <div v-if="character === 'lamar'">
-                JE SUIS LAMAR
-                <img src="assets/img/AmuletteLamarGlow.png" alt>
+        <div class="mobile textGlow" v-if="isMobile">
+            <div class="uiGlobaleMobile" v-bind:class="{ visible: canShowUIGlobale }">
+                <p>Commencer<br/><b>la première étape</b></p>
+                <button class="cta" @click="onFirstStepClick()">
+                    <div class="outerCircle">
+                        <div class="innerCircle"></div>
+                    </div>
+                </button>
+
+                <img src="assets/img/tour1mobile.png" alt>
             </div>
-            <div v-if="character === 'zanit'">
-                JE SUIS ZANIT
-                <img src="assets/img/AmuletteZanitGlow.png" alt>
+
+            <div class="amulettes" v-bind:class="{ visible: canShowUITuto }">     
+                <div v-if="character === 'lamar'">
+                    <img src="assets/img/AmuletteLamarGlow.png" alt>
+                </div>
+                <div v-if="character === 'zanit'">
+                    <img src="assets/img/AmuletteZanitGlow.png" alt>
+                </div>
             </div>
         </div>
     </div>
@@ -156,7 +215,7 @@ import TrackerVideo from "@/components/TrackerVideo.vue";
 import socket from "@/socket.js";
 import { threeBus, bus } from "../main";
 import { setTimeout } from "timers";
-import CSS from "@/config/styles.scss"
+import CSS from "@/config/styles.scss";
 
 export default {
     name: "experience",
@@ -170,6 +229,7 @@ export default {
         },
         camIsActive: true,
         character: undefined,
+        canShowIndice: true,
         canShowUIGlobale: false,
         canShowUITuto: false,
         canShowUIStep: false,
@@ -200,59 +260,99 @@ export default {
         onFirstStepClick() {
             this.setRoomState({ currentStep: { name: "NEXT" } });
         },
-        getTransitionEnd(){
-            return (this.roomState.currentStep.cameraTransition.camPos.time + this.roomState.currentStep.cameraTransition.camPos.delay) * 1000 - 2000
-        },
-        addHoleWinnerScore(winner){
-            // winner = Cyan / Pink / White
-            if(winner === "Cyan") {
-                console.log(this.$refs.scoreLamar.children[0], this.scoreLamar)
-                this.$refs.scoreLamar.children[this.scoreLamar].style.backgroundColor = CSS.cyan
-                this.scoreLamar ++
-            } else if (winner === "Pink"){
-                this.$refs.scoreZanit.children[this.scoreZanit].style.backgroundColor = CSS.pink
-                this.scoreZanit ++
-            } else if(winner === "White"){
-                this.$refs.scoreTeam.children[this.scoreTeam].style.backgroundColor = CSS.white
-                this.scoreTeam ++
+        getTransitionEnd() {
+            if (
+                this.roomState.currentStep.cameraTransition.camPos &&
+                this.roomState.currentStep.cameraTransition.camPos.time !==
+                    undefined &&
+                this.roomState.currentStep.cameraTransition.camPos.delay !==
+                    undefined
+            ) {
+                return (
+                    (this.roomState.currentStep.cameraTransition.camPos.time +
+                        this.roomState.currentStep.cameraTransition.camPos
+                            .delay) *
+                        1000 -
+                    2000
+                );
+            } else if (
+                this.roomState.currentStep.cameraTransition.camTarget &&
+                this.roomState.currentStep.cameraTransition.camTarget.time !==
+                    undefined &&
+                this.roomState.currentStep.cameraTransition.camTarget.delay !==
+                    undefined
+            ) {
+                return (
+                    (this.roomState.currentStep.cameraTransition.camTarget
+                        .time +
+                        this.roomState.currentStep.cameraTransition.camTarget
+                            .delay) *
+                        1000 -
+                    2000
+                );
             } else {
-                console.log("Winner is not possible >>>", winner)
+                return 0;
             }
-            this.totalFilledHoles ++
         },
-        playerHoleProgress(hole){
-            if(hole.color === "Cyan"){
-                this.$refs.cyanProgression.style.strokeDasharray = `${hole.progress}, 100`;
-            } else if(hole.color === "Pink"){
-                this.$refs.pinkProgression.style.strokeDasharray = `${hole.progress}, 100`;
+        addHoleWinnerScore(winner) {
+            // winner = Cyan / Pink / White
+            if (winner === "Cyan") {
+                this.$refs.scoreLamar.children[
+                    this.scoreLamar
+                ].style.backgroundColor = CSS.cyan;
+                this.scoreLamar++;
+            } else if (winner === "Pink") {
+                this.$refs.scoreZanit.children[
+                    this.scoreZanit
+                ].style.backgroundColor = CSS.pink;
+                this.scoreZanit++;
+            } else if (winner === "White") {
+                this.$refs.scoreTeam.children[
+                    this.scoreTeam
+                ].style.backgroundColor = CSS.white;
+                this.scoreTeam++;
+            } else {
+                console.log("Winner is not possible >>>", winner);
+            }
+            this.totalFilledHoles++;
+        },
+        playerHoleProgress(hole) {
+            if (hole.color === "Cyan") {
+                this.$refs.cyanProgression.style.strokeDasharray = `${
+                    hole.progress
+                }, 100`;
+            } else if (hole.color === "Pink") {
+                this.$refs.pinkProgression.style.strokeDasharray = `${
+                    hole.progress
+                }, 100`;
             }
         },
         checkVictoriousPlayer() {
-            let victoriousPlayer = null
-                // Check white
+            let victoriousPlayer = null;
+            // Check white
             if (this.totalFilledHoles > this.totalholes / 2) {
                 if (this.scoreTeam >= this.totalFilledHoles / 2) {
-                    victoriousPlayer = "team"
+                    victoriousPlayer = "team";
                 } else {
                     if (this.scoreLamar > this.scoreZanit) {
-                        victoriousPlayer = "lamar"
+                        victoriousPlayer = "lamar";
                     } else if (this.scoreZanit > this.scoreLamar) {
-                        victoriousPlayer = "zanit"
+                        victoriousPlayer = "zanit";
                     } else {
-                        victoriousPlayer = "egalite"
+                        victoriousPlayer = "egalite";
                     }
                 }
             } else {
-                victoriousPlayer = "egalite"
+                victoriousPlayer = "egalite";
             }
 
-            return victoriousPlayer
+            return victoriousPlayer;
         },
-        getVictoriousIcon(){
-            return `assets/img/${this.iconSrc}`
+        getVictoriousIcon() {
+            return `assets/img/${this.iconSrc}`;
         }
     },
-    watch:{
+    watch: {
         roomState: {
             handler: function(currentRoomState, oldRoomState) {
                 // Show good UI relative to current step
@@ -260,72 +360,75 @@ export default {
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
                     this.canShowUIGlobale = false;
                     setTimeout(() => {
-                        this.canShowUITuto = true
-                    }, this.getTransitionEnd())
+                        this.canShowUITuto = true;
+                    }, this.getTransitionEnd());
                 }
 
-                // UI XP EN COURS 
+                // UI XP EN COURS
                 if (currentRoomState.currentStep.name === "trial_1_tuto") {
-                    this.canShowUITuto = false
+                    this.canShowUITuto = false;
                     setTimeout(() => {
-                        this.canShowUIStep = true
-                    }, this.getTransitionEnd())
+                        this.canShowUIStep = true;
+                    }, this.getTransitionEnd());
 
-                    threeBus.$on("holeFilled", this.addHoleWinnerScore)    
-                    threeBus.$on("holeScaling", this.playerHoleProgress)    
+                    threeBus.$on("holeFilled", this.addHoleWinnerScore);
+                    threeBus.$on("holeScaling", this.playerHoleProgress);
                 }
 
                 // UI END STEP 1
                 if (currentRoomState.currentStep.name === "trial_1_end") {
-                    this.canShowUIStep = false
-                    this.victoriousPlayer = this.checkVictoriousPlayer()
-                    let color
+                    this.canShowUIStep = false;
+                    this.victoriousPlayer = this.checkVictoriousPlayer();
+                    let color;
 
-                    if(this.victoriousPlayer === "lamar"){
-                        this.victoriousText = "Lamar"
-                        this.victoriousScore = this.scoreLamar
-                        this.iconSrc = "icon-stone-lamar.png"
-                        color = CSS.cyan
-                    } else if(this.victoriousPlayer === "zanit"){
-                        this.victoriousText = "Zanit"
-                        this.victoriousScore = this.scoreZanit
-                        this.iconSrc = "icon-stone-zanit.png"
-                        color = CSS.pink
-                    } else if(this.victoriousPlayer=== "team"){
-                        this.victoriousText = "Bravo"
-                        this.victoriousLegend = "Vous avez réussi à reconstruire la tour"
-                        this.victoriousScore = this.scoreTeam
-                        this.plurielMerged = true
-                        color = CSS.white
+                    if (this.victoriousPlayer === "lamar") {
+                        this.victoriousText = "Lamar";
+                        this.victoriousScore = this.scoreLamar;
+                        this.iconSrc = "icon-stone-lamar.png";
+                        color = CSS.cyan;
+                    } else if (this.victoriousPlayer === "zanit") {
+                        this.victoriousText = "Zanit";
+                        this.victoriousScore = this.scoreZanit;
+                        this.iconSrc = "icon-stone-zanit.png";
+                        color = CSS.pink;
+                    } else if (this.victoriousPlayer === "team") {
+                        this.victoriousText = "Bravo";
+                        this.victoriousLegend =
+                            "Vous avez réussi à reconstruire la tour";
+                        this.victoriousScore = this.scoreTeam;
+                        this.plurielMerged = true;
+                        color = CSS.white;
                     } else {
-                        this.victoriousText = "Egalité"
-                        this.victoriousLegend = "Vous ferez mieux une prochaine fois"
-                        this.victoriousScore = this.scoreTeam + this.scoreLamar + this.scoreZanit
-                        color = CSS.white
+                        this.victoriousText = "Egalité";
+                        this.victoriousLegend =
+                            "Vous ferez mieux une prochaine fois";
+                        this.victoriousScore =
+                            this.scoreTeam + this.scoreLamar + this.scoreZanit;
+                        color = CSS.white;
                     }
 
-                    for(let i=0; i < this.victoriousScore; i++){
-                        this.$refs.victoriousScore.children[i].style.backgroundColor = color
+                    for (let i = 0; i < this.victoriousScore; i++) {
+                        this.$refs.victoriousScore.children[
+                            i
+                        ].style.backgroundColor = color;
                     }
 
-                    this.$refs.victoriousStep.style.borderColor = color
+                    this.$refs.victoriousStep.style.borderColor = color;
 
-                    setTimeout(()=>{
-                        this.canShowUIEnd = true
-                    }, this.getTransitionEnd())
+                    setTimeout(() => {
+                        this.canShowUIEnd = true;
+                    }, this.getTransitionEnd());
                 }
 
                 // UI END GLOBALE
                 if (currentRoomState.currentStep.name === "global_ending") {
-                    console.log("GLOBALL ENDING")
-                    this.canShowUIEnd = false
-                    console.log("plUrIEL MERGED", this.plurielMerged)
+                    this.canShowUIEnd = false;
 
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         this.canShowUIGlobale = true;
                         this.canShowUIGlobaleEnd = true;
-                        bus.$emit('trigger ending', this.victoriousPlayer)
-                    }, this.getTransitionEnd())
+                        bus.$emit("trigger ending", this.victoriousPlayer);
+                    }, this.getTransitionEnd());
                 }
             },
             deep: true
@@ -342,7 +445,8 @@ export default {
 
         setTimeout(() => {
             this.canShowUIGlobale = true;
-        }, this.getTransitionEnd()) 
+            this.canShowIndice = false
+        }, this.getTransitionEnd());
         // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }
 };
@@ -356,6 +460,61 @@ div {
 
     div.visible {
         opacity: 1;
+    }
+
+    button.cta {
+        color: $white;
+        text-transform: uppercase;
+        padding: 15px 25px;
+
+        div.outerCircle {
+            border: solid 4px $white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+            position: relative;
+
+            &:hover {
+                transform: scale(1.15);
+            }
+
+            div.innerCircle {
+                width: 100%;
+                height: 100%;
+                border: solid 1px $white;
+                border-radius: 100%;
+
+                animation: pulse 1.5s infinite ease-in;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+    }
+
+    .indice{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 800px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        font-size: 24px;
+
+        p:nth-of-type(2){
+            line-height: 55px;
+            font-size: 50px;
+        }
     }
 
     .uiGlobale {
@@ -375,52 +534,11 @@ div {
             opacity: 0;
         }
 
-        button {
-            color: $white;
-            text-transform: uppercase;
-            padding: 15px 25px;
-            justify-self: center;
-            align-self: flex-end;
-
-            div.outerCircle {
-                border: solid 4px $white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                transition: transform 0.5s ease;
-                position: relative;
-
-                &:hover {
-                    transform: scale(1.15);
-                }
-
-                div.innerCircle {
-                    width: 100%;
-                    height: 100%;
-                    border: solid 1px $white;
-                    border-radius: 100%;
-
-                    animation: pulse 1.5s infinite ease-in;
-                }
-            }
-
-            @keyframes pulse {
-                0% {
-                    transform: scale(1.1);
-                }
-                100% {
-                    transform: scale(1.8);
-                    opacity: 0;
-                }
-            }
-        }
-
-
-        p.visible{
+        p.visible {
             display: block;
         }
 
-        p {    
+        p {
             display: none;
             max-width: 280px;
             margin: 0 auto 80px;
@@ -436,7 +554,7 @@ div {
                 border-radius: 100%;
                 opacity: 0.5;
 
-                &:nth-of-type(1){
+                &:nth-of-type(1) {
                     opacity: 1;
                 }
 
@@ -449,7 +567,7 @@ div {
         }
     }
 
-    .recapTuto{
+    .recapTuto {
         opacity: 0;
         transition: opacity 0.5s ease;
         position: absolute;
@@ -458,14 +576,14 @@ div {
         transform: translate(-50%, -50%);
         text-align: center;
 
-        p{
+        p {
             max-width: 500px;
             margin: 0 auto;
             margin-bottom: 50px;
         }
     }
 
-    .uiStep1{
+    .uiStep1 {
         opacity: 0;
         transition: opacity 0.5s ease;
         position: absolute;
@@ -476,21 +594,21 @@ div {
         align-items: center;
         justify-content: center;
 
-        .scoreTeam{
+        .scoreTeam {
             position: relative;
-            margin: 0 20px;
+            margin: 0 4vw;
 
-            div.gradient{
+            div.gradient {
                 .score {
                     list-style: none;
                     position: relative;
                     width: 100px;
                     height: 100px;
-                    border: solid 2px $black;
-                    background-color: $black;
+                    // border: solid 2px $black;
+                    // background-color: $black;
                     border-radius: 50%;
 
-                    div { 
+                    div {
                         position: absolute;
                         top: 0;
                         left: 0;
@@ -498,9 +616,9 @@ div {
                         height: 100%;
                         clip-path: url(#sector);
 
-                        background-color: rgba(227,227,227,0.5);
+                        background-color: rgba(227, 227, 227, 0.5);
 
-                        &.one {                 
+                        &.one {
                             transform: rotate(-40deg);
                         }
                         &.two {
@@ -530,91 +648,92 @@ div {
                     }
                 }
 
-                svg{
+                svg {
                     position: absolute;
                 }
             }
-            
-            img{
+
+            img {
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 z-index: 2;
             }
-            
         }
 
-        .scoreLamar, .scoreZanit{
+        .scoreLamar,
+        .scoreZanit {
             display: flex;
             justify-content: center;
             align-items: center;
 
-            &.scoreLamar{
-                .stone::before{
+            &.scoreLamar {
+                .stone::before {
                     content: "Lamar";
                 }
 
-                div.score{
-                    div:first-child{
+                div.score {
+                    div:first-child {
                         border-top-left-radius: 50px;
                         border-bottom-left-radius: 50px;
                     }
 
-                    div:last-child{
+                    div:last-child {
                         border-top-right-radius: 50px;
                         border-bottom-right-radius: 50px;
                     }
                 }
             }
 
-            &.scoreZanit{
-                .stone::before{
+            &.scoreZanit {
+                .stone::before {
                     content: "Zanit";
                 }
 
-                div.score{
+                div.score {
                     flex-direction: row-reverse;
 
-                    div:last-child{
+                    div:last-child {
                         border-top-left-radius: 50px;
                         border-bottom-left-radius: 50px;
                     }
 
-                    div:first-child{
+                    div:first-child {
                         border-top-right-radius: 50px;
                         border-bottom-right-radius: 50px;
                     }
                 }
             }
 
-            .stone{
-                margin: 0 10px;
+            .stone {
+                margin: 0 30px;
                 position: relative;
                 width: 80px;
                 height: 80px;
 
-                &::before{
+                &::before {
                     position: absolute;
-                    top: -40px; 
-                    left: 50%;;
+                    top: -40px;
+                    left: 50%;
                     font-weight: bold;
                     transform: translateX(-50%);
                 }
 
-                img, svg{
+                img,
+                svg {
                     top: 50%;
                     left: 50%;
                     position: absolute;
                     transform: translate(-50%, -50%);
                 }
 
-                svg{
+                svg {
                     z-index: 3;
                     transform-origin: center left;
                     transform: rotate(-90deg);
 
-                    circle{
+                    circle {
                         transform-origin: 3px 3px;
 
                         transform: scale(2.8);
@@ -622,14 +741,14 @@ div {
                 }
             }
 
-            div.score{
+            div.score {
                 border-radius: 50px;
                 width: 300px;
                 height: 20px;
                 display: flex;
                 background-color: rgba(255, 255, 255, 0.5);
 
-                div{
+                div {
                     width: 11.111%;
                     border: solid 2px white;
                 }
@@ -637,7 +756,7 @@ div {
         }
     }
 
-    .step1End{
+    .step1End {
         opacity: 0;
         transition: opacity 0.5s ease;
         position: absolute;
@@ -647,38 +766,37 @@ div {
         text-align: center;
         font-size: 25px;
 
-        p.victorious{
+        p.victorious {
             max-width: 250px;
             margin: 0 auto;
 
-            span{
+            span {
                 font-size: 70px;
                 font-weight: bold;
             }
         }
 
-        img{
-            margin:  25px 0;
+        img {
+            margin: 25px 0;
         }
 
-        div.score{
+        div.score {
             border-radius: 50px;
             width: 300px;
             height: 20px;
             display: flex;
             background-color: rgba(255, 255, 255, 0.5);
 
-            div{
+            div {
                 width: 11.111%;
                 border: solid 2px white;
 
-
-                &:first-child{
+                &:first-child {
                     border-top-left-radius: 50px;
                     border-bottom-left-radius: 50px;
                 }
 
-                &:last-child{
+                &:last-child {
                     border-top-right-radius: 50px;
                     border-bottom-right-radius: 50px;
                 }
@@ -686,16 +804,16 @@ div {
         }
     }
 
-    .globalEnd{
+    .globalEnd {
         opacity: 0;
         transition: opacity 0.5s ease;
         text-align: center;
 
-        p.visible{
+        p.visible {
             opacity: 1;
         }
 
-        p{
+        p {
             font-size: 50px;
             opacity: 0;
             margin-top: 20%;
@@ -704,13 +822,65 @@ div {
     }
 
     .mobile {
-        img {
-            position: fixed;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $black;
+        border: solid 1px red;
+        text-align: center;
+
+        img{
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .uiGlobaleMobile{
+            transition: opacity 0.5s ease-in;
+            opacity: 0;
+            border: solid 1px yellow;
+
+            &.visible{
+                opacity: 1;
+            }
+
+            button.cta, p{
+                position: absolute;
+                z-index: 3;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            button.cta{
+                bottom: 50px;
+            }
+            
+            p{
+                top: 80px;
+            }
+        }
+
+        .amulettes{
+            transition: opacity 0.5s ease-in;
+            opacity: 0;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background-color: $black;
+
+            &.visible{
+                opacity: 1;
+            }
+
+            img{
+                width: 110%;
+            }
         }
     }
 }

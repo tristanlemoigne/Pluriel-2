@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const colors = {
         cyan: "#00ffff",
         pink: "#ff00ff",
-        blue: "#0000ff",
-        red: "#ff0000",
+        blue: "#214CFF",
+        red: "#FF1B38",
         white: "#ff99ff"
     }
 
@@ -49,8 +49,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const easingFactor = 0.15
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.2 // 5
-    const fusionScaleDuration = 0.9 // 2
+    const defaultScaleDuration = 2.6 // 5
+    const fusionScaleDuration = 1.2 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
@@ -61,7 +61,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
     init()
     createSpotlights()
-    initGui()
+    // initGui()
 
     /* ----------------------- INIT ----------------------- */
     function init() {
@@ -71,11 +71,11 @@ function Trial1(scene, camera, assets, timeVars) {
         // scene.add(camera.target)
 
         // Get tour base
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.material) {
                 child.material.metalness = 0
                 child.material.roughness = 1
@@ -83,13 +83,13 @@ function Trial1(scene, camera, assets, timeVars) {
         })
 
         // Get all holes
-        assets.islands.traverse((child) => {
+        assets.islands.traverse(child => {
             if (child.name.includes("HoleFill")) {
                 child.material = child.material.clone() // clone material so that it is not shared with other meshes
                 holesArr.push(child)
             }
         })
-        holesArr.forEach((hole) => {
+        holesArr.forEach(hole => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -111,7 +111,7 @@ function Trial1(scene, camera, assets, timeVars) {
         positionPersos()
     }
 
-    function positionPersos(){
+    function positionPersos() {
         console.log("BASETOUR", baseTour)
         assets.zanitRigged.position.copy(baseTour.position.clone())
         assets.lamarRigged.position.copy(baseTour.position.clone())
@@ -132,7 +132,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // CYAN
         cyanSpotLight = new THREE.SpotLight(
-            colors.cyan,
+            colors.blue,
             ...Object.values(spotLightParams)
         )
         cyanSpotLight.position.set(0, 0, 0)
@@ -158,7 +158,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // PINK
         pinkSpotLight = new THREE.SpotLight(
-            colors.pink,
+            colors.red,
             ...Object.values(spotLightParams)
         )
         pinkSpotLight.position.set(0, 0, 0)
@@ -269,7 +269,9 @@ function Trial1(scene, camera, assets, timeVars) {
                 .normalize()
 
             spotLightRaycaster.set(spotPos, raycastDir)
-            const intersects = spotLightRaycaster.intersectObjects(baseTour.children)
+            const intersects = spotLightRaycaster.intersectObjects(
+                baseTour.children
+            )
 
             // if (intersects[0]) {
             //     projectedTargPos = intersects[0].point
@@ -304,23 +306,32 @@ function Trial1(scene, camera, assets, timeVars) {
                     distanceHoleToCyan < maxDistanceFromHole &&
                     distanceHoleToPink < maxDistanceFromHole
                 ) {
-                    hole.pinkValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
-                    hole.cyanValue += timeVars.DELTA_TIME * fusionScaleDuration * 2
+                    hole.pinkValue +=
+                        (timeVars.DELTA_TIME / fusionScaleDuration) *
+                        0.001 *
+                        0.5
+                    hole.cyanValue +=
+                        (timeVars.DELTA_TIME / fusionScaleDuration) *
+                        0.001 *
+                        0.5
+
                     threeBus.$emit("holeScaling", {
                         color: "White",
                         progress: (hole.cyanValue + hole.pinkValue) * 100
                     })
                 } else {
                     if (distanceHoleToCyan < maxDistanceFromHole) {
-                        hole.cyanValue += 1 / (60 * defaultScaleDuration)
+                        hole.cyanValue +=
+                            (timeVars.DELTA_TIME / defaultScaleDuration) * 0.001
                         threeBus.$emit("holeScaling", {
                             color: "Cyan",
                             progress: hole.cyanValue * 100
                         })
                     }
 
-                    if (distanceHoleToPink < maxDistanceFromHole){
-                        hole.pinkValue += 1 / (60 * defaultScaleDuration)
+                    if (distanceHoleToPink < maxDistanceFromHole) {
+                        hole.pinkValue +=
+                            (timeVars.DELTA_TIME / defaultScaleDuration) * 0.001
                         threeBus.$emit("holeScaling", {
                             color: "Pink",
                             progress: hole.pinkValue * 100
@@ -334,12 +345,10 @@ function Trial1(scene, camera, assets, timeVars) {
                     .clone()
                     .lerp(hole.scaleMax, hole.progress)
                 hole.scale.copy(newScale)
-             
             } else {
                 // HOLE IS FILLED > CHECK VICTORIOUS
                 // console.log("HOLE FILLED")
                 console.log("HOLE FILLED")
-
 
                 if (hole.cyanValue >= maxColorScale) {
                     // Cyan winner
@@ -355,7 +364,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     hole.material.color.set(colors.white)
                 }
 
-                holesArr.splice(holesArr.indexOf(hole), 1);
+                holesArr.splice(holesArr.indexOf(hole), 1)
                 threeBus.$emit("holeFilled", hole.winner)
             }
         })
@@ -412,7 +421,7 @@ function Trial1(scene, camera, assets, timeVars) {
             cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
             cyanSpotLight.target.position.z = -cameraTargetDist
 
-            cyanSpotLight.intensity = 10 + cameraTargetDist * 5
+            cyanSpotLight.intensity = 20 + cameraTargetDist * 5
 
             rotationHelper.scale.set(
                 cameraTargetDist * 2,
@@ -434,8 +443,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     cyanSpotLight.target.position,
                     dummyVec
                 )
-                cyanSpotLight.quaternion.slerp(dummyQuat, 0.05)
-                // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             cyanSpotLightHelper.update()
         }
@@ -448,7 +457,7 @@ function Trial1(scene, camera, assets, timeVars) {
             )
             pinkSpotLight.target.position.z = -cameraTargetDist
 
-            pinkSpotLight.intensity = 10 + cameraTargetDist * 10
+            pinkSpotLight.intensity = 20 + cameraTargetDist * 10
 
             if (mobileQuaternions.pink) {
                 // TODO: remove dummy stuff (optimize)
@@ -464,8 +473,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     pinkSpotLight.target.position,
                     dummyVec
                 )
-                pinkSpotLight.quaternion.slerp(dummyQuat, 0.05)
-                // slerp value should be around 0.05 -> 0.15 (closer to 0, the spotlight feels harder to rotate)
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             pinkSpotLightHelper.update()
         }
@@ -482,7 +491,7 @@ function Trial1(scene, camera, assets, timeVars) {
         // Gui
         const gui = new dat.GUI()
 
-        gui.add(debug, "video").onChange((boolean) => {
+        gui.add(debug, "video").onChange(boolean => {
             if (boolean) {
                 video.style.opacity = 1
             } else {

@@ -2,10 +2,12 @@ import OrbitControls from "orbit-controls-es6"
 import CustomRenderer from "./postprocessing/CustomRenderer"
 import CameraGroup from "./CameraGroup"
 
+import HomeMobSceneEntity from "./sceneEntities/Mobile/HomeMobSceneEntity"
 import CrystalSceneEntity from "./sceneEntities/Mobile/CrystalSceneEntity"
 import CanvasRotator from "./CanvasRotator"
 import { bus, threeBus } from "../main"
 import socket from "../socket.js"
+import { TweenLite, Power0, Sine, Power1, Power2, Power3 } from "gsap"
 
 import * as THREE from "three"
 
@@ -24,11 +26,14 @@ function SceneManagerMob(canvas, assets) {
     let camera, customRenderer, controls
     let currentSceneEntity, sceneEntities
     let character
+    const masterScene = new THREE.Scene()
 
-    let LAST_TIME = Date.now()
-    let DELTA_TIME
-    let mstime = 0
-    let time = 0
+    let timeVars = {
+        time: 0,
+        mstime: 0,
+        DELTA_TIME: undefined,
+        LAST_TIME: Date.now()
+    }
 
     function init() {
         // Post processing
@@ -39,7 +44,7 @@ function SceneManagerMob(canvas, assets) {
         camera.position.copy(new THREE.Vector3(0, 0, -10))
 
         sceneEntities = initScenesEntities()
-        // currentSceneEntity = sceneEntities["home"]()
+        currentSceneEntity = sceneEntities["home"]()
 
         customRenderer = CustomRenderer(
             canvas,
@@ -67,7 +72,8 @@ function SceneManagerMob(canvas, assets) {
 
     function initScenesEntities() {
         const sceneEntities = {
-            trial_1_intro: () => CrystalSceneEntity(assets, character)
+            home: () => HomeMobSceneEntity(masterScene, assets),
+            trial_1_intro: () => CrystalSceneEntity(character) // is needed to send Gyroscop informations
         }
         return sceneEntities
     }
@@ -90,10 +96,148 @@ function SceneManagerMob(canvas, assets) {
         if (sceneEntities[step.name]) {
             currentSceneEntity = sceneEntities[step.name]()
         }
+        if (step.addedThreeGroupsMob) {
+            fadeIn(step.addedThreeGroupsMob)
+        }
+        if (step.removedThreeGroupsMob) {
+            fadeOut(step.removedThreeGroupsMob)
+        }
+    }
 
-        CanvasRotator(canvas, camera, customRenderer).rotateCanvas(
-            step.canvasAngle
-        )
+    function fadeIn(fadeInInfos) {
+        console.log("FADEIN", fadeInInfos)
+        fadeInInfos.map(({ asset: addedAssetName, delay, time, scene }) => {
+            if (!assets[addedAssetName]) {
+                console.error(`Can't add "${addedAssetName}", asset not found`)
+            }
+            let localTweenedVar = { fadeInPercentage: 0 } // 0 -> 1
+
+            assets[addedAssetName].traverse(child => {
+                if (child.intensity && child.normalIntensity) {
+                    TweenLite.fromTo(
+                        child,
+                        time,
+                        {
+                            intensity: 0
+                        },
+                        {
+                            delay: delay,
+                            intensity: child.normalIntensity
+                            // onUpdate: () => {
+                            //     console.log(child.name, child.intensity)
+                            // }
+                        }
+                    )
+                } else if (child.material) {
+                    /* NOTE: this can be an array!! */
+                    if (child.material.map) {
+                        child.material.map(actualMaterial => {
+                            actualMaterial.side = THREE.FrontSide
+                            // actualMaterial.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                            actualMaterial.transparent = true
+                            actualMaterial.opacity = 0
+                        })
+                    } else {
+                        child.material.side = THREE.FrontSide
+                        // child.material.side = THREE.DoubleSide // no good for transparency effects, only use for debug if possible
+                        child.material.transparent = true
+                        child.material.opacity = 0
+                    }
+                }
+            })
+
+            switch (scene) {
+                case "sceneR":
+                    sceneR.add(assets[addedAssetName])
+                    break
+                case "sceneL":
+                    sceneL.add(assets[addedAssetName])
+                    break
+                default:
+                    masterScene.add(assets[addedAssetName])
+            }
+
+            TweenLite.to(localTweenedVar, time, {
+                fadeInPercentage: 1,
+                // NOTE: add 0.2sec to delay to avoid starting the tween while the asset is still not visible (maybe fix this later)
+                delay: delay + 0.2,
+                onUpdate: () => {
+                    assets[addedAssetName].traverse(child => {
+                        if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.opacity =
+                                        localTweenedVar.fadeInPercentage
+                                })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeInPercentage
+                            }
+                        }
+                    })
+                }
+            })
+        })
+    }
+
+    function fadeOut(fadeOutInfos) {
+        fadeOutInfos.map(({ asset: removedAssetName, delay, time }) => {
+            let localTweenedVar = { fadeOutPercentage: 1 } // 1 -> 0
+
+            if (!assets[removedAssetName]) {
+                console.error(
+                    `Can't remove "${removedAssetName}", asset not found`
+                )
+            }
+            TweenLite.to(localTweenedVar, time, {
+                fadeOutPercentage: 0,
+                delay: delay,
+                onStart: () => {
+                    assets[removedAssetName].traverse(child => {
+                        if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.side = THREE.FrontSide
+                                    actualMaterial.transparent = true
+                                })
+                            } else {
+                                child.material.side = THREE.FrontSide
+                                child.material.transparent = true
+                            }
+                        }
+                    })
+                },
+                onUpdate: () => {
+                    assets[removedAssetName].traverse(child => {
+                        if (child.intensity) {
+                            child.intensity =
+                                child.normalIntensity *
+                                localTweenedVar.fadeOutPercentage // not very accurate, but may be sufficient (best accuracy would involve stocking initial intensity values for all lights)
+                        } else if (child.material) {
+                            /* NOTE: this can be an array!! */
+                            if (child.material.map) {
+                                child.material.map(actualMaterial => {
+                                    actualMaterial.opacity =
+                                        localTweenedVar.fadeOutPercentage
+                                })
+                            } else {
+                                child.material.opacity =
+                                    localTweenedVar.fadeOutPercentage
+                            }
+                        }
+                    })
+                },
+                onComplete: () => {
+                    masterScene.remove(assets[removedAssetName])
+
+                    assets[removedAssetName].traverse(child => {
+                        if (child.dispose) child.dispose()
+                    })
+                }
+            })
+        })
     }
 
     function update() {
@@ -102,16 +246,18 @@ function SceneManagerMob(canvas, assets) {
 
         camera.lookAt(new THREE.Vector3(0, 0, 1))
 
-        currentSceneEntity.update()
-        customRenderer.render(currentSceneEntity.scenes, camera)
+        // currentSceneEntity.update()
+        currentSceneEntity.update(timeVars)
+
+        customRenderer.render([masterScene], camera)
         // customRenderer.render(currentSceneEntity.scene, camera)
     }
 
     function updateTime() {
-        DELTA_TIME = Date.now() - LAST_TIME
-        LAST_TIME = Date.now()
-        mstime += DELTA_TIME
-        time = mstime * 0.001 // convert from millis to seconds
+        timeVars.DELTA_TIME = Date.now() - timeVars.LAST_TIME
+        timeVars.LAST_TIME = Date.now()
+        timeVars.mstime += timeVars.DELTA_TIME
+        timeVars.time = timeVars.mstime * 0.001 // convert from millis to seconds
     }
 
     return {

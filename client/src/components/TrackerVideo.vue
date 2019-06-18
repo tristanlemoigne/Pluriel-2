@@ -9,6 +9,8 @@
 import Tracker from "../threejs/sceneEntities/tracker/Tracker.js";
 
 import { threeBus } from "../main";
+import { reMap } from "../utils"
+
 
 export default {
     name: "TrackerVideo",
@@ -46,7 +48,13 @@ export default {
             this.pinkAmulette.src = "/assets/img/AmuletteZanit.png";
         },
         updateAmulette(amulette, blob){
-            this.context.drawImage(amulette, blob.x, blob.y     , blob.width, blob.height);
+            this.context.drawImage(
+                amulette, 
+                reMap(blob.x, 0,  this.$refs.video.offsetWidth, 0, this.$refs.tutoCanvas.width), 
+                reMap(blob.y, 0,  this.$refs.video.offsetHeight, 0, this.$refs.tutoCanvas.height), 
+                blob.width/2, 
+                blob.height/2
+            );
         }
     },
     watch: {
