@@ -212,6 +212,7 @@ export default {
                 opacity: 1; /* Firefox */
             }
         }
+
         button {
             position: absolute;
             bottom: 5%;
