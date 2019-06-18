@@ -188,7 +188,11 @@
         <!-- Mobile stuff -->
         <div class="mobile textGlow" v-if="isMobile">
             <div class="uiGlobaleMobile" v-bind:class="{ visible: canShowUIGlobale }">
-                <p>Commencer<br/><b>la première étape</b></p>
+                <p>
+                    Commencer
+                    <br>
+                    <b>la première étape</b>
+                </p>
                 <button class="cta" @click="onFirstStepClick()">
                     <div class="outerCircle">
                         <div class="innerCircle"></div>
@@ -198,7 +202,7 @@
                 <img src="assets/img/tour1mobile.png" alt>
             </div>
 
-            <div class="amulettes" v-bind:class="{ visible: canShowUITuto }">     
+            <div class="amulettes" v-bind:class="{ visible: canShowUITuto }">
                 <div v-if="character === 'lamar'">
                     <img src="assets/img/AmuletteLamarGlow.png" alt>
                 </div>
@@ -262,6 +266,7 @@ export default {
         },
         getTransitionEnd() {
             if (
+                this.roomState.currentStep.cameraTransition &&
                 this.roomState.currentStep.cameraTransition.camPos &&
                 this.roomState.currentStep.cameraTransition.camPos.time !==
                     undefined &&
@@ -276,6 +281,7 @@ export default {
                     2000
                 );
             } else if (
+                this.roomState.currentStep.cameraTransition &&
                 this.roomState.currentStep.cameraTransition.camTarget &&
                 this.roomState.currentStep.cameraTransition.camTarget.time !==
                     undefined &&
@@ -445,7 +451,7 @@ export default {
 
         setTimeout(() => {
             this.canShowUIGlobale = true;
-            this.canShowIndice = false
+            this.canShowIndice = false;
         }, this.getTransitionEnd());
         // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }
@@ -500,7 +506,7 @@ div {
         }
     }
 
-    .indice{
+    .indice {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -511,7 +517,7 @@ div {
         transition: opacity 0.5s ease;
         font-size: 24px;
 
-        p:nth-of-type(2){
+        p:nth-of-type(2) {
             line-height: 55px;
             font-size: 50px;
         }
@@ -831,7 +837,7 @@ div {
         border: solid 1px red;
         text-align: center;
 
-        img{
+        img {
             width: 100%;
             position: absolute;
             top: 50%;
@@ -839,32 +845,33 @@ div {
             transform: translate(-50%, -50%);
         }
 
-        .uiGlobaleMobile{
+        .uiGlobaleMobile {
             transition: opacity 0.5s ease-in;
             opacity: 0;
             border: solid 1px yellow;
 
-            &.visible{
+            &.visible {
                 opacity: 1;
             }
 
-            button.cta, p{
+            button.cta,
+            p {
                 position: absolute;
                 z-index: 3;
                 left: 50%;
                 transform: translateX(-50%);
             }
 
-            button.cta{
+            button.cta {
                 bottom: 50px;
             }
-            
-            p{
+
+            p {
                 top: 80px;
             }
         }
 
-        .amulettes{
+        .amulettes {
             transition: opacity 0.5s ease-in;
             opacity: 0;
             position: absolute;
@@ -874,11 +881,11 @@ div {
             height: 100%;
             background-color: $black;
 
-            &.visible{
+            &.visible {
                 opacity: 1;
             }
 
-            img{
+            img {
                 width: 110%;
             }
         }

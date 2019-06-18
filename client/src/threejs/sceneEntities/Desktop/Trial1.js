@@ -46,7 +46,7 @@ function Trial1(scene, camera, assets, timeVars) {
         canvas: false
     }
 
-    const easingFactor = 0.15
+    const easingFactor = 0.16
 
     // Conditions de victoire (seconds)
     const defaultScaleDuration = 2.6 // 5
@@ -451,10 +451,11 @@ function Trial1(scene, camera, assets, timeVars) {
 
         if (pinkSpotLight.lastTrackedBlob) {
             // TODO: do some LERP or SLERP here
-            pinkSpotLight.quaternion.setFromUnitVectors(
+            const targetQuat = new THREE.Quaternion().setFromUnitVectors(
                 neutralCamVector,
-                pinkTargetPosToLerp.clone().normalize()
+                pinkTargetPosToLerp.normalize()
             )
+            pinkSpotLight.quaternion.slerp(targetQuat, easingFactor)
             pinkSpotLight.target.position.z = -cameraTargetDist
 
             pinkSpotLight.intensity = 20 + cameraTargetDist * 12

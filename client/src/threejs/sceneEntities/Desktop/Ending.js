@@ -96,6 +96,19 @@ function Ending(scene, camera, assets, timeVars) {
             buildingLight.material.emissive = new THREE.Color(0xffff00)
             buildingLight.material.emissiveIntensity = 10
         })
+        tourCentrale.material.transparent = true
+        tourCentrale.material.opacity = 0.3
+        tourCentrale.material.roughness = 0
+        tourCentrale.material.reflectivity = 1
+        tourCentrale.material.color = new THREE.Color(0xffffff)
+
+        const testSphere = new THREE.Mesh(
+            new THREE.IcosahedronBufferGeometry(1.5, 3),
+            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+        )
+        testSphere.position.copy(tourCentrale.position)
+        testSphere.position.y += 5
+        scene.add(testSphere)
 
         // console.log(
         //     { pierreLeft },
