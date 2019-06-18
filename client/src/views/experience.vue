@@ -202,7 +202,7 @@
                 <img src="assets/img/tour1mobile.png" alt>
             </div>
 
-            <div class="amulettes" v-bind:class="{ visible: canShowUITuto }">
+            <div class="amulettes">
                 <div v-if="character === 'lamar'">
                     <img src="assets/img/AmuletteLamarGlow.png" alt>
                 </div>
@@ -834,7 +834,6 @@ div {
         width: 100%;
         height: 100%;
         background-color: $black;
-        border: solid 1px red;
         text-align: center;
 
         img {
@@ -848,7 +847,12 @@ div {
         .uiGlobaleMobile {
             transition: opacity 0.5s ease-in;
             opacity: 0;
-            border: solid 1px yellow;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
 
             &.visible {
                 opacity: 1;
@@ -873,7 +877,7 @@ div {
 
         .amulettes {
             transition: opacity 0.5s ease-in;
-            opacity: 0;
+            // opacity: 0;
             position: absolute;
             top: 0;
             left: 0;
