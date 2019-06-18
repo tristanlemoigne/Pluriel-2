@@ -1,7 +1,7 @@
 <template>
     <div class="dioramas" v-if="roomState.currentStep.name.slice(0,7) === 'diorama'">
         <div class="videoContainer" v-bind:class="{ desktop: !isMobile }" >
-            <video ref="video" src="/assets/videos/pluriel.mp4" @loadedmetadata="videoLoaded" @timeupdate="onVideoTimeUpdate" autoplay></video>
+            <video ref="video" v-if="!isMobile" src="/assets/videos/pluriel.mp4" @loadedmetadata="videoLoaded" @timeupdate="onVideoTimeUpdate" autoplay></video>
         </div>
 
         <button class="skip" v-if="!isMobile" @click.once="onSkip">Passer</button>
@@ -10,9 +10,8 @@
             Histoire
 
             <div class="circleTime">
-                <svg width="100" height="100">
+                <svg width="200" height="200">
                     <circle
-                        class="circleBg"
                         stroke="#efefef"
                         opacity="0.5"
                         stroke-width="1"
@@ -22,7 +21,6 @@
                         r="15.91549431"
                     ></circle>
                     <circle 
-                        class="circleFill"
                         ref="videoProgression"
                         stroke="#fff"
                         stroke-width="1"
@@ -41,6 +39,7 @@
 <script>
 import { bus } from "@/main"
 import { setTimeout } from 'timers';
+import socket from "@/socket.js";
 
 export default {
     name: "experience",
@@ -65,10 +64,8 @@ export default {
             bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
         },
         onVideoTimeUpdate(event){
-            if(this.isMobile && this.$refs.video){
-                this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
-                this.$refs.videoProgression.style.strokeDasharray = `${this.videoProgress}, 100`;
-            }
+            this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
+            socket.emit("video update", this.videoProgress)
         },
         videoLoaded(){
             this.videoDuration = this.$refs.video.duration
@@ -78,6 +75,12 @@ export default {
         if(!this.isMobile){
             this.$refs.video.addEventListener("ended", this.onSkip)
         }
+
+        socket.on("video updating", videoProgression => {
+            if(this.isMobile){
+                this.$refs.videoProgression.style.strokeDasharray = `${videoProgression}, 100`;
+            }
+        })
     }
 }
 </script>
@@ -130,20 +133,14 @@ div.dioramas {
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
+        font-size: 18px;
 
         .circleTime {
-            margin: 50px 10px;
+            margin-top: 20px;
             position: relative;
-            width: 80px;
-            height: 80px;
-
-            &::before {
-                position: absolute;
-                top: -40px;
-                left: 50%;
-                font-weight: bold;
-                transform: translateX(-50%);
-            }
+            border: solid 1px red;
+            width: 200px;
+            height: 200px;
 
             img,
             svg {
@@ -160,9 +157,8 @@ div.dioramas {
 
                 circle {
                     transition: all 0.25s ease;
-                    transform-origin: 3px 3px;
 
-                    transform: scale(2.8);
+                    transform: scale(5);
                 }
             }
         }
