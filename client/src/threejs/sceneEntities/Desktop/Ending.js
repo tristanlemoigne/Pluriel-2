@@ -76,24 +76,17 @@ function Ending(scene, camera, assets, timeVars) {
             }
         })
 
-        console.log(
-            { pierreLeft },
-            { pierreRight },
-            { buildingLightsLeft },
-            { buildingLightsRight }
-        )
-
         // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
         // pierreLeft.material.emissiveIntensity = 10
         // pierreRight.material.emissive = new THREE.Color(0x80ff00)
         // pierreRight.material.emissiveIntensity = 10
 
         buildingLightsLeft.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0x00ffff)
+            buildingLight.material.emissive = new THREE.Color(0xffffff)
             buildingLight.material.emissiveIntensity = 10
         })
         buildingLightsRight.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0xffff00)
+            buildingLight.material.emissive = new THREE.Color(0xffffff)
             buildingLight.material.emissiveIntensity = 10
         })
         tourCentrale.material.transparent = true
@@ -104,18 +97,20 @@ function Ending(scene, camera, assets, timeVars) {
 
         const testSphere = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(1.5, 3),
-            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+            new THREE.MeshBasicMaterial({ color: 0xffffff })
         )
         testSphere.position.copy(tourCentrale.position)
         testSphere.position.y += 5
         scene.add(testSphere)
 
-        // console.log(
-        //     { pierreLeft },
-        //     { pierreRight },
-        //     { buildingLightsLeft },
-        //     { buildingLightsRight }
-        // )
+        console.log(
+            { islandRight },
+            { islandLeft },
+            { pierreLeft },
+            { pierreRight },
+            { buildingLightsLeft },
+            { buildingLightsRight }
+        )
 
         // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
         // pierreLeft.material.emissiveIntensity = 10
@@ -346,6 +341,10 @@ function Ending(scene, camera, assets, timeVars) {
         tourCentrale.rotation.y +=
             tourCentrale.angularVelocity * timeVars.DELTA_TIME
         // }
+    }
+
+    function beforeDestroy() {
+        //
     }
 
     /* ----------------------- GUI ----------------------- */

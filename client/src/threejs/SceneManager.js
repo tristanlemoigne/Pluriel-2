@@ -433,7 +433,9 @@ function SceneManager(canvas, assets) {
         // CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
 
         if (sceneEntities[step.name]) {
-            // currentSceneEntity.destroy()
+            if (currentSceneEntity.beforeDestroy) {
+                currentSceneEntity.beforeDestroy()
+            }
             currentSceneEntity = sceneEntities[step.name]()
         }
         if (step.addedThreeGroupsDsk) {
