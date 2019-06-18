@@ -67,14 +67,34 @@ function Ending(scene, camera, assets, timeVars) {
                 tourCentrale.angularVelocity = 0
             }
 
-            // if (child.material && child.name.includes("Pierre")) {
-            //     console.log(child)
-            //     pierreLeft = child
-            // }
-            // else if (child.material && child.name.includes("PierreIleD")) {
-            //     console.log(child)
-            //     pierreRight = child
-            // }
+            if (child.material && child.name.includes("PierreIleG")) {
+                console.log(child)
+                pierreLeft = child
+            } else if (child.material && child.name.includes("PierreIleD")) {
+                console.log(child)
+                pierreRight = child
+            }
+        })
+
+        console.log(
+            { pierreLeft },
+            { pierreRight },
+            { buildingLightsLeft },
+            { buildingLightsRight }
+        )
+
+        // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
+        // pierreLeft.material.emissiveIntensity = 10
+        // pierreRight.material.emissive = new THREE.Color(0x80ff00)
+        // pierreRight.material.emissiveIntensity = 10
+
+        buildingLightsLeft.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0x00ffff)
+            buildingLight.material.emissiveIntensity = 10
+        })
+        buildingLightsRight.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0xffff00)
+            buildingLight.material.emissiveIntensity = 10
         })
 
         // console.log(

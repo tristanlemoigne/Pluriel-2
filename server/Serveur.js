@@ -1,11 +1,11 @@
 let server
 
-class Serveur{
-    constructor(io){
+class Serveur {
+    constructor(io) {
         server = io
     }
 
-    init(){
+    init() {
         let rooms = []
         const maxMobileUsers = 2
         const maxDesktopUsers = 1
@@ -59,7 +59,9 @@ class Serveur{
 
                 // Create the socket.io room
                 socket.join(generatedRoomStr, () => {
-                    server.in(currentRoom.id).emit("update users", currentRoom.users)
+                    server
+                        .in(currentRoom.id)
+                        .emit("update users", currentRoom.users)
                     console.log(`Un joueur a créé la salle ${generatedRoomStr}`)
                     // create and joins the room (emit only joined)
                     socket.emit("joined room", generatedRoomStr)
@@ -91,7 +93,8 @@ class Serveur{
 
                 const mobileUsersCount = () => mobileUsers().length
                 const desktopUsersCount = () => desktopUsers().length
-                const usersInRoomCount = () => mobileUsersCount() + desktopUsersCount()
+                const usersInRoomCount = () =>
+                    mobileUsersCount() + desktopUsersCount()
 
                 if (usersInRoomCount() >= maxUsersInOneRoom) {
                     console.error("La salle est pleine (3 devices max)")
@@ -100,7 +103,10 @@ class Serveur{
                     console.error(
                         "Trop de mobiles dans la room, tu ne peux pas rejoindre"
                     )
-                } else if (desktopUsersCount() >= maxDesktopUsers && !isMobile) {
+                } else if (
+                    desktopUsersCount() >= maxDesktopUsers &&
+                    !isMobile
+                ) {
                     console.error(
                         "Il y déjà un desktop dans la room, tu ne peux pas rejoindre"
                     )
@@ -118,25 +124,27 @@ class Serveur{
                         server
                             .in(currentRoom.id)
                             .emit("update users", currentRoom.users)
-                        console.log(`Un joueur a rejoint la salle ${requestedRoom}`)
+                        console.log(
+                            `Un joueur a rejoint la salle ${requestedRoom}`
+                        )
                         // Dispatch the room's state
                         console.log(currentRoom.roomState)
                         server
                             .in(currentRoom.id)
                             .emit("set user room state", currentRoom.roomState)
 
-                        if(mobileUsersCount() === 1) {
+                        if (mobileUsersCount() === 1) {
                             currentRoom.roomState.player1 = socket.id
                             server
                                 .in(currentRoom.id)
-                                .emit("playerOneReady")
+                                .emit("playerOneReady", socket.id)
                         }
 
-                        if(mobileUsersCount() === 2) {
+                        if (mobileUsersCount() === 2) {
                             currentRoom.roomState.player2 = socket.id
                             server
                                 .in(currentRoom.id)
-                                .emit("playerTwoReady")
+                                .emit("playerTwoReady", socket.id)
                         }
 
                         // If, after this connection, the room is full, then go to next step
@@ -144,14 +152,18 @@ class Serveur{
                             mobileUsersCount() === maxMobileUsers &&
                             desktopUsersCount() === maxDesktopUsers
                         ) {
-                            setTimeout(()=> {
+                            setTimeout(() => {
                                 currentRoom.roomState.currentStep = experienceSteps.find(
-                                    stepObj => stepObj.name === "selection_perso"
+                                    stepObj =>
+                                        stepObj.name === "selection_perso"
                                 )
 
                                 server
-                                .in(currentRoom.id)
-                                .emit("set user room state", currentRoom.roomState)
+                                    .in(currentRoom.id)
+                                    .emit(
+                                        "set user room state",
+                                        currentRoom.roomState
+                                    )
                             }, 3000)
                         }
                     })
@@ -169,12 +181,18 @@ class Serveur{
                     currentRoom.users = currentRoom.users.filter(
                         user => user.id !== socket.id
                     )
-                    server.in(currentRoom.id).emit("update users", currentRoom.users)
+                    server
+                        .in(currentRoom.id)
+                        .emit("update users", currentRoom.users)
                     console.log(`Un joueur a quitté la salle ${currentRoom.id}`)
                     // Dele room if last user left
                     if (currentRoom.users.length <= 0) {
                         rooms = rooms.filter(room => room.id !== currentRoom.id)
-                        console.log("la room ", currentRoom.id, " à été supprimée")
+                        console.log(
+                            "la room ",
+                            currentRoom.id,
+                            " à été supprimée"
+                        )
                     }
                 })
             })
@@ -187,15 +205,23 @@ class Serveur{
                     return
                 }
                 if (Object.keys(changedState).includes("currentStep")) {
-                    changedState.currentStep = checkCurrentStep(
-                        changedState.currentStep,
-                        currentRoom.roomState.currentStep
-                        // currentRoom.roomState.currentStep.name
-                    )
+                    changedState.currentStep = {
+                        ...changedState.currentStep,
+                        ...checkCurrentStep(
+                            changedState.currentStep,
+                            currentRoom.roomState.currentStep
+                            // currentRoom.roomState.currentStep.name
+                        )
+                    }
                 }
-                currentRoom.roomState = { ...currentRoom.roomState, ...changedState }
+                currentRoom.roomState = {
+                    ...currentRoom.roomState,
+                    ...changedState
+                }
                 console.log(currentRoom.roomState)
-                server.in(currentRoom.id).emit("set user room state", currentRoom.roomState)
+                server
+                    .in(currentRoom.id)
+                    .emit("set user room state", currentRoom.roomState)
             })
 
             // THREE LOOP UPDATED
@@ -239,7 +265,11 @@ class Serveur{
          */
         function checkCurrentStep(requestedStep, currentStep) {
             // Specific step
-            if (experienceSteps.some(stepObj => stepObj.name === requestedStep.name)) {
+            if (
+                experienceSteps.some(
+                    stepObj => stepObj.name === requestedStep.name
+                )
+            ) {
                 return experienceSteps.find(
                     stepObj => stepObj.name === requestedStep.name
                 )
@@ -251,22 +281,27 @@ class Serveur{
                     stepObj => stepObj.name === currentStep.name
                 )
                 if (currentStepIndex === -1) {
-                    console.error("the current step is not in the experienceSteps list")
+                    console.warn(
+                        "the current step is not in the experienceSteps list"
+                    )
                     return currentStep
                 }
                 const nextStepIndex = currentStepIndex + 1
                 const nextStep = experienceSteps[nextStepIndex]
                 if (typeof nextStep === "undefined") {
-                    console.error(
+                    console.warn(
                         "the current step is the last of the experienceSteps list"
                     )
                     return currentStep
                 }
                 return nextStep
             } else {
-                console.error(
-                    "the requestedStep '" + requestedStep.name + "' is not recognized"
+                console.warn(
+                    "the requestedStep '" +
+                        requestedStep.name +
+                        "' is not recognized, returning current step"
                 )
+                return currentStep
             }
         }
 

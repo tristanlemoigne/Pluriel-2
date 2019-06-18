@@ -75,12 +75,12 @@ function Trial1(scene, camera, assets, timeVars) {
             if (child.name.includes("Towerbroken")) baseTour = child
         })
 
-        assets.islands.traverse(child => {
-            if (child.material) {
-                child.material.metalness = 0
-                child.material.roughness = 1
-            }
-        })
+        // assets.islands.traverse(child => {
+        //     if (child.material) {
+        //         child.material.metalness = 0
+        //         child.material.roughness = 1
+        //     }
+        // })
 
         // Get all holes
         assets.islands.traverse(child => {
@@ -108,16 +108,16 @@ function Trial1(scene, camera, assets, timeVars) {
         threeBus.$on("track", refreshTrackedDatas)
         // bus.$on("logTrial1Victorious", checkVictoriousPlayer)
 
-        positionPersos()
+        // positionPersos()
     }
 
-    function positionPersos() {
-        console.log("BASETOUR", baseTour)
-        assets.zanitRigged.position.copy(baseTour.position.clone())
-        assets.lamarRigged.position.copy(baseTour.position.clone())
+    // function positionPersos() {
+    //     console.log("BASETOUR", baseTour)
+    //     assets.zanitRigged.position.copy(baseTour.position.clone())
+    //     assets.lamarRigged.position.copy(baseTour.position.clone())
 
-        assets.zanitRigged.scale.set(10, 10, 10)
-    }
+    //     assets.zanitRigged.scale.set(10, 10, 10)
+    // }
 
     /* ----------------------- SPOTLIGHTS ----------------------- */
     function createSpotlights() {
@@ -421,7 +421,7 @@ function Trial1(scene, camera, assets, timeVars) {
             cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
             cyanSpotLight.target.position.z = -cameraTargetDist
 
-            cyanSpotLight.intensity = 20 + cameraTargetDist * 5
+            cyanSpotLight.intensity = 20 + cameraTargetDist * 8
 
             rotationHelper.scale.set(
                 cameraTargetDist * 2,
@@ -457,7 +457,7 @@ function Trial1(scene, camera, assets, timeVars) {
             )
             pinkSpotLight.target.position.z = -cameraTargetDist
 
-            pinkSpotLight.intensity = 20 + cameraTargetDist * 10
+            pinkSpotLight.intensity = 20 + cameraTargetDist * 12
 
             if (mobileQuaternions.pink) {
                 // TODO: remove dummy stuff (optimize)

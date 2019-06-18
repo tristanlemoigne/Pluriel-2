@@ -101,7 +101,7 @@ function SceneManager(canvas, assets) {
             {
                 vec3 vNormal = normalize( normalMatrix * normal );
                 vec3 vNormel = normalize( normalMatrix * camDir );
-                intensity = pow( 0.06 - dot(vNormal, vNormel), 6. ); // For FrontSide
+                intensity = pow( 0.07 - dot(vNormal, vNormel), 6. ); // For FrontSide
                 // intensity = pow( 0.7 - dot(vNormal, vNormel), 3.0 ); // For BackSide
 
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
@@ -238,7 +238,7 @@ function SceneManager(canvas, assets) {
 
         currentCameraPath = catmullRomCurveFromGeometry(cameraPathGeometry)
         // console.log(currentCameraPath.getLength(), time)
-        currentCameraPath.arcLengthDivisions = time * time * time // default is 200, must be very high if the time of the transition / the curve length is long
+        currentCameraPath.arcLengthDivisions = time * time * time * 2 // default is 200, must be very high if the time of the transition / the curve length is long
         // currentCameraPathSpacedPoints = currentCameraPath.getSpacedPoints(
         //     time * 60
         // )

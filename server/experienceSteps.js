@@ -37,10 +37,6 @@ module.exports = [
             { asset: "pinkStone", delay: 0, time: 0.8, scene: "sceneR" },
             { asset: "cyanStone", delay: 0, time: 0.8, scene: "sceneL" },
             { asset: "stoneLights", delay: 0, time: 0.8 }
-        ],
-        removedThreeGroupsMob: [
-            { asset: "pinkStone", delay: 0, time: 0.8, scene: "sceneR" },
-            { asset: "cyanStone", delay: 0, time: 0.8, scene: "sceneL" }
         ]
     },
 
@@ -51,23 +47,34 @@ module.exports = [
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
-            // { asset: "persos", delay: 0, time: 0.5, scene: "sceneR" },
             { asset: "persosLights", delay: 0, time: 0.5, scene: "sceneR" }
         ],
         addedThreeGroupsMob: [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
-            { asset: "zanitRigged", delay: 0, time: 0.5 }
+            { asset: "zanitRigged", delay: 0, time: 0.5 },
+            { asset: "lamarSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "persosLights", delay: 0, time: 0.5 },
+            { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
 
     {
         name: "dioramas",
         removedThreeGroupsDsk: [
+            { asset: "lamarRigged", delay: 0, time: 0.5, hidden: true },
+            { asset: "zanitRigged", delay: 0, time: 0.5, hidden: true },
+            { asset: "lamarSVG", delay: 0, time: 0.5 },
+            { asset: "zanitSVG", delay: 0, time: 0.5 },
+            { asset: "persosLights", delay: 0, time: 0.8 }
+        ],
+        removedThreeGroupsMob: [
             { asset: "lamarRigged", delay: 0, time: 0.5 },
             { asset: "zanitRigged", delay: 0, time: 0.5 },
             { asset: "lamarSVG", delay: 0, time: 0.5 },
             { asset: "zanitSVG", delay: 0, time: 0.5 },
-            { asset: "persosLights", delay: 0, time: 0.8 }
+            { asset: "persosLights", delay: 0, time: 0.5 },
+            { asset: "stoneLights", delay: 0, time: 0.8 }
         ]
     },
 
@@ -83,7 +90,6 @@ module.exports = [
             { asset: "nuages", delay: 5, time: 0 },
             { asset: "nuagesLights", delay: 2, time: 5 }
         ],
-        removedThreeGroupsMob: [{ asset: "nuages", delay: 0, time: 3 }],
         cameraTransition: {
             camPos: {
                 path: "NurbsPath00",
@@ -102,7 +108,7 @@ module.exports = [
         fog: {
             delay: 4,
             time: 6,
-            density: 0.006,
+            density: 0.01,
             easing: ["Power1", "easeInOut"]
         }
     },
@@ -127,7 +133,7 @@ module.exports = [
         fog: {
             delay: 1,
             time: 10,
-            density: 0.016,
+            density: 0.018,
             easing: ["Power1", "easeInOut"]
         }
     },
@@ -188,18 +194,18 @@ module.exports = [
     {
         name: "trial_1_end",
         cameraTransition: {
-            camPos: {
-                delay: 0,
-                time: 1,
-                // Je sais pas ce que je met ici lol mais c'est pour faire apparaitre mon UI
-            },
+            // camPos: {
+            //     delay: 0,
+            //     time: 1
+            //     // Je sais pas ce que je met ici lol mais c'est pour faire apparaitre mon UI
+            // },
             camTarget: {
                 point: "Target06",
                 delay: 0,
                 time: 2,
                 easing: ["Power2", "easeInOut"]
             }
-        },
+        }
         // addedThreeGroupsDsk: [
         //     { asset: "lamarRigged", delay: 0, time: 0.5 },
         //     { asset: "zanitRigged", delay: 0, time: 0.5 }
