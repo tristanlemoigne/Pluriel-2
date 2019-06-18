@@ -14,7 +14,11 @@
                     class="textGlow"
                     v-bind:class="{ visible: !canShowUIGlobaleEnd }"
                 >Accédez à la 1ère étape grâce à votre téléphone.</p>
-                <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
+                <p
+                    class="textGlow"
+                    v-bind:class="{ visible: canShowUIGlobaleEnd }"
+                    @click="tryAgain"
+                >
                     Recommencer
                     <br>l'expérience
                 </p>
@@ -258,6 +262,9 @@ export default {
         roomState: Object
     },
     methods: {
+        tryAgain() {
+            this.setRoomState({ currentStep: { name: "global_intro" } });
+        },
         setRoomState(stateObj) {
             bus.$emit("setRoomState", stateObj);
         },

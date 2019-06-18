@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const colors = {
         cyan: "#00ffff",
         pink: "#ff00ff",
-        blue: "#214CFF",
-        red: "#FF1B38",
+        blue: "#113CFF",
+        red: "#FF0B28",
         white: "#ff99ff"
     }
 
@@ -125,7 +125,7 @@ function Trial1(scene, camera, assets, timeVars) {
             intensity: 50,
             distance: 0,
             angle: Math.PI / 65,
-            penumbra: 0.9
+            penumbra: 0.5
         }
         // const spotTargetPos = new THREE.Vector3()
         // const spotLightPos = new THREE.Vector3(0, 0, 0)
@@ -141,20 +141,20 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // Cyan target
         cyanSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8)
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
-        var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
-        cyanSpotLight.target.add(targetSphere)
+        // var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8)
+        // var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
+        // var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
+        // cyanSpotLight.target.add(targetSphere)
         cyanSpotLight.add(cyanSpotLight.target)
         camera.add(cyanSpotLight)
 
-        rotationHelper = targetSphere.clone()
-        rotationHelper.material.wireframe = true
+        // rotationHelper = targetSphere.clone()
+        // rotationHelper.material.wireframe = true
         // cyanSpotLight.add(rotationHelper)
 
-        cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
-        cyanSpotLightHelper.visible = false
-        scene.add(cyanSpotLightHelper)
+        // cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
+        // cyanSpotLightHelper.visible = false
+        // scene.add(cyanSpotLightHelper)
 
         // PINK
         pinkSpotLight = new THREE.SpotLight(
@@ -167,16 +167,16 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // Pink target
         pinkSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8) // helper for debug
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
-        var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
-        pinkSpotLight.target.add(targetSphere)
+        // var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8) // helper for debug
+        // var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+        // var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
+        // pinkSpotLight.target.add(targetSphere)
         pinkSpotLight.add(pinkSpotLight.target)
         camera.add(pinkSpotLight)
 
-        pinkSpotLightHelper = new THREE.SpotLightHelper(pinkSpotLight)
-        pinkSpotLightHelper.visible = false
-        scene.add(pinkSpotLightHelper)
+        // pinkSpotLightHelper = new THREE.SpotLightHelper(pinkSpotLight)
+        // pinkSpotLightHelper.visible = false
+        // scene.add(pinkSpotLightHelper)
     }
 
     // /* ----------------------- REFRESH AND APPLY TRACKER ----------------------- */
@@ -420,13 +420,13 @@ function Trial1(scene, camera, assets, timeVars) {
             cyanSpotLight.quaternion.slerp(targetQuat, easingFactor)
             cyanSpotLight.target.position.z = -cameraTargetDist
 
-            cyanSpotLight.intensity = 20 + cameraTargetDist * 8
+            cyanSpotLight.intensity = 20 + cameraTargetDist * 10
 
-            rotationHelper.scale.set(
-                cameraTargetDist * 2,
-                cameraTargetDist * 2,
-                cameraTargetDist * 2
-            )
+            // rotationHelper.scale.set(
+            //     cameraTargetDist * 2,
+            //     cameraTargetDist * 2,
+            //     cameraTargetDist * 2
+            // )
 
             if (mobileQuaternions.cyan) {
                 // TODO: remove dummy stuff (optimize)
@@ -445,7 +445,7 @@ function Trial1(scene, camera, assets, timeVars) {
                 cyanSpotLight.quaternion.slerp(dummyQuat, 0.03)
                 // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
-            cyanSpotLightHelper.update()
+            // cyanSpotLightHelper.update()
         }
 
         if (pinkSpotLight.lastTrackedBlob) {
@@ -457,7 +457,7 @@ function Trial1(scene, camera, assets, timeVars) {
             pinkSpotLight.quaternion.slerp(targetQuat, easingFactor)
             pinkSpotLight.target.position.z = -cameraTargetDist
 
-            pinkSpotLight.intensity = 20 + cameraTargetDist * 12
+            pinkSpotLight.intensity = 20 + cameraTargetDist * 13
 
             if (mobileQuaternions.pink) {
                 // TODO: remove dummy stuff (optimize)
@@ -476,7 +476,7 @@ function Trial1(scene, camera, assets, timeVars) {
                 pinkSpotLight.quaternion.slerp(dummyQuat, 0.03)
                 // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
-            pinkSpotLightHelper.update()
+            // pinkSpotLightHelper.update()
         }
 
         // Fill holes
@@ -499,11 +499,11 @@ function Trial1(scene, camera, assets, timeVars) {
             }
         })
 
-        const spotLightHelpers = gui.addFolder("Spotlight Helpers")
-        spotLightHelpers.add(pinkSpotLightHelper, "visible").name("Pink")
-        spotLightHelpers.add(cyanSpotLightHelper, "visible").name("Cyan")
+        // const spotLightHelpers = gui.addFolder("Spotlight Helpers")
+        // spotLightHelpers.add(pinkSpotLightHelper, "visible").name("Pink")
+        // spotLightHelpers.add(cyanSpotLightHelper, "visible").name("Cyan")
 
-        spotLightHelpers.open()
+        // spotLightHelpers.open()
 
         gui.add(camera, "logCamera")
 
