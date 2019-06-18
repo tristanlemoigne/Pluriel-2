@@ -101,12 +101,13 @@ export default {
         roomId: String,
         isMobile: Boolean,
         users: Array,
-        roomState: Object
+        roomState: Object,
+        audioFunctions: Object
     },
     data() {
         return {
             isDebugMode: true,
-            player1: "otot",
+            player1: undefined,
             player2: undefined
         };
     },
@@ -135,6 +136,7 @@ export default {
                     ease: Power2.easeOut
                 });
             }
+            this.audioFunctions.playerJoinedRoom()
         });
 
         socket.on("playerTwoReady", playerID => {
@@ -145,6 +147,7 @@ export default {
                     ease: Power2.easeOut
                 });
             }
+            this.audioFunctions.playerJoinedRoom()
         });
 
         if (this.isMobile) {

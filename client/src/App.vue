@@ -7,6 +7,7 @@
                 :roomId="roomId"
                 :roomState="roomState"
                 :users="users"
+                :audioFunctions="audioFunctions"
                 @createRoom="userCreateRoom"
                 @joinRoom="userJoinRoom"
             />
@@ -50,7 +51,53 @@ export default {
             myCharacter: null,
             roomId: "",
             isMobile: checkIfMobile(),
-            isAudioActive: true
+            isAudioActive: true,
+            audioFunctions: {
+                startAmbient(){
+                    const ambient = new Audio("/assets/audio/ambient.mp3");
+                    ambient.volume = 0.04
+                    ambient.loop = true
+                    ambient.play();
+                },
+                clickBtn(){
+                    const clickAudio = new Audio("/assets/audio/button-click.mp3");
+                    clickAudio.play();
+                },
+                persoSelection(perso){
+                    let src
+
+                    if(perso === "lamar"){
+                        src = "/assets/audio/selection-lamar.mp3"
+                    } else if(perso === "zanit"){
+                        src =  "/assets/audio/selection-zanit.mp3"
+                    } else {
+                        src = "/assets/audio/player-join-room.mp3"
+                    }
+
+                    const persoSelectedAudio = new Audio(src);
+                    persoSelectedAudio.play();
+                }, 
+                playerJoinedRoom(){
+                    const playerRoomAudio = new Audio("/assets/audio/player-join-room.mp3");
+                    playerRoomAudio.play();
+                }, 
+                separationIles(){
+                    const separationAudio = new Audio("/assets/audio/separation-iles.mp3");
+                    separationAudio.play();
+                }, 
+                transitionNuages(){
+                    const nuagesAudio = new Audio("/assets/audio/transition-nuages.mp3");
+                    nuagesAudio.play();
+                }, 
+                trouReboucheSolo(){
+                    const trouSoloAudio = new Audio("/assets/audio/trou-rebouche-solo.mp3");
+                    trouSoloAudio.play();
+                },
+                trouReboucheDuo(){
+                    const trouDuoAudio = new Audio("/assets/audio/trou-rebouche-duo.mp3");
+                    trouDuoAudio.play();
+                }
+            }
         };
     },
     mounted() {

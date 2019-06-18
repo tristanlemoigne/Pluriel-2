@@ -47,7 +47,8 @@ export default {
     components: {},
     props: {
         isMobile: Boolean,
-        roomState: Object
+        roomState: Object,
+        audioFunctions: Object
     },
     data: function() {
         return {
@@ -81,8 +82,10 @@ export default {
                         }
 
                         this.$refs.lamarPlayer.style.opacity = 1;
+                        this.audioFunctions.persoSelection("lamar")
                     }
                 }
+
             },
             deep: true
         },
@@ -106,6 +109,7 @@ export default {
                         }
 
                         this.$refs.zanitPlayer.style.opacity = 1;
+                        this.audioFunctions.persoSelection("zanit")
                     }
                 }
             },

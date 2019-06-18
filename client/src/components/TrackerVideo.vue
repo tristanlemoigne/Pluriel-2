@@ -48,8 +48,6 @@ export default {
             this.pinkAmulette.src = "/assets/img/AmuletteZanit.png";
         },
         updateAmulette(amulette, blob){
-            console.log(amulette, blob)
-
             this.context.beginPath();
             this.context.arc(
                 reMap(blob.x, 0,  this.$refs.video.offsetWidth, 0, this.$refs.tutoCanvas.width) +blob.width/2, 
@@ -108,7 +106,6 @@ div.trackerVideo{
         width: 100%;
         height: 100%;
         z-index: 4;
-        border: solid 1px red;
     }
 
     video {

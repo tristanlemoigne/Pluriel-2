@@ -255,7 +255,8 @@ export default {
         roomId: String,
         isMobile: Boolean,
         users: Array,
-        roomState: Object
+        roomState: Object,
+        audioFunctions: Object
     },
     methods: {
         setRoomState(stateObj) {
@@ -307,16 +308,19 @@ export default {
                     this.scoreLamar
                 ].style.backgroundColor = CSS.cyan;
                 this.scoreLamar++;
+                this.audioFunctions.trouReboucheSolo()
             } else if (winner === "Pink") {
                 this.$refs.scoreZanit.children[
                     this.scoreZanit
                 ].style.backgroundColor = CSS.pink;
                 this.scoreZanit++;
+                this.audioFunctions.trouReboucheSolo()
             } else if (winner === "White") {
                 this.$refs.scoreTeam.children[
                     this.scoreTeam
                 ].style.backgroundColor = CSS.white;
                 this.scoreTeam++;
+                this.audioFunctions.trouReboucheDuo()
             } else {
                 console.log("Winner is not possible >>>", winner);
             }
@@ -443,6 +447,8 @@ export default {
                         this.canShowUIGlobale = true;
                         this.canShowUIGlobaleEnd = true;
                         bus.$emit("trigger ending", this.victoriousPlayer);
+                        this.audioFunctions.separationIles()
+
                     }, this.getTransitionEnd());
                 }
             },
@@ -450,6 +456,7 @@ export default {
         }
     },
     mounted() {
+
         if (this.roomState.lamar === socket.id) {
             this.character = "lamar";
         } else if (this.roomState.zanit === socket.id) {
@@ -457,6 +464,10 @@ export default {
         } else {
             this.character = undefined;
         }
+
+        setTimeout(()=>{
+            this.audioFunctions.transitionNuages()
+        }, 2000)
 
         setTimeout(() => {
             this.canShowUIGlobale = true;

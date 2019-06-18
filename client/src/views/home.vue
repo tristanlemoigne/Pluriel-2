@@ -9,7 +9,7 @@
         </div>
 
         <!-- Commencer l'expérience Desktop-->
-        <button v-if="!isMobile" @click="createRoom">
+        <button v-if="!isMobile" @click.prevent="createRoom">
             <div class="outerCircle">
                 <div class="innerCircle"></div>
             </div>
@@ -70,7 +70,8 @@ export default {
         Logo
     },
     props: {
-        isMobile: Boolean
+        isMobile: Boolean,
+        audioFunctions: Object
     },
     data: () => ({
         title: "Pluriel",
@@ -82,6 +83,9 @@ export default {
         createRoom(event) {
             this.$emit("createRoom");
             threeBus.$emit("step creation room");
+
+            this.audioFunctions.startAmbient()
+            this.audioFunctions.clickBtn()
         },
         joinRoom(event) {
             this.$emit("joinRoom", this.$data.requestedRoom);
