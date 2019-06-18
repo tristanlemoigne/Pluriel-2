@@ -1,6 +1,6 @@
 <template>
     <div class="trackerVideo">
-        <canvas ref="tutoCanvas" class="tutoCanvas" />
+        <canvas  width="680" height="400" ref="tutoCanvas" class="tutoCanvas" />
         <video ref="video" width="170" height="128" autoplay muted/>
     </div>
 </template>
@@ -48,13 +48,28 @@ export default {
             this.pinkAmulette.src = "/assets/img/AmuletteZanit.png";
         },
         updateAmulette(amulette, blob){
-            this.context.drawImage(
-                amulette, 
-                reMap(blob.x, 0,  this.$refs.video.offsetWidth, 0, this.$refs.tutoCanvas.width), 
-                reMap(blob.y, 0,  this.$refs.video.offsetHeight, 0, this.$refs.tutoCanvas.height), 
-                blob.width/2, 
-                blob.height/2
+            console.log(amulette, blob)
+
+            this.context.beginPath();
+            this.context.arc(
+                reMap(blob.x, 0,  this.$refs.video.offsetWidth, 0, this.$refs.tutoCanvas.width) +blob.width/2, 
+                reMap(blob.y, 0,  this.$refs.video.offsetHeight, 0, this.$refs.tutoCanvas.height)+blob.width/2, 
+                blob.width/2, 0, 2 * Math.PI
             );
+
+            this.context.fillStyle = blob.color;
+            this.context.strokeStyle = "#fff";
+            this.context.lineWidth = 2;
+            this.context.fill()
+            this.context.stroke()
+
+            // this.context.drawImage(
+            //     amulette, 
+            //     reMap(blob.x, 0,  this.$refs.video.offsetWidth, 0, this.$refs.tutoCanvas.width), 
+            //     reMap(blob.y, 0,  this.$refs.video.offsetHeight, 0, this.$refs.tutoCanvas.height), 
+            //     blob.width/2, 
+            //     blob.height/2
+            // );
         }
     },
     watch: {
@@ -93,6 +108,7 @@ div.trackerVideo{
         width: 100%;
         height: 100%;
         z-index: 4;
+        border: solid 1px red;
     }
 
     video {
