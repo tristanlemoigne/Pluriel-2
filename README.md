@@ -55,22 +55,11 @@ git push heroku master
 heroku open
 ```
 
-## Socket.js
+## envIp.js
 
-`socket.js` file in `/client/src/`
-! DON'T FORGET TO CHANGE YOUR IP IN DEV MODE !
+`envIp.js` file in `/client/src/`
+! DON'T FORGET TO CHANGE YOUR IP !
 
 ```
-import io from "socket.io-client"
-let url
-
-if(process.env.NODE_ENV === "development"){
-    // DEV
-    url = "http://192.168.1.14:5000/"
-} else {
-    // PROD
-    url = "https://pluriel.herokuapp.com"
-}
-
-export default io(url)
+module.exports = "http://10.137.27.192:5000"
 ```
