@@ -139,7 +139,8 @@ function Ending(scene, camera, assets, timeVars) {
         if (
             winnerStr === "lamar" ||
             winnerStr === "zanit" ||
-            winnerStr === "egalite"
+            winnerStr === "egalite" ||
+            winnerStr === "loose"
         ) {
             loseAnimation(6)
         } else if (winnerStr === "team") {

@@ -28,11 +28,11 @@
             v-if="isDebugMode"
             @click="emitToBus('trigger ending', 'team')"
         >team wins</button>
-        <button
+        <!-- <button
             class="debugButton"
             v-if="isDebugMode"
             @click="emitToBus('trigger ending', 'lamar')"
-        >cyan wins</button>
+        >cyan wins</button> -->
         <!-- 
 		<div>
 			<span>Desktop Users: {{desktopUsersCount}}</span>

@@ -348,7 +348,6 @@ function Trial1(scene, camera, assets, timeVars) {
             } else {
                 // HOLE IS FILLED > CHECK VICTORIOUS
                 // console.log("HOLE FILLED")
-                console.log("HOLE FILLED")
 
                 if (hole.cyanValue >= maxColorScale) {
                     // Cyan winner

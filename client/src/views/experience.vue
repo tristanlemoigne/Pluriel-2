@@ -248,7 +248,7 @@ export default {
         plurielMerged: false,
         victoriousText: "Aucun",
         victoriousLegend: "à remporté la première épreuve",
-        iconSrc: "icon-stone@2x.png",
+        iconSrc: "icon-stone-looser.png",
         victoriousPlayer: "Aucun"
     }),
     props: {
@@ -335,7 +335,7 @@ export default {
         },
         checkVictoriousPlayer() {
             let victoriousPlayer = null;
-            // Check white
+            // Check WIN or LOOSE
             if (this.totalFilledHoles > this.totalholes / 2) {
                 if (this.scoreTeam >= this.totalFilledHoles / 2) {
                     victoriousPlayer = "team";
@@ -349,7 +349,7 @@ export default {
                     }
                 }
             } else {
-                victoriousPlayer = "egalite";
+                victoriousPlayer = "loose";
             }
 
             return victoriousPlayer;
@@ -385,6 +385,7 @@ export default {
                 if (currentRoomState.currentStep.name === "trial_1_end") {
                     this.canShowUIStep = false;
                     this.victoriousPlayer = this.checkVictoriousPlayer();
+                    console.log("VICTORIOUS PLAYER", this.victoriousPlayer)
                     let color;
 
                     if (this.victoriousPlayer === "lamar") {
@@ -401,16 +402,24 @@ export default {
                         this.victoriousText = "Bravo";
                         this.victoriousLegend =
                             "Vous avez réussi à reconstruire la tour";
-                        this.victoriousScore = this.scoreTeam;
+                        this.victoriousScore = this.scoreTeam + this.scoreLamar + this.scoreZanit;
+                        this.iconSrc = "icon-stone-victorious.png";
                         this.plurielMerged = true;
                         color = CSS.white;
-                    } else {
+                    } else if(this.victoriousPlayer === "egalite"){
                         this.victoriousText = "Egalité";
                         this.victoriousLegend =
                             "Vous ferez mieux une prochaine fois";
                         this.victoriousScore =
                             this.scoreTeam + this.scoreLamar + this.scoreZanit;
-                        color = CSS.white;
+                        color = "#9C8EA9";
+                    } else {
+                        this.victoriousText = "Dommage";
+                        this.victoriousLegend =
+                            "Vous n'avez pas remplis suffisament de trous";
+                        this.victoriousScore =
+                            this.scoreTeam + this.scoreLamar + this.scoreZanit;
+                        color = "#9C8EA9"
                     }
 
                     for (let i = 0; i < this.victoriousScore; i++) {
@@ -773,7 +782,7 @@ div {
         font-size: 25px;
 
         p.victorious {
-            max-width: 250px;
+            max-width: 400px;
             margin: 0 auto;
 
             span {
@@ -791,11 +800,12 @@ div {
             width: 300px;
             height: 20px;
             display: flex;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 0 auto;
 
             div {
                 width: 11.111%;
-                border: solid 2px white;
+                border: solid 2px lightgrey;
 
                 &:first-child {
                     border-top-left-radius: 50px;
@@ -817,11 +827,13 @@ div {
 
         p.visible {
             opacity: 1;
+            display: block;
         }
 
         p {
             font-size: 50px;
             opacity: 0;
+            display: none;
             margin-top: 20%;
             transition: opacity 0.5s ease;
         }
