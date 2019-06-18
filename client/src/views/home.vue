@@ -15,8 +15,23 @@
             </div>
         </button>
 
+
+        <!-- Home Mobile -->
+        <div class="homeMobile textGlow" v-if="isMobile && !canShowMobileForm" >
+            <div class="main">
+                <Logo/>
+                <h2 >{{subtitle}}</h2>
+            </div>
+
+            <button @click.once="showMobileForm">
+                <div class="outerCircle">
+                    <div class="innerCircle"></div>
+                </div>
+            </button>
+        </div>
+
         <!-- Commencer l'expérience Mobile-->
-        <form class="mobile" v-if="isMobile" action @submit.prevent="joinRoom">
+        <form class="formMobile" v-if="isMobile && canShowMobileForm" action @submit.prevent="joinRoom">
             <p class="textGlow">
                 Connectez-vous sur
                 <b>pluriel-xp.com</b> avec votre ordinateur et rentrez le code affiché
@@ -56,7 +71,8 @@ export default {
     data: () => ({
         title: "Pluriel",
         subtitle: "Une expérience singulière",
-        requestedRoom: ""
+        requestedRoom: "",
+        canShowMobileForm: false
     }),
     methods: {
         createRoom(event) {
@@ -71,6 +87,9 @@ export default {
                 this.$refs.sliderBar.style.left = `calc(50% + (${
                     e.pageX
                 }px - 50%) * 0.45)`;
+        },
+        showMobileForm(){
+            this.canShowMobileForm = true
         }
     },
     mounted() {
@@ -141,6 +160,70 @@ export default {
         }
     }
 
+    .homeMobile{
+        border: solid 1px red;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-image: url("/assets/img/HomeMobile.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        div.main{
+            position: relative;
+            top: 40%;
+            transform: translateY(-50%);
+
+            h2{
+                margin: 0;
+            }
+        }
+
+        button{
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+  
+    .formMobile {
+        input {
+            margin-top: 10%;
+            background: none;
+            border: none;
+            color: $white;
+            text-transform: uppercase;
+            border-bottom: solid 2px $white;
+            font-size: 40px;
+            text-align: center;
+            padding-bottom: 5px;
+            width: 200px;
+            letter-spacing: 20px;
+            padding-left: 5px;
+
+            &::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: $white;
+                opacity: 1; /* Firefox */
+            }
+        }
+
+        button {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        img{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+    }
+
     button {
         color: $white;
         text-transform: uppercase;
@@ -171,34 +254,6 @@ export default {
         }
     }
 
-    .mobile {
-        input {
-            margin-top: 10%;
-            background: none;
-            border: none;
-            color: $white;
-            text-transform: uppercase;
-            border-bottom: solid 2px $white;
-            font-size: 40px;
-            text-align: center;
-            padding-bottom: 5px;
-            width: 200px;
-            letter-spacing: 20px;
-            padding-left: 5px;
-
-            &::placeholder {
-                /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: $white;
-                opacity: 1; /* Firefox */
-            }
-        }
-        button {
-            position: absolute;
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-    }
 
     @keyframes pulse {
         0% {
