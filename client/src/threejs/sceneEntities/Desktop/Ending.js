@@ -39,8 +39,8 @@ function Ending(scene, camera, assets, timeVars) {
 
                 islandLeft.traverse(islandLeftChild => {
                     if (
-                        islandLeftChild.material &&
-                        islandLeftChild.material.name.includes("Emission")
+                        child.material &&
+                        child.name.includes("LumiereBatimentGauche")
                     ) {
                         buildingLightsLeft.push(islandLeftChild)
                     }
@@ -53,8 +53,8 @@ function Ending(scene, camera, assets, timeVars) {
 
                 islandRight.traverse(islandRightChild => {
                     if (
-                        islandRightChild.material &&
-                        islandRightChild.material.name.includes("Emission")
+                        child.material &&
+                        child.name.includes("LumiereBatimentDroite")
                     ) {
                         buildingLightsRight.push(islandRightChild)
                     }
@@ -67,19 +67,22 @@ function Ending(scene, camera, assets, timeVars) {
                 tourCentrale.angularVelocity = 0
             }
 
-            if (child.material && child.name.includes("PierreIleG")) {
+            if (child.material && child.name.includes("PierreTourGauche")) {
                 console.log(child)
                 pierreLeft = child
-            } else if (child.material && child.name.includes("PierreIleD")) {
+            } else if (
+                child.material &&
+                child.name.includes("PierreTourDroite")
+            ) {
                 console.log(child)
                 pierreRight = child
             }
         })
 
-        // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
-        // pierreLeft.material.emissiveIntensity = 10
-        // pierreRight.material.emissive = new THREE.Color(0x80ff00)
-        // pierreRight.material.emissiveIntensity = 10
+        pierreLeft.material.emissive = new THREE.Color(0x00ff80)
+        pierreLeft.material.emissiveIntensity = 10
+        pierreRight.material.emissive = new THREE.Color(0x80ff00)
+        pierreRight.material.emissiveIntensity = 10
 
         buildingLightsLeft.map(buildingLight => {
             buildingLight.material.emissive = new THREE.Color(0xffffff)
@@ -112,19 +115,19 @@ function Ending(scene, camera, assets, timeVars) {
             { buildingLightsRight }
         )
 
-        // pierreLeft.material.emissive = new THREE.Color(0x00ff80)
-        // pierreLeft.material.emissiveIntensity = 10
-        // pierreRight.material.emissive = new THREE.Color(0x80ff00)
-        // pierreRight.material.emissiveIntensity = 10
+        pierreLeft.material.emissive = new THREE.Color(0x00ff80)
+        pierreLeft.material.emissiveIntensity = 10
+        pierreRight.material.emissive = new THREE.Color(0x80ff00)
+        pierreRight.material.emissiveIntensity = 10
 
-        // buildingLightsLeft.map(buildingLight => {
-        //     buildingLight.material.emissive = new THREE.Color(0x00ffff)
-        //     buildingLight.material.emissiveIntensity = 10
-        // })
-        // buildingLightsRight.map(buildingLight => {
-        //     buildingLight.material.emissive = new THREE.Color(0xffff00)
-        //     buildingLight.material.emissiveIntensity = 10
-        // })
+        buildingLightsLeft.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0x00ffff)
+            buildingLight.material.emissiveIntensity = 10
+        })
+        buildingLightsRight.map(buildingLight => {
+            buildingLight.material.emissive = new THREE.Color(0xffff00)
+            buildingLight.material.emissiveIntensity = 10
+        })
 
         //LISTENERS
         bus.$on("trigger ending", animateEnding) // receive "team", "lamar", "zanit", or "egalite"
