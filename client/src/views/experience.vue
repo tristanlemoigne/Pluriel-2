@@ -30,7 +30,7 @@
 
                 <div class="stones">
                     <img ref="victoriousStep" src="assets/img/icon-stone.png" alt>
-                    <img src="assets/img/icon-stone-victorious.png" alt>
+                    <img src="assets/img/icon-stone.png" alt>
                     <img src="assets/img/icon-stone.png" alt>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="scoreTeam">
-                    <img src="assets/img/icon-stone.png" alt>
+                    <img src="assets/img/icon-stone-victorious2.png" alt>
 
                     <div class="gradient">
                         <div ref="scoreTeam" class="score">
@@ -185,7 +185,9 @@
             <div class="globalEnd textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
                 <p v-bind:class="{ visible: !plurielMerged }">
                     Malheureusement,
-                    <br>Votre collaboration n’a pas été suffisante
+                    <br>votre collaboration n’a pas été suffisante<br/> pour reconstruire Pluriel
+                    <!-- Malheureusement,
+                    <br>Votre collaboration n’a pas été suffisante -->
                 </p>
                 <p v-bind:class="{ visible: plurielMerged }">
                     Félicitations,
@@ -460,7 +462,7 @@ export default {
                             "Vous avez réussi à reconstruire la tour";
                         this.victoriousScore =
                             this.scoreTeam + this.scoreLamar + this.scoreZanit;
-                        this.iconSrc = "icon-stone-victorious.png";
+                        this.iconSrc = "icon-stone-victorious2.png";
                         this.plurielMerged = true;
                         color = CSS.purple;
                     } else if (this.victoriousPlayer === "egalite") {
@@ -692,7 +694,7 @@ div {
         opacity: 0;
         transition: opacity 0.5s ease;
         position: absolute;
-        bottom: 100px;
+        bottom: 90px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
@@ -707,8 +709,8 @@ div {
                 .score {
                     list-style: none;
                     position: relative;
-                    width: 100px;
-                    height: 100px;
+                    width: 110px;
+                    height: 110px;
                     // border: solid 2px $black;
                     // background-color: $black;
                     border-radius: 50%;
