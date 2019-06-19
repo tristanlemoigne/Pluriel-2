@@ -15,11 +15,15 @@
                     v-bind:class="{ visible: !canShowUIGlobaleEnd }"
                 >Accédez à la 1ère étape grâce à votre téléphone.</p>
                 <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
-                    <button class="cta" @click="setRoomState({currentStep: { name: 'trial_1_intro' }})">
+                    <button
+                        class="cta"
+                        @click="setRoomState({currentStep: { name: 'trial_1_intro' }})"
+                    >
                         <div class="outerCircle">
                             <div class="innerCircle"></div>
                         </div>
-                    </button><br/>
+                    </button>
+                    <br>
 
                     <span>
                         Recommencer
@@ -195,7 +199,10 @@
 
         <!-- Mobile stuff -->
         <div class="mobile textGlow" v-if="isMobile">
-            <div class="uiGlobaleMobile" v-bind:class="{ visible: canShowUIGlobale && !canShowUIGlobaleEnd}">
+            <div
+                class="uiGlobaleMobile"
+                v-bind:class="{ visible: canShowUIGlobale && !canShowUIGlobaleEnd}"
+            >
                 <p>
                     Commencer
                     <br>
@@ -316,19 +323,19 @@ export default {
                     this.scoreLamar
                 ].style.backgroundColor = CSS.cyan;
                 this.scoreLamar++;
-                this.audioFunctions.trouReboucheSolo()
+                this.audioFunctions.trouReboucheSolo();
             } else if (winner === "Pink") {
                 this.$refs.scoreZanit.children[
                     this.scoreZanit
                 ].style.backgroundColor = CSS.pink;
                 this.scoreZanit++;
-                this.audioFunctions.trouReboucheSolo()
+                this.audioFunctions.trouReboucheSolo();
             } else if (winner === "Purple") {
                 this.$refs.scoreTeam.children[
                     this.scoreTeam
                 ].style.backgroundColor = CSS.purple;
                 this.scoreTeam++;
-                this.audioFunctions.trouReboucheDuo()
+                this.audioFunctions.trouReboucheDuo();
             } else {
                 console.log("Winner is not possible >>>", winner);
             }
@@ -376,46 +383,45 @@ export default {
                 // Show good UI relative to current step
                 // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
-                    this.audioFunctions.transitionNuages()
+                    this.audioFunctions.transitionNuages();
 
                     // this.canShowUIGlobale = false;
 
-                    this.canShowUIGlobale = false
-                    this.canShowUITuto = false
-                    this.canShowUIStep = false
-                    this.canShowUIEnd = false
-                    this.canShowUIGlobaleEnd = false
+                    this.canShowUIGlobale = false;
+                    this.canShowUITuto = false;
+                    this.canShowUIStep = false;
+                    this.canShowUIEnd = false;
+                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
                         // this.canShowUITuto = true;
 
-                        this.canShowUIGlobale = false
-                        this.canShowUITuto = true
-                        this.canShowUIStep = false
-                        this.canShowUIEnd = false
-                        this.canShowUIGlobaleEnd = false
+                        this.canShowUIGlobale = false;
+                        this.canShowUITuto = true;
+                        this.canShowUIStep = false;
+                        this.canShowUIEnd = false;
+                        this.canShowUIGlobaleEnd = false;
                     }, this.getTransitionEnd());
-
                 }
 
                 // UI XP EN COURS
                 if (currentRoomState.currentStep.name === "trial_1_tuto") {
                     // this.canShowUITuto = false;
 
-                    this.canShowUIGlobale = false
-                    this.canShowUITuto = false
-                    this.canShowUIStep = false
-                    this.canShowUIEnd = false
-                    this.canShowUIGlobaleEnd = false
+                    this.canShowUIGlobale = false;
+                    this.canShowUITuto = false;
+                    this.canShowUIStep = false;
+                    this.canShowUIEnd = false;
+                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
                         // this.canShowUIStep = true;
 
-                        this.canShowUIGlobale = false
-                        this.canShowUITuto = false
-                        this.canShowUIStep = true
-                        this.canShowUIEnd = false
-                        this.canShowUIGlobaleEnd = false
+                        this.canShowUIGlobale = false;
+                        this.canShowUITuto = false;
+                        this.canShowUIStep = true;
+                        this.canShowUIEnd = false;
+                        this.canShowUIGlobaleEnd = false;
                     }, this.getTransitionEnd());
 
                     threeBus.$on("holeFilled", this.addHoleWinnerScore);
@@ -426,11 +432,11 @@ export default {
                 if (currentRoomState.currentStep.name === "trial_1_end") {
                     // this.canShowUIStep = false;
 
-                    this.canShowUIGlobale = false
-                    this.canShowUITuto = false
-                    this.canShowUIStep = false
-                    this.canShowUIEnd = false
-                    this.canShowUIGlobaleEnd = false
+                    this.canShowUIGlobale = false;
+                    this.canShowUITuto = false;
+                    this.canShowUIStep = false;
+                    this.canShowUIEnd = false;
+                    this.canShowUIGlobaleEnd = false;
                     this.victoriousPlayer = this.checkVictoriousPlayer();
                     let color;
 
@@ -448,11 +454,12 @@ export default {
                         this.victoriousText = "Bravo";
                         this.victoriousLegend =
                             "Vous avez réussi à reconstruire la tour";
-                        this.victoriousScore = this.scoreTeam + this.scoreLamar + this.scoreZanit;
+                        this.victoriousScore =
+                            this.scoreTeam + this.scoreLamar + this.scoreZanit;
                         this.iconSrc = "icon-stone-victorious.png";
                         this.plurielMerged = true;
                         color = CSS.purple;
-                    } else if(this.victoriousPlayer === "egalite"){
+                    } else if (this.victoriousPlayer === "egalite") {
                         this.victoriousText = "Egalité";
                         this.victoriousLegend =
                             "Vous ferez mieux une prochaine fois";
@@ -462,10 +469,10 @@ export default {
                     } else {
                         this.victoriousText = "Dommage";
                         this.victoriousLegend =
-                            "Vous n'avez pas remplis suffisament de trous";
+                            "Vous n'avez pas rempli suffisamment de trous";
                         this.victoriousScore =
                             this.scoreTeam + this.scoreLamar + this.scoreZanit;
-                        color = "#9C8EA9"
+                        color = "#9C8EA9";
                     }
 
                     for (let i = 0; i < this.victoriousScore; i++) {
@@ -479,11 +486,11 @@ export default {
                     setTimeout(() => {
                         // this.canShowUIEnd = true;
 
-                        this.canShowUIGlobale = false
-                        this.canShowUITuto = false
-                        this.canShowUIStep = false
-                        this.canShowUIEnd = true
-                        this.canShowUIGlobaleEnd = false
+                        this.canShowUIGlobale = false;
+                        this.canShowUITuto = false;
+                        this.canShowUIStep = false;
+                        this.canShowUIEnd = true;
+                        this.canShowUIGlobaleEnd = false;
                     }, this.getTransitionEnd());
                 }
 
@@ -491,34 +498,33 @@ export default {
                 if (currentRoomState.currentStep.name === "global_ending") {
                     // this.canShowUIEnd = false;
 
-                    this.canShowUIGlobale = false
-                    this.canShowUITuto = false
-                    this.canShowUIStep = false
-                    this.canShowUIEnd = false
-                    this.canShowUIGlobaleEnd = false
+                    this.canShowUIGlobale = false;
+                    this.canShowUITuto = false;
+                    this.canShowUIStep = false;
+                    this.canShowUIEnd = false;
+                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
-                        this.audioFunctions.separationIles()
+                        this.audioFunctions.separationIles();
                         bus.$emit("trigger ending", this.victoriousPlayer);
                     }, this.getTransitionEnd());
 
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         // this.canShowUIGlobale = true;
                         // this.canShowUIGlobaleEnd = true;
 
-                        this.canShowUIGlobale = true
-                        this.canShowUITuto = false
-                        this.canShowUIStep = false
-                        this.canShowUIEnd = false
-                        this.canShowUIGlobaleEnd = true
-                    }, this.getTransitionEnd() + 6000) // 11 = animation duration
+                        this.canShowUIGlobale = true;
+                        this.canShowUITuto = false;
+                        this.canShowUIStep = false;
+                        this.canShowUIEnd = false;
+                        this.canShowUIGlobaleEnd = true;
+                    }, this.getTransitionEnd() + 6000); // 11 = animation duration
                 }
             },
             deep: true
         }
     },
     mounted() {
-
         if (this.roomState.lamar === socket.id) {
             this.character = "lamar";
         } else if (this.roomState.zanit === socket.id) {
@@ -527,20 +533,20 @@ export default {
             this.character = undefined;
         }
 
-        setTimeout(()=>{
-            this.audioFunctions.transitionNuages()
-        }, 2000)
+        setTimeout(() => {
+            this.audioFunctions.transitionNuages();
+        }, 2000);
 
         setTimeout(() => {
             // this.canShowUIGlobale = true;
             // this.canShowIndice = false;
 
             this.canShowIndice = false;
-            this.canShowUIGlobale = true
-            this.canShowUITuto = false
-            this.canShowUIStep = false
-            this.canShowUIEnd = false
-            this.canShowUIGlobaleEnd = false
+            this.canShowUIGlobale = true;
+            this.canShowUITuto = false;
+            this.canShowUIStep = false;
+            this.canShowUIEnd = false;
+            this.canShowUIGlobaleEnd = false;
         }, this.getTransitionEnd());
         // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }

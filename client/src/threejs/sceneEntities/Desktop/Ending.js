@@ -15,9 +15,14 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     let buildingLightsRight = []
     let pierreLeft, pierreRight
 
-    let neutralMatColor
+    let neutralMatColor = new THREE.Color(0x808080)
+    let pinkMatColor = new THREE.Color(0xff0000)
+    let cyanMatColor = new THREE.Color(0x0000ff)
+    let teamMatColor = new THREE.Color(0xff00ff)
     const lightMatParams = {
-        roughness: 0.1
+        color: neutralMatColor,
+        roughness: 0.1,
+        emissiveIntensity: 0.1
     }
     const pierreLeftMat = new THREE.MeshStandardMaterial(lightMatParams)
     const pierreRightMat = new THREE.MeshStandardMaterial(lightMatParams)
@@ -56,18 +61,23 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                 tourCentrale.originalPos = new THREE.Vector3()
                 tourCentrale.originalPos.copy(tourCentrale.position)
                 tourCentrale.angularVelocity = 0
+                tourCentrale.material.transparent = true
             }
 
             if (child.material && child.name.includes("PierreTourGauche")) {
                 neutralMatColor = child.material.color
                 child.material = pierreLeftMat
                 pierreLeft = child
+                pierreLeft.originalPos = new THREE.Vector3()
+                pierreLeft.originalPos.copy(pierreLeft.position)
             } else if (
                 child.material &&
                 child.name.includes("PierreTourDroite")
             ) {
                 child.material = pierreRightMat
                 pierreRight = child
+                pierreRight.originalPos = new THREE.Vector3()
+                pierreRight.originalPos.copy(pierreRight.position)
             }
 
             if (
@@ -95,11 +105,10 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
             }
         })
 
-        tourCentrale.material.transparent = true
-        tourCentrale.material.opacity = 0.3
+        tourCentrale.material.opacity = 0.4
         tourCentrale.material.roughness = 0
         tourCentrale.material.reflectivity = 1
-        tourCentrale.material.color = new THREE.Color(0xffffff)
+        tourCentrale.material.color = teamMatColor
 
         const testSphere = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(1.5, 3),
@@ -109,19 +118,19 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         testSphere.position.y += 5
         scene.add(testSphere)
 
-        pierreLeftMat.emissive = new THREE.Color(0xff0000)
+        pierreLeftMat.emissive = pinkMatColor
         pierreLeftMat.emissiveIntensity = 10
-        pierreRightMat.emissive = new THREE.Color(0x0000ff)
+        pierreRightMat.emissive = cyanMatColor
         pierreRightMat.emissiveIntensity = 10
 
-        buildingLightsLeftMat.emissive = new THREE.Color(0xff0000)
+        buildingLightsLeftMat.emissive = pinkMatColor
         buildingLightsLeftMat.emissiveIntensity = 10
-        buildingLightsRightMat.emissive = new THREE.Color(0x0000ff)
+        buildingLightsRightMat.emissive = cyanMatColor
         buildingLightsRightMat.emissiveIntensity = 10
 
-        tourLeftMat.emissive = new THREE.Color(0xff0000)
+        tourLeftMat.emissive = pinkMatColor
         tourLeftMat.emissiveIntensity = 10
-        tourRightMat.emissive = new THREE.Color(0x0000ff)
+        tourRightMat.emissive = cyanMatColor
         tourRightMat.emissiveIntensity = 10
 
         //LISTENERS
@@ -353,7 +362,11 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
             buildingLightsLeftMat,
             buildingLightsRightMat
         ]
-        lightMats.map(material => (material.color = neutralMatColor))
+        lightMats.map(material => {
+            material.color.copy(neutralMatColor)
+            material.emissive.copy(neutralMatColor)
+            material.emissiveIntensity = 0.1
+        })
     }
 
     /* ----------------------- GUI ----------------------- */
