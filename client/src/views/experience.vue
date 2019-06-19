@@ -15,11 +15,17 @@
                     v-bind:class="{ visible: !canShowUIGlobaleEnd }"
                 >Accédez à la 1ère étape grâce à votre téléphone.</p>
                 <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
-                    Recommencer
-                    <br>l'expérience
-                </p>
+                    <button class="cta" @click="setRoomState({currentStep: { name: 'trial_1_intro' }})">
+                        <div class="outerCircle">
+                            <div class="innerCircle"></div>
+                        </div>
+                    </button><br/>
 
-                <!-- TODO ADD BTN RESTART -->
+                    <span>
+                        Recommencer
+                        <br>l'expérience
+                    </span>
+                </p>
 
                 <div class="stones">
                     <img ref="victoriousStep" src="assets/img/icon-stone.png" alt>
