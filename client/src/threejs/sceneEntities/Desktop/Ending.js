@@ -490,6 +490,47 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         })
     }
 
+    function resetPositions(animDuration) {
+        islandLeft.position.copy(islandLeft.originalPos)
+        islandRight.position.copy(islandRight.originalPos)
+        tourCentrale.position.copy(tourCentrale.originalPos)
+
+        const resetTweens = new TimelineLite()
+        resetTweens
+            .duration(animDuration)
+            .add("move", 2)
+            .to(
+                islandLeft.position,
+                8,
+                {
+                    x: islandLeft.originalPos.x,
+                    y: islandLeft.originalPos.y,
+                    ease: Power2.easeInOut
+                },
+                "move"
+            )
+            .to(
+                islandRight.position,
+                8,
+                {
+                    x: islandRight.originalPos.x,
+                    y: islandRight.originalPos.y,
+                    ease: Power2.easeInOut
+                },
+                "move"
+            )
+            .to(
+                tourCentrale.position,
+                8,
+                {
+                    x: tourCentrale.originalPos.x,
+                    y: tourCentrale.originalPos.y,
+                    ease: Power2.easeInOut
+                },
+                "move"
+            )
+    }
+
     function update(timeVars, mobileQuaternions) {
         // if (isWinAnimFinished) {
         tourCentrale.rotation.y +=
@@ -499,7 +540,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
 
     function beforeDestroy() {
         console.log("Before destroy Ending")
-
+        resetPositions(5)
         resetMaterials()
     }
 

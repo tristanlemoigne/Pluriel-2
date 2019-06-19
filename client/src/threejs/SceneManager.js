@@ -153,10 +153,10 @@ function SceneManager(canvas, assets) {
         })
 
         // // ---- this is a temporary fix ---- TODO: remove this when the blender file has the right light values
-        // assets.islands.traverse((child) => {
+        // assets.islands.traverse(child => {
         //     if (child.intensity) {
-        //         if (child.intensity >= 100) {
-        //             child.intensity = reMap(child.intensity, 100, 90000, 100, 900)
+        //         if (child.intensity >= 90) {
+        //             child.intensity *= 0.1
         //         }
         //         child.normalIntensity = child.intensity // stock intensity values (will be tweened from 0)
         //     }
