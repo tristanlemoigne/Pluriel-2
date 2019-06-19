@@ -108,6 +108,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // LISTENERS
         threeBus.$on("track", refreshTrackedDatas)
+        threeBus.$emit("reset trial1", resetTrial1)
         // bus.$on("logTrial1Victorious", checkVictoriousPlayer)
 
         // positionPersos()
@@ -486,6 +487,24 @@ function Trial1(scene, camera, assets, timeVars) {
             raycastedPosFromSpot(cyanSpotLight),
             raycastedPosFromSpot(pinkSpotLight)
         )
+    }
+
+    function resetTrial1(){
+        // Reset colors tours
+
+        // Reset hole progress
+        holesArr.forEach(hole => {
+            hole.cyanValue = 0
+            hole.pinkValue = 0
+
+            hole.progress = 0
+            hole.progressMax = 1 // 100%
+            hole.winner = "None"
+
+            hole.scaleMax = hole.scale.clone()
+            hole.scale.multiplyScalar(0.001)
+            hole.scaleMin = hole.scale.clone()
+        })
     }
 
     function beforeDestroy() {

@@ -247,6 +247,7 @@ export default {
             isDebugMode: true
         },
         camIsActive: true,
+        hasRestart: false,
         character: undefined,
         canShowIndice: true,
         canShowUIGlobale: false,
@@ -379,7 +380,59 @@ export default {
         },
         restartExperience() {
             console.log("Restart xp");
+            this.resetExperienceUI()
+            threeBus.$emit("reset trial1")
             this.setRoomState({ currentStep: { name: "trial_1_intro" } });
+        },
+        resetExperienceUI(){
+            // Reset datas 
+            this.camIsActive = true
+            this.hasRestart = true
+            this.character = undefined
+            this.canShowIndice = false
+            this.canShowUIGlobale = false
+            this.canShowUITuto = false
+            this.canShowUIStep = false
+            this.canShowUIEnd = false
+            this.canShowUIGlobaleEnd = false
+            this.scoreLamar = 0
+            this.scoreZanit = 0
+            this.scoreTeam = 0
+            this.totalFilledHoles = 0
+            this.totalholes = 9
+            this.victoriousScore = 0
+            this.plurielMerged = false
+            this.victoriousText = "Aucun"
+            this.victoriousLegend = "à remporté la première épreuve"
+            this.iconSrc = "icon-stone-looser.png"
+            this.victoriousPlayer = "Aucun"
+
+            // Reset styles
+            this.$refs.victoriousStep.style.borderColor = "rgba(227, 227, 227, 0.1)"
+
+            // Score lamar
+            for (let i = 0; i < this.$refs.scoreLamar.children.length; i++) {
+                this.$refs.scoreLamar.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+            }
+
+            // Score zanit
+            for (let i = 0; i < this.$refs.scoreZanit.children.length; i++) {
+                this.$refs.scoreZanit.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+            }
+
+            // Score team
+            for (let i = 0; i < this.$refs.scoreTeam.children.length; i++) {
+                this.$refs.scoreTeam.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+            }
+
+             // Final score
+            for (let i = 0; i < this.$refs.victoriousScore.children.length; i++) {
+                this.$refs.victoriousScore.children[i].style.background = "none";
+            }
+
+            // Hole progression
+            this.$refs.cyanProgression.style.strokeDasharray = "0, 100"
+            this.$refs.pinkProgression.style.strokeDasharray = "0, 100"
         }
     },
     watch: {
@@ -388,62 +441,36 @@ export default {
                 // Show good UI relative to current step
                 // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
-                    // this.canShowUIGlobale = false;
-
                     this.canShowUIGlobale = false;
-                    this.canShowUITuto = false;
-                    this.canShowUIStep = false;
-                    this.canShowUIEnd = false;
-                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
                         this.audioFunctions.transitionAround();
                     }, 4000);
 
                     setTimeout(() => {
-                        // this.canShowUITuto = true;
-
-                        this.canShowUIGlobale = false;
                         this.canShowUITuto = true;
-                        this.canShowUIStep = false;
-                        this.canShowUIEnd = false;
-                        this.canShowUIGlobaleEnd = false;
+
                     }, this.getTransitionEnd());
                 }
 
                 // UI XP EN COURS
                 if (currentRoomState.currentStep.name === "trial_1_tuto") {
-                    // this.canShowUITuto = false;
-
-                    this.canShowUIGlobale = false;
                     this.canShowUITuto = false;
-                    this.canShowUIStep = false;
-                    this.canShowUIEnd = false;
-                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
-                        // this.canShowUIStep = true;
-
-                        this.canShowUIGlobale = false;
-                        this.canShowUITuto = false;
                         this.canShowUIStep = true;
-                        this.canShowUIEnd = false;
-                        this.canShowUIGlobaleEnd = false;
                     }, this.getTransitionEnd());
 
-                    threeBus.$on("holeFilled", this.addHoleWinnerScore);
-                    threeBus.$on("holeScaling", this.playerHoleProgress);
+                    if(!this.hasRestart){
+                        threeBus.$on("holeFilled", this.addHoleWinnerScore);
+                        threeBus.$on("holeScaling", this.playerHoleProgress);
+                    }
                 }
 
                 // UI END STEP 1
                 if (currentRoomState.currentStep.name === "trial_1_end") {
-                    // this.canShowUIStep = false;
-
-                    this.canShowUIGlobale = false;
-                    this.canShowUITuto = false;
                     this.canShowUIStep = false;
-                    this.canShowUIEnd = false;
-                    this.canShowUIGlobaleEnd = false;
+
                     this.victoriousPlayer = this.checkVictoriousPlayer();
                     let color;
 
@@ -491,25 +518,14 @@ export default {
                     this.$refs.victoriousStep.style.borderColor = color;
 
                     setTimeout(() => {
-                        // this.canShowUIEnd = true;
-
-                        this.canShowUIGlobale = false;
-                        this.canShowUITuto = false;
-                        this.canShowUIStep = false;
                         this.canShowUIEnd = true;
-                        this.canShowUIGlobaleEnd = false;
+
                     }, this.getTransitionEnd());
                 }
 
                 // UI END GLOBALE
                 if (currentRoomState.currentStep.name === "global_ending") {
-                    // this.canShowUIEnd = false;
-
-                    this.canShowUIGlobale = false;
-                    this.canShowUITuto = false;
-                    this.canShowUIStep = false;
                     this.canShowUIEnd = false;
-                    this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
                         this.audioFunctions.separationIles();
@@ -517,13 +533,7 @@ export default {
                     }, this.getTransitionEnd());
 
                     setTimeout(() => {
-                        // this.canShowUIGlobale = true;
-                        // this.canShowUIGlobaleEnd = true;
-
                         this.canShowUIGlobale = true;
-                        this.canShowUITuto = false;
-                        this.canShowUIStep = false;
-                        this.canShowUIEnd = false;
                         this.canShowUIGlobaleEnd = true;
                     }, this.getTransitionEnd() + 6000); // 11 = animation duration
                 }
@@ -545,15 +555,8 @@ export default {
         }, 2000);
 
         setTimeout(() => {
-            // this.canShowUIGlobale = true;
-            // this.canShowIndice = false;
-
-            this.canShowIndice = false;
             this.canShowUIGlobale = true;
-            this.canShowUITuto = false;
-            this.canShowUIStep = false;
-            this.canShowUIEnd = false;
-            this.canShowUIGlobaleEnd = false;
+            this.canShowIndice = false;
         }, this.getTransitionEnd());
         // after the '-', that is the negative delay we want the UI to appear (can be any value) in ms
     }
