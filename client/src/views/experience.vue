@@ -3,7 +3,7 @@
         <!--Desktop stuff -->
         <div v-if="!isMobile">
             <div class="indice textGlow" v-bind:class="{ visible: canShowIndice }">
-                <p>Il est maintenant temps pour vous de&nbspc;changer la&nbspc;destinée de Pluriel.</p>
+                <p>Il est maintenant temps pour vous de&nbsp;changer la&nbsp;destinée de Pluriel.</p>
                 <p>Arriverez-vous à associer vos deux visions afin de lui redonner sa splendeur ?</p>
             </div>
 

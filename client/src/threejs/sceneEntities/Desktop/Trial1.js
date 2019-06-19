@@ -385,7 +385,7 @@ function Trial1(scene, camera, assets, timeVars) {
                             emissiveIntensity: 0
                         },
                         {
-                            emissiveIntensity: 0.1
+                            emissiveIntensity: 0.06
                         }
                     )
                 } else if (hole.pinkValue >= maxColorScale) {
@@ -421,7 +421,7 @@ function Trial1(scene, camera, assets, timeVars) {
                             emissiveIntensity: 0
                         },
                         {
-                            emissiveIntensity: 0.2
+                            emissiveIntensity: 0.09
                         }
                     )
                 } else {
@@ -457,7 +457,7 @@ function Trial1(scene, camera, assets, timeVars) {
                             emissiveIntensity: 0
                         },
                         {
-                            emissiveIntensity: 0.4
+                            emissiveIntensity: 0.15
                         }
                     )
                 }
@@ -541,7 +541,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     cyanSpotLight.target.position,
                     dummyVec
                 )
-                cyanSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                cyanSpotLight.quaternion.slerp(dummyQuat, 0.032)
                 // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             cyanSpotLightHelper.update()
@@ -572,7 +572,7 @@ function Trial1(scene, camera, assets, timeVars) {
                     pinkSpotLight.target.position,
                     dummyVec
                 )
-                pinkSpotLight.quaternion.slerp(dummyQuat, 0.03)
+                pinkSpotLight.quaternion.slerp(dummyQuat, 0.032)
                 // slerp value should be around 0.02 -> 0.1 (closer to 0, the spotlight feels harder to rotate)
             }
             pinkSpotLightHelper.update()
