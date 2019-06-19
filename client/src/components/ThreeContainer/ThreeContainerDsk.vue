@@ -69,7 +69,7 @@ export default {
 }
 .loseGradient {
     opacity: 0;
-    background: linear-gradient(#8080d8, #af5060);
+    background: linear-gradient(#3e3fac, #f177be);
 }
 
 .canvasContainer {

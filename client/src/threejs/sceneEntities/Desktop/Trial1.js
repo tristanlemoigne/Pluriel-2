@@ -4,6 +4,7 @@ import { reMap } from "../../../utils"
 import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
+import { SpotLight } from "three"
 
 function Trial1(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
@@ -49,8 +50,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const easingFactor = 0.16
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 3 // 5
-    const fusionScaleDuration = 1.4 // 2
+    const defaultScaleDuration = 2.8 // 5
+    const fusionScaleDuration = 1.3 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
@@ -66,8 +67,8 @@ function Trial1(scene, camera, assets, timeVars) {
     /* ----------------------- INIT ----------------------- */
     function init() {
         // Helpers
-        const axesHelper = new THREE.AxesHelper(50)
-        scene.add(axesHelper)
+        // const axesHelper = new THREE.AxesHelper(50)
+        // scene.add(axesHelper)
         // scene.add(camera.target)
 
         // Get tour base
@@ -486,6 +487,11 @@ function Trial1(scene, camera, assets, timeVars) {
         )
     }
 
+    function beforeDestroy() {
+        cyanSpotLight.intensity = 0
+        pinkSpotLight.intensity = 0
+    }
+
     /* ----------------------- GUI ----------------------- */
     function initGui() {
         // Gui
@@ -511,7 +517,8 @@ function Trial1(scene, camera, assets, timeVars) {
     }
 
     return {
-        update
+        update,
+        beforeDestroy
     }
 }
 

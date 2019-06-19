@@ -6,29 +6,38 @@ import { threeBus } from "../../../main"
 import { TimelineLite, Power0, Sine, Power1, Power2, Power3 } from "gsap"
 import experienceSteps from "../../../../../server/experienceSteps" // this is reference a file outside client folder, so it's the same as the server's
 
-function Ending(scene, camera, assets, timeVars) {
+function Ending(scene, camera, assets, timeVars, glowMaterial) {
     /* ----------------------- INPUTS ----------------------- */
     let islandLeft, islandRight, tourCentrale
+    let towerLightsLeft = []
+    let towerLightsRight = []
     let buildingLightsLeft = []
     let buildingLightsRight = []
     let pierreLeft, pierreRight
+
+    let neutralMatColor
+    const lightMatParams = {
+        roughness: 0.1
+    }
+    const pierreLeftMat = new THREE.MeshStandardMaterial(lightMatParams)
+    const pierreRightMat = new THREE.MeshStandardMaterial(lightMatParams)
+    const tourLeftMat = new THREE.MeshStandardMaterial(lightMatParams)
+    const tourRightMat = new THREE.MeshStandardMaterial(lightMatParams)
+    const buildingLightsLeftMat = new THREE.MeshStandardMaterial(lightMatParams)
+    const buildingLightsRightMat = new THREE.MeshStandardMaterial(
+        lightMatParams
+    )
 
     let datguiVars = {
         spaceOffs: 0
     }
     let spaceOffs
-    // let isWinAnimFinished = false
 
     init()
     // initGui()
 
     /* ----------------------- INIT ----------------------- */
     function init() {
-        // HELPERS
-        // const axesHelper = new THREE.AxesHelper(50)
-        // scene.add(axesHelper)
-        // scene.add(camera.target)
-
         // GET ISLANDS
         assets.islands.traverse(child => {
             // TODO: avoid traversing multiple times
@@ -36,29 +45,11 @@ function Ending(scene, camera, assets, timeVars) {
                 islandLeft = child
                 islandLeft.originalPos = new THREE.Vector3()
                 islandLeft.originalPos.copy(islandLeft.position)
-
-                islandLeft.traverse(islandLeftChild => {
-                    if (
-                        child.material &&
-                        child.name.includes("LumiereBatimentGauche")
-                    ) {
-                        buildingLightsLeft.push(islandLeftChild)
-                    }
-                })
             }
             if (child.name.includes("-IleDroite")) {
                 islandRight = child
                 islandRight.originalPos = new THREE.Vector3()
                 islandRight.originalPos.copy(islandRight.position)
-
-                islandRight.traverse(islandRightChild => {
-                    if (
-                        child.material &&
-                        child.name.includes("LumiereBatimentDroite")
-                    ) {
-                        buildingLightsRight.push(islandRightChild)
-                    }
-                })
             }
             if (child.name.includes("TourCentrale")) {
                 tourCentrale = child
@@ -68,23 +59,41 @@ function Ending(scene, camera, assets, timeVars) {
             }
 
             if (child.material && child.name.includes("PierreTourGauche")) {
-                console.log(child)
+                neutralMatColor = child.material.color
+                child.material = pierreLeftMat
                 pierreLeft = child
             } else if (
                 child.material &&
                 child.name.includes("PierreTourDroite")
             ) {
-                console.log(child)
+                child.material = pierreRightMat
                 pierreRight = child
             }
-        })
 
-        console.log(
-            { pierreLeft },
-            { pierreRight },
-            { buildingLightsLeft },
-            { buildingLightsRight }
-        )
+            if (
+                child.material &&
+                child.name.includes("LumiereBatimentsGauche")
+            ) {
+                child.material = buildingLightsLeftMat
+                buildingLightsLeft.push(child)
+            }
+            if (
+                child.material &&
+                child.name.includes("LumiereBatimentDroite")
+            ) {
+                child.material = buildingLightsRightMat
+                buildingLightsRight.push(child)
+            }
+
+            if (child.material && child.name.includes("LumiereTourGauche")) {
+                child.material = tourLeftMat
+                towerLightsLeft.push(child)
+            }
+            if (child.material && child.name.includes("LumiereTourDroite")) {
+                child.material = tourRightMat
+                towerLightsRight.push(child)
+            }
+        })
 
         tourCentrale.material.transparent = true
         tourCentrale.material.opacity = 0.3
@@ -94,25 +103,26 @@ function Ending(scene, camera, assets, timeVars) {
 
         const testSphere = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(1.5, 3),
-            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+            glowMaterial
         )
         testSphere.position.copy(tourCentrale.position)
         testSphere.position.y += 5
         scene.add(testSphere)
 
-        pierreLeft.material.emissive = new THREE.Color(0x00ff80)
-        pierreLeft.material.emissiveIntensity = 10
-        pierreRight.material.emissive = new THREE.Color(0x80ff00)
-        pierreRight.material.emissiveIntensity = 10
+        pierreLeftMat.emissive = new THREE.Color(0xff0000)
+        pierreLeftMat.emissiveIntensity = 10
+        pierreRightMat.emissive = new THREE.Color(0x0000ff)
+        pierreRightMat.emissiveIntensity = 10
 
-        buildingLightsLeft.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0x00ffff)
-            buildingLight.material.emissiveIntensity = 10
-        })
-        buildingLightsRight.map(buildingLight => {
-            buildingLight.material.emissive = new THREE.Color(0xffff00)
-            buildingLight.material.emissiveIntensity = 10
-        })
+        buildingLightsLeftMat.emissive = new THREE.Color(0xff0000)
+        buildingLightsLeftMat.emissiveIntensity = 10
+        buildingLightsRightMat.emissive = new THREE.Color(0x0000ff)
+        buildingLightsRightMat.emissiveIntensity = 10
+
+        tourLeftMat.emissive = new THREE.Color(0xff0000)
+        tourLeftMat.emissiveIntensity = 10
+        tourRightMat.emissive = new THREE.Color(0x0000ff)
+        tourRightMat.emissiveIntensity = 10
 
         //LISTENERS
         bus.$on("trigger ending", animateEnding) // receive "team", "lamar", "zanit", or "egalite"
@@ -332,6 +342,18 @@ function Ending(scene, camera, assets, timeVars) {
         // }
     }
 
+    function beforeDestroy() {
+        const lightMats = [
+            pierreLeftMat,
+            pierreRightMat,
+            tourLeftMat,
+            tourRightMat,
+            buildingLightsLeftMat,
+            buildingLightsRightMat
+        ]
+        lightMats.map(material => (material.color = neutralMatColor))
+    }
+
     /* ----------------------- GUI ----------------------- */
     function initGui() {
         // Gui
@@ -344,7 +366,8 @@ function Ending(scene, camera, assets, timeVars) {
     }
 
     return {
-        update
+        update,
+        beforeDestroy
     }
 }
 

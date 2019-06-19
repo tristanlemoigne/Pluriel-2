@@ -166,7 +166,8 @@ function SceneManager(canvas, assets) {
             home: () => HomeDskSceneEntity([sceneL, sceneR], assets),
             // global_intro: () => TODO(masterScene, camera, assets),
             trial_1_intro: () => Trial1(masterScene, camera, assets, timeVars),
-            global_ending: () => Ending(masterScene, camera, assets, timeVars)
+            trial_1_end: () =>
+                Ending(masterScene, camera, assets, timeVars, glowMaterial)
         }
         currentSceneEntity = sceneEntities["home"]()
 
@@ -433,7 +434,9 @@ function SceneManager(canvas, assets) {
         // CanvasRotator(canvas, camera, customRenderer).rotateCanvas(canvasAngle)
 
         if (sceneEntities[step.name]) {
-            // currentSceneEntity.destroy()
+            if (currentSceneEntity.beforeDestroy) {
+                currentSceneEntity.beforeDestroy()
+            }
             currentSceneEntity = sceneEntities[step.name]()
         }
         if (step.addedThreeGroupsDsk) {
