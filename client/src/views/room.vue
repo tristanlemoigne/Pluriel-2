@@ -9,7 +9,7 @@
         >
             <div class="description textGlow">
                 Vous devrez être
-                <b>2 joueurs</b> ayant chacun un smartphone pour réaliser l’expérience.
+                <b>2 joueurs</b> ayant chacun un&nbsp;smartphone pour réaliser l’expérience.
             </div>
 
             <div class="illustration">
@@ -32,8 +32,10 @@
         <div v-if="!isMobile" ref="connexion" class="connexion">
             <div v-if="roomState.currentStep.name === 'room_waiting'">
                 <div class="description textGlow">
-                    Connectez-vous grâce à votre mobile sur
-                    <b>pluriel-xp.com</b>, et rentrez ce code :
+                    Connectez-vous grâce
+                    à votre mobile sur&nbsp;
+                    <b>pluriel-xp.com</b>,
+                    et rentrez ce code :
                 </div>
 
                 <div class="roomId textGlow">{{ roomId }}</div>
@@ -136,7 +138,7 @@ export default {
                     ease: Power2.easeOut
                 });
             }
-            this.audioFunctions.playerJoinedRoom()
+            this.audioFunctions.playerJoinedRoom();
         });
 
         socket.on("playerTwoReady", playerID => {
@@ -147,7 +149,7 @@ export default {
                     ease: Power2.easeOut
                 });
             }
-            this.audioFunctions.playerJoinedRoom()
+            this.audioFunctions.playerJoinedRoom();
         });
 
         if (this.isMobile) {

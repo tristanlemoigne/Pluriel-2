@@ -15,14 +15,15 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     let buildingLightsRight = []
     let pierreLeft, pierreRight
 
-    let neutralMatColor = new THREE.Color(0x808080)
+    let neutralMatColor = new THREE.Color(0x909090)
     let pinkMatColor = new THREE.Color(0xff0000)
     let cyanMatColor = new THREE.Color(0x0000ff)
     let teamMatColor = new THREE.Color(0xff00ff)
     const lightMatParams = {
         color: neutralMatColor,
         roughness: 0.1,
-        emissiveIntensity: 0.1
+        emissiveIntensity: 0.1,
+        emissive: neutralMatColor
     }
     const pierreLeftMat = new THREE.MeshStandardMaterial(lightMatParams)
     const pierreRightMat = new THREE.MeshStandardMaterial(lightMatParams)
@@ -105,36 +106,123 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
             }
         })
 
-        tourCentrale.material.opacity = 0.4
-        tourCentrale.material.roughness = 0
-        tourCentrale.material.reflectivity = 1
-        tourCentrale.material.color = teamMatColor
+        // tourCentrale.material.opacity = 0.4
+        // tourCentrale.material.roughness = 0
+        // tourCentrale.material.reflectivity = 1
+        // tourCentrale.material.color = teamMatColor
 
-        const testSphere = new THREE.Mesh(
-            new THREE.IcosahedronBufferGeometry(1.5, 3),
-            glowMaterial
-        )
-        testSphere.position.copy(tourCentrale.position)
-        testSphere.position.y += 5
-        scene.add(testSphere)
+        // TODO: keep original values
 
-        pierreLeftMat.emissive = pinkMatColor
-        pierreLeftMat.emissiveIntensity = 10
-        pierreRightMat.emissive = cyanMatColor
-        pierreRightMat.emissiveIntensity = 10
+        // const testSphere = new THREE.Mesh(
+        //     new THREE.IcosahedronBufferGeometry(1.5, 3),
+        //     glowMaterial
+        // )
+        // testSphere.position.copy(tourCentrale.position)
+        // testSphere.position.y += 5
+        // scene.add(testSphere)
 
-        buildingLightsLeftMat.emissive = pinkMatColor
-        buildingLightsLeftMat.emissiveIntensity = 10
-        buildingLightsRightMat.emissive = cyanMatColor
-        buildingLightsRightMat.emissiveIntensity = 10
+        // pierreLeftMat.emissive = pinkMatColor
+        // pierreLeftMat.emissiveIntensity = 10
+        // pierreRightMat.emissive = cyanMatColor
+        // pierreRightMat.emissiveIntensity = 10
 
-        tourLeftMat.emissive = pinkMatColor
-        tourLeftMat.emissiveIntensity = 10
-        tourRightMat.emissive = cyanMatColor
-        tourRightMat.emissiveIntensity = 10
+        // buildingLightsLeftMat.emissive = pinkMatColor
+        // buildingLightsLeftMat.emissiveIntensity = 10
+        // buildingLightsRightMat.emissive = cyanMatColor
+        // buildingLightsRightMat.emissiveIntensity = 10
+
+        // tourLeftMat.emissive = pinkMatColor
+        // tourLeftMat.emissiveIntensity = 10
+        // tourRightMat.emissive = cyanMatColor
+        // tourRightMat.emissiveIntensity = 10
 
         //LISTENERS
         bus.$on("trigger ending", animateEnding) // receive "team", "lamar", "zanit", or "egalite"
+        threeBus.$on("light up islands", lightUpIslands)
+    }
+
+    function lightUpIslands(victoriousPlayer) {
+        const animDuration = 2
+        const lightTweens = new TimelineLite()
+        switch (victoriousPlayer) {
+            case "lamar":
+                lightTweens
+                    .duration(animDuration)
+                    .add("lightup", 0)
+                    .to(
+                        pierreLeftMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.2,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 4,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                break
+            case "zanit":
+                lightTweens
+                    .duration(animDuration)
+                    .add("lightup", 0)
+                    .to(
+                        pierreLeftMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0.2,
+                            b: 0,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 4,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                break
+            case "team":
+                lightTweens
+                    .duration(animDuration)
+                    .add("lightup", 0)
+                    .to(
+                        pierreLeftMat.emissive,
+                        2,
+                        {
+                            r: 0.8,
+                            g: 0.1,
+                            b: 0.8,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 6,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                break
+            case "egalite":
+                break
+        }
     }
 
     function animateEnding(winnerStr) {
@@ -144,7 +232,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
             winnerStr === "egalite" ||
             winnerStr === "loose"
         ) {
-            loseAnimation(11)
+            loseAnimation(11, winnerStr)
         } else if (winnerStr === "team") {
             winAnimation(11)
         }
@@ -152,7 +240,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         // distance TOGETHER : originalPos -13.9
     }
 
-    function loseAnimation(animDuration) {
+    function loseAnimation(animDuration, winnerStr) {
         const gradientDivs = document.body.getElementsByClassName("bgGradient")
         for (let i = 0; i < gradientDivs.length; i++) {
             if (gradientDivs[i].classList.contains("loseGradient")) {
@@ -212,6 +300,27 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                     g: 0.45,
                     b: 0.55,
                     ease: Power1.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                tourCentrale.material.color,
+                7,
+                {
+                    r: neutralMatColor.r,
+                    g: neutralMatColor.g,
+                    b: neutralMatColor.b,
+                    ease: Power1.easeInOut
+                },
+                "moveX"
+            )
+            .to(
+                tourCentrale.material,
+                7,
+                {
+                    opacity: 1,
+                    roughness: 1,
+                    reflectivity: 0
                 },
                 "moveX"
             )
@@ -320,6 +429,27 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                 "move"
             )
             .to(
+                tourCentrale.material.color,
+                10,
+                {
+                    r: teamMatColor.r,
+                    g: teamMatColor.g,
+                    b: teamMatColor.b,
+                    ease: Power1.easeInOut
+                },
+                "move"
+            )
+            .to(
+                tourCentrale.material,
+                10,
+                {
+                    opacity: 0.4,
+                    roughness: 0,
+                    reflectivity: 1
+                },
+                "move"
+            )
+            .to(
                 tourCentrale.position,
                 12,
                 {
@@ -344,16 +474,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     // TODO: ajouter du fog, afficher l'ui défaite
     // TODO: enlever le fog, faire briller la tour centrale, afficher l'ui victoire
 
-    function update(timeVars, mobileQuaternions) {
-        // if (isWinAnimFinished) {
-        tourCentrale.rotation.y +=
-            tourCentrale.angularVelocity * timeVars.DELTA_TIME
-        // }
-    }
-
-    function beforeDestroy() {
-        console.log("Before destroy Ending")
-
+    function resetMaterials() {
         const lightMats = [
             pierreLeftMat,
             pierreRightMat,
@@ -369,6 +490,19 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         })
     }
 
+    function update(timeVars, mobileQuaternions) {
+        // if (isWinAnimFinished) {
+        tourCentrale.rotation.y +=
+            tourCentrale.angularVelocity * timeVars.DELTA_TIME
+        // }
+    }
+
+    function beforeDestroy() {
+        console.log("Before destroy Ending")
+
+        resetMaterials()
+    }
+
     /* ----------------------- GUI ----------------------- */
     function initGui() {
         // Gui
@@ -382,7 +516,8 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
 
     return {
         update,
-        beforeDestroy
+        beforeDestroy,
+        resetMaterials
     }
 }
 

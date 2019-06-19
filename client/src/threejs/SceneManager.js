@@ -169,6 +169,9 @@ function SceneManager(canvas, assets) {
             trial_1_end: () =>
                 Ending(masterScene, camera, assets, timeVars, glowMaterial)
         }
+
+        sceneEntities["trial_1_end"]().resetMaterials() // access method to set the emissive materials to neutral colors // TODO: clean this mess
+
         currentSceneEntity = sceneEntities["home"]()
 
         customRenderer = CustomRenderer(
