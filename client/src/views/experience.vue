@@ -397,7 +397,7 @@ export default {
                     this.canShowUIGlobaleEnd = false;
 
                     setTimeout(() => {
-                        this.audioFunctions.transitionNuages();
+                        this.audioFunctions.transitionAround();
                     }, 4000);
 
                     setTimeout(() => {
