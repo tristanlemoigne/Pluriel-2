@@ -185,9 +185,10 @@
             <div class="globalEnd textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
                 <p v-bind:class="{ visible: !plurielMerged }">
                     Malheureusement,
-                    <br>votre collaboration n’a pas été suffisante<br/>pour reconstruire Pluriel
+                    <br>votre collaboration n’a pas été suffisante
+                    <br>pour reconstruire Pluriel
                     <!-- Malheureusement,
-                    <br>Votre collaboration n’a pas été suffisante -->
+                    <br>Votre collaboration n’a pas été suffisante-->
                 </p>
                 <p v-bind:class="{ visible: plurielMerged }">
                     Félicitations,
@@ -370,14 +371,15 @@ export default {
                 victoriousPlayer = "loose";
             }
 
+            threeBus.$emit("light up islands", victoriousPlayer);
             return victoriousPlayer;
         },
         getVictoriousIcon() {
             return `assets/img/${this.iconSrc}`;
         },
-        restartExperience(){
-            console.log("Restart xp")
-            this.setRoomState({currentStep: { name: 'trial_1_intro' }})
+        restartExperience() {
+            console.log("Restart xp");
+            this.setRoomState({ currentStep: { name: "trial_1_intro" } });
         }
     },
     watch: {
@@ -386,7 +388,6 @@ export default {
                 // Show good UI relative to current step
                 // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
-                    
                     // this.canShowUIGlobale = false;
 
                     this.canShowUIGlobale = false;
@@ -395,9 +396,9 @@ export default {
                     this.canShowUIEnd = false;
                     this.canShowUIGlobaleEnd = false;
 
-                    setTimeout(()=>{
-                        this.audioFunctions.transitionNuages()
-                    }, 4000)
+                    setTimeout(() => {
+                        this.audioFunctions.transitionNuages();
+                    }, 4000);
 
                     setTimeout(() => {
                         // this.canShowUITuto = true;
