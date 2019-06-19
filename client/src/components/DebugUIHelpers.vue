@@ -23,11 +23,11 @@
         >global_ending</button>-->
 
         <!-- <button class="debugButton" v-if="isDebugMode" @click="logTrial1Victorious()">Who wins?</button> -->
-        <button
+        <!-- <button
             class="debugButton"
             v-if="isDebugMode"
             @click="emitToBus('trigger ending', 'team')"
-        >team wins</button>
+        >team wins</button> -->
         <!-- <button
             class="debugButton"
             v-if="isDebugMode"
@@ -85,11 +85,11 @@ export default {
 .debugUI {
     pointer-events: none;
     position: absolute;
-    top: 25px;
-    left: 0;
+    bottom: 25px;
+    right: 0;
     z-index: 1000;
     font-size: 10px;
-    opacity: 0.3;
+    opacity: 0;
 
     span {
         margin-right: 10px;
@@ -101,7 +101,7 @@ export default {
         margin-bottom: 5px;
         color: #0f0;
         background: #000;
-        padding: 10px;
+        padding: 50px 25px;
         display: inline-block;
     }
 }

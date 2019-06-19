@@ -169,7 +169,6 @@ export default {
     }
 
     .homeMobile {
-        border: solid 1px red;
         width: 100%;
         height: 100%;
         position: absolute;
