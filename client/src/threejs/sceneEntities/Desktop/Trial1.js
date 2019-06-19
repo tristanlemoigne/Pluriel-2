@@ -40,7 +40,7 @@ function Trial1(scene, camera, assets, timeVars) {
         blue: "#214CFF",
         red: "#FF1B38",
         white: "#ff99ff",
-        purple: "#EE82EE"
+        purple: "#5F00FF"
     }
 
     const debug = {
@@ -489,6 +489,7 @@ function Trial1(scene, camera, assets, timeVars) {
     }
 
     function beforeDestroy() {
+        console.log("Before destroy trial 1")
         cyanSpotLight.intensity = 0
         pinkSpotLight.intensity = 0
     }

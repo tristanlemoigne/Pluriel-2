@@ -65,7 +65,7 @@ export default {
 }
 .winGradient {
     opacity: 0;
-    background: linear-gradient(#da8f32, #3c7bd8);
+    background: linear-gradient(#da8f32, #be66a4, #3c7bd8);
 }
 .loseGradient {
     opacity: 0;

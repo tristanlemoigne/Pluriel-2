@@ -310,7 +310,7 @@ export default {
             }
         },
         addHoleWinnerScore(winner) {
-            // winner = Cyan / Pink / White
+            // winner = Cyan / Pink / Purple
             if (winner === "Cyan") {
                 this.$refs.scoreLamar.children[
                     this.scoreLamar

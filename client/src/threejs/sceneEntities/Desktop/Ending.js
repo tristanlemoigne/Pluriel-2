@@ -343,6 +343,8 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     }
 
     function beforeDestroy() {
+        console.log("Before destroy Ending")
+
         const lightMats = [
             pierreLeftMat,
             pierreRightMat,
