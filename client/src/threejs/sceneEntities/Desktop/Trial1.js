@@ -141,15 +141,15 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // Cyan target
         cyanSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8)
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
-        var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
-        cyanSpotLight.target.add(targetSphere)
+        // var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8)
+        // var targetMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff })
+        // var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
+        // cyanSpotLight.target.add(targetSphere)
         cyanSpotLight.add(cyanSpotLight.target)
         camera.add(cyanSpotLight)
 
-        rotationHelper = targetSphere.clone()
-        rotationHelper.material.wireframe = true
+        // rotationHelper = targetSphere.clone()
+        // rotationHelper.material.wireframe = true
         // cyanSpotLight.add(rotationHelper)
 
         cyanSpotLightHelper = new THREE.SpotLightHelper(cyanSpotLight)
@@ -167,10 +167,10 @@ function Trial1(scene, camera, assets, timeVars) {
 
         // Pink target
         pinkSpotLight.target.position.set(0, 0, 50)
-        var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8) // helper for debug
-        var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
-        var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
-        pinkSpotLight.target.add(targetSphere)
+        // var targetGeometry = new THREE.SphereGeometry(0.1, 8, 8) // helper for debug
+        // var targetMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff })
+        // var targetSphere = new THREE.Mesh(targetGeometry, targetMaterial)
+        // pinkSpotLight.target.add(targetSphere)
         pinkSpotLight.add(pinkSpotLight.target)
         camera.add(pinkSpotLight)
 
@@ -422,11 +422,11 @@ function Trial1(scene, camera, assets, timeVars) {
 
             cyanSpotLight.intensity = 20 + cameraTargetDist * 8
 
-            rotationHelper.scale.set(
-                cameraTargetDist * 2,
-                cameraTargetDist * 2,
-                cameraTargetDist * 2
-            )
+            // rotationHelper.scale.set(
+            //     cameraTargetDist * 2,
+            //     cameraTargetDist * 2,
+            //     cameraTargetDist * 2
+            // )
 
             if (mobileQuaternions.cyan) {
                 // TODO: remove dummy stuff (optimize)
