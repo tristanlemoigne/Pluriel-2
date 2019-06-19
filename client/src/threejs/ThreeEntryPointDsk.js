@@ -48,7 +48,7 @@ function ThreeEntryPointDsk(canvas) {
     loader.load("/assets/img/lamar.svg", "lamarSVG")
 
     // ISLANDS
-    loader.load("/assets/models/Islands.glb", "islands", ["scene"])
+    loader.load("/assets/models/Islands_prez.glb", "islands", ["scene"])
 
     // TRIAL 1
     // loader.load("/assets/models/Interaction13.glb", "tour1")

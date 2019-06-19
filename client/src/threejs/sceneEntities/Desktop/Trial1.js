@@ -5,6 +5,7 @@ import * as dat from "dat.gui"
 import { bus } from "../../../main"
 import { threeBus } from "../../../main"
 import { SpotLight } from "three"
+import { TweenLite } from "gsap"
 
 function Trial1(scene, camera, assets, timeVars) {
     /* ----------------------- INPUTS ----------------------- */
@@ -35,12 +36,12 @@ function Trial1(scene, camera, assets, timeVars) {
     const spotLightRaycaster = new THREE.Raycaster()
 
     const colors = {
-        cyan: "#00ffff",
-        pink: "#ff00ff",
-        blue: "#214CFF",
-        red: "#FF1B38",
-        white: "#ff99ff",
-        purple: "#5F00FF"
+        cyan: new THREE.Color(0x00ffff),
+        pink: new THREE.Color(0xff00ff),
+        blue: new THREE.Color(0x214cff),
+        red: new THREE.Color(0xff1b38),
+        white: new THREE.Color(0xff99ff),
+        purple: new THREE.Color(0x5f00ff)
     }
 
     const debug = {
@@ -51,8 +52,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const easingFactor = 0.16
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.8 // 5
-    const fusionScaleDuration = 1.3 // 2
+    const defaultScaleDuration = 3 // 5
+    const fusionScaleDuration = 1.2 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
@@ -126,8 +127,8 @@ function Trial1(scene, camera, assets, timeVars) {
         const spotLightParams = {
             intensity: 50,
             distance: 0,
-            angle: Math.PI / 65,
-            penumbra: 0.9
+            angle: Math.PI / 63,
+            penumbra: 0.7
         }
         // const spotTargetPos = new THREE.Vector3()
         // const spotLightPos = new THREE.Vector3(0, 0, 0)
@@ -354,15 +355,111 @@ function Trial1(scene, camera, assets, timeVars) {
                 if (hole.cyanValue >= maxColorScale) {
                     // Cyan winner
                     hole.winner = "Cyan"
-                    hole.material.color.set(colors.cyan)
+                    const finishedFillTween = TweenLite.to(
+                        hole.material.color,
+                        0.4,
+                        {
+                            r: colors.cyan.r,
+                            g: colors.cyan.g,
+                            b: colors.cyan.b
+                        }
+                    )
+                    const emissiveColorFillTween = TweenLite.fromTo(
+                        hole.material.emissive,
+                        0.6,
+                        {
+                            r: hole.material.emissive.r,
+                            g: hole.material.emissive.g,
+                            b: hole.material.emissive.b
+                        },
+                        {
+                            r: colors.cyan.r,
+                            g: colors.cyan.g,
+                            b: colors.cyan.b
+                        }
+                    )
+                    const emissiveIntensityFillTween = TweenLite.fromTo(
+                        hole.material,
+                        0.6,
+                        {
+                            emissiveIntensity: 0
+                        },
+                        {
+                            emissiveIntensity: 0.1
+                        }
+                    )
                 } else if (hole.pinkValue >= maxColorScale) {
                     // Pink winner
                     hole.winner = "Pink"
-                    hole.material.color.set(colors.pink)
+                    const finishedFillTween = TweenLite.to(
+                        hole.material.color,
+                        0.4,
+                        {
+                            r: colors.pink.r,
+                            g: colors.pink.g,
+                            b: colors.pink.b
+                        }
+                    )
+                    const emissiveColorFillTween = TweenLite.fromTo(
+                        hole.material.emissive,
+                        0.6,
+                        {
+                            r: hole.material.emissive.r,
+                            g: hole.material.emissive.g,
+                            b: hole.material.emissive.b
+                        },
+                        {
+                            r: colors.pink.r,
+                            g: colors.pink.g,
+                            b: colors.pink.b
+                        }
+                    )
+                    const emissiveIntensityFillTween = TweenLite.fromTo(
+                        hole.material,
+                        0.6,
+                        {
+                            emissiveIntensity: 0
+                        },
+                        {
+                            emissiveIntensity: 0.2
+                        }
+                    )
                 } else {
                     // Both wins
                     hole.winner = "Purple"
-                    hole.material.color.set(colors.purple)
+                    const finishedFillTween = TweenLite.to(
+                        hole.material.color,
+                        0.4,
+                        {
+                            r: colors.purple.r,
+                            g: colors.purple.g,
+                            b: colors.purple.b
+                        }
+                    )
+                    const emissiveColorFillTween = TweenLite.fromTo(
+                        hole.material.emissive,
+                        0.5,
+                        {
+                            r: hole.material.emissive.r,
+                            g: hole.material.emissive.g,
+                            b: hole.material.emissive.b
+                        },
+                        {
+                            r: colors.purple.r,
+                            g: colors.purple.g,
+                            b: colors.purple.b
+                        }
+                    )
+                    const emissiveIntensityFillTween = TweenLite.fromTo(
+                        hole.material,
+                        0.5,
+                        {
+                            emissiveIntensity: 0
+                        },
+                        {
+                            emissiveIntensity: 0.4
+                        }
+                    )
                 }
 
                 holesArr.splice(holesArr.indexOf(hole), 1)

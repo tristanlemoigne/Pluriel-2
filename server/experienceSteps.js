@@ -86,20 +86,20 @@ module.exports = [
         name: "global_intro",
         addedThreeGroupsDsk: [{ asset: "islands", delay: 0, time: 1 }],
         removedThreeGroupsDsk: [
-            { asset: "nuages", delay: 5, time: 0 },
-            { asset: "nuagesLights", delay: 2, time: 5 }
+            { asset: "nuages", delay: 7, time: 0 },
+            { asset: "nuagesLights", delay: 4, time: 3 }
         ],
         cameraTransition: {
             camPos: {
                 path: "NurbsPath00",
                 delay: 0,
-                time: 11,
+                time: 12,
                 easing: ["Power3", "easeInOut"]
             },
             camTarget: {
                 point: "Target01",
                 delay: 0.5,
-                time: 6.5,
+                time: 7,
                 easing: ["Power3", "easeInOut"]
             }
         },
@@ -107,7 +107,7 @@ module.exports = [
         fog: {
             delay: 4,
             time: 6,
-            density: 0.01,
+            density: 0.009,
             easing: ["Power1", "easeInOut"]
         }
     },
