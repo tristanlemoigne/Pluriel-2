@@ -456,7 +456,7 @@ export default {
                     setTimeout(()=>{
                         this.canShowUIGlobale = true;
                         this.canShowUIGlobaleEnd = true;
-                    }, this.getTransitionEnd() + 8000) // 11 = animation duration
+                    }, this.getTransitionEnd() + 6000) // 11 = animation duration
                 }
             },
             deep: true

@@ -49,8 +49,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const easingFactor = 0.16
 
     // Conditions de victoire (seconds)
-    const defaultScaleDuration = 2.6 // 5
-    const fusionScaleDuration = 1.2 // 2
+    const defaultScaleDuration = 3 // 5
+    const fusionScaleDuration = 1.4 // 2
 
     // TODO: maxDistance must be dynamic : the furter away the camera is, the bigger it needs to be (use cameraTargetDist)
     const maxDistanceFromHole = 0.75 // 0.65-0.7 convient pour les plus petits trous
