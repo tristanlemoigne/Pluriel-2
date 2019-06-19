@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const spotLightRaycaster = new THREE.Raycaster()
 
     const colors = {
-        cyan: new THREE.Color(0x00ffff),
-        pink: new THREE.Color(0xff00ff),
+        cyan: new THREE.Color(0x00ddff),
+        pink: new THREE.Color(0xff00cc),
         blue: new THREE.Color(0x214cff),
         red: new THREE.Color(0xff1b38),
         white: new THREE.Color(0xff99ff),
@@ -586,11 +586,14 @@ function Trial1(scene, camera, assets, timeVars) {
         )
     }
 
-    function resetTrial1(){
-        // Reset colors tours
-
+    function resetTrial1() {
         // Reset hole progress
         holesArr.forEach(hole => {
+            // Reset colors tours
+            hole.material.color.copy(baseTour.material.color)
+            hole.material.emissive.copy(baseTour.material.color)
+            hole.material.emissiveIntensity = 0
+
             hole.cyanValue = 0
             hole.pinkValue = 0
 

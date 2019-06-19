@@ -263,7 +263,7 @@ export default {
         victoriousScore: 0,
         plurielMerged: false,
         victoriousText: "Aucun",
-        victoriousLegend: "à remporté la première épreuve",
+        victoriousLegend: "a remporté la première épreuve",
         iconSrc: "icon-stone-looser.png",
         victoriousPlayer: "Aucun"
     }),

@@ -149,12 +149,13 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                 lightTweens
                     .duration(animDuration)
                     .add("lightup", 0)
+                    // pierre left
                     .to(
                         pierreLeftMat.emissive,
                         2,
                         {
                             r: 0,
-                            g: 0.2,
+                            g: 0.6,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -164,23 +165,193 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat,
                         2,
                         {
-                            emissiveIntensity: 4,
+                            emissiveIntensity: 1.55,
                             ease: Power1.easeInOut
                         },
                         "lightup"
                     )
+                    // tour left
+                    .to(
+                        tourLeftMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.6,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.55,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings left
+                    .to(
+                        buildingLightsLeftMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.6,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.55,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // pierre Right
+                    .to(
+                        pierreRightMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0,
+                            b: 0.2,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // tour Right
+                    .to(
+                        tourRightMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0,
+                            b: 0.2,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings Right
+                    .to(
+                        buildingLightsRightMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0,
+                            b: 0.2,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+
                 break
             case "zanit":
                 lightTweens
                     .duration(animDuration)
                     .add("lightup", 0)
+                    // pierre Right
+                    .to(
+                        pierreRightMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.6,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.55,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // tour Right
+                    .to(
+                        tourRightMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.6,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.55,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings Right
+                    .to(
+                        buildingLightsRightMat.emissive,
+                        2,
+                        {
+                            r: 0,
+                            g: 0.6,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.55,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // pierre Left
                     .to(
                         pierreLeftMat.emissive,
                         2,
                         {
                             r: 1,
-                            g: 0.2,
-                            b: 0,
+                            g: 0,
+                            b: 0.2,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -189,7 +360,49 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat,
                         2,
                         {
-                            emissiveIntensity: 4,
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // tour Left
+                    .to(
+                        tourLeftMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0,
+                            b: 0.2,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings Left
+                    .to(
+                        buildingLightsLeftMat.emissive,
+                        2,
+                        {
+                            r: 1,
+                            g: 0,
+                            b: 0.2,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -199,13 +412,77 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                 lightTweens
                     .duration(animDuration)
                     .add("lightup", 0)
+                    // pierre Right
+                    .to(
+                        pierreRightMat.emissive,
+                        2,
+                        {
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        pierreRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // tour Right
+                    .to(
+                        tourRightMat.emissive,
+                        2,
+                        {
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings Right
+                    .to(
+                        buildingLightsRightMat.emissive,
+                        2,
+                        {
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsRightMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // pierre Left
                     .to(
                         pierreLeftMat.emissive,
                         2,
                         {
-                            r: 0.8,
-                            g: 0.1,
-                            b: 0.8,
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -214,7 +491,49 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat,
                         2,
                         {
-                            emissiveIntensity: 6,
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // tour Left
+                    .to(
+                        tourLeftMat.emissive,
+                        2,
+                        {
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        tourLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    // buildings Left
+                    .to(
+                        buildingLightsLeftMat.emissive,
+                        2,
+                        {
+                            r: 0.5,
+                            g: 0.05,
+                            b: 1,
+                            ease: Power1.easeInOut
+                        },
+                        "lightup"
+                    )
+                    .to(
+                        buildingLightsLeftMat,
+                        2,
+                        {
+                            emissiveIntensity: 1.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -486,19 +805,19 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         lightMats.map(material => {
             material.color.copy(neutralMatColor)
             material.emissive.copy(neutralMatColor)
-            material.emissiveIntensity = 0.1
+            material.emissiveIntensity = 0.05
         })
     }
 
     function resetPositions(animDuration) {
-        islandLeft.position.copy(islandLeft.originalPos)
-        islandRight.position.copy(islandRight.originalPos)
-        tourCentrale.position.copy(tourCentrale.originalPos)
+        // islandLeft.position.copy(islandLeft.originalPos)
+        // islandRight.position.copy(islandRight.originalPos)
+        // tourCentrale.position.copy(tourCentrale.originalPos)
 
         const resetTweens = new TimelineLite()
         resetTweens
             .duration(animDuration)
-            .add("move", 2)
+            .add("move", 0.3)
             .to(
                 islandLeft.position,
                 8,
@@ -533,14 +852,14 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
 
     function update(timeVars, mobileQuaternions) {
         // if (isWinAnimFinished) {
-        tourCentrale.rotation.y +=
-            tourCentrale.angularVelocity * timeVars.DELTA_TIME
+        tourCentrale.rotation.z +=
+            tourCentrale.angularVelocity * timeVars.DELTA_TIME // wtf sur l'axe Z ?!
         // }
     }
 
     function beforeDestroy() {
         console.log("Before destroy Ending")
-        resetPositions(5)
+        resetPositions(1.2)
         resetMaterials()
     }
 
