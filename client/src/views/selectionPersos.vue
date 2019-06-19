@@ -163,8 +163,8 @@ export default {
         display: flex;
         width: 100%;
         justify-content: space-around;
-        max-width: 1400px;
-        margin: 70px auto 0;
+        max-width: 1800px;
+        margin: 100px auto 0;
 
         p {
             opacity: 0;

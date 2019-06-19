@@ -39,7 +39,8 @@ function Trial1(scene, camera, assets, timeVars) {
         pink: "#ff00ff",
         blue: "#214CFF",
         red: "#FF1B38",
-        white: "#ff99ff"
+        white: "#ff99ff",
+        purple: "#EE82EE"
     }
 
     const debug = {
@@ -360,8 +361,8 @@ function Trial1(scene, camera, assets, timeVars) {
                     hole.material.color.set(colors.pink)
                 } else {
                     // Both wins
-                    hole.winner = "White"
-                    hole.material.color.set(colors.white)
+                    hole.winner = "Purple"
+                    hole.material.color.set(colors.purple)
                 }
 
                 holesArr.splice(holesArr.indexOf(hole), 1)
