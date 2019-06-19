@@ -1,9 +1,9 @@
 <template>
     <div class="canvasContainer">
         <canvas ref="canvas"></canvas>
-        <div class="gradient normalGradient"></div>
-        <div class="gradient loseGradient"></div>
-        <div class="gradient winGradient"></div>
+        <div class="bgGradient normalGradient"></div>
+        <div class="bgGradient loseGradient"></div>
+        <div class="bgGradient winGradient"></div>
     </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/config/styles.scss";
 
-.gradient {
+.bgGradient {
     transition: 6s ease;
     z-index: -1;
     position: absolute;

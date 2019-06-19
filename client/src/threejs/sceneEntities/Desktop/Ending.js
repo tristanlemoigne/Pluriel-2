@@ -153,7 +153,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     }
 
     function loseAnimation(animDuration) {
-        const gradientDivs = document.body.getElementsByClassName("gradient")
+        const gradientDivs = document.body.getElementsByClassName("bgGradient")
         for (let i = 0; i < gradientDivs.length; i++) {
             if (gradientDivs[i].classList.contains("loseGradient")) {
                 gradientDivs[

@@ -15,10 +15,7 @@
                     v-bind:class="{ visible: !canShowUIGlobaleEnd }"
                 >Accédez à la 1ère étape grâce à votre téléphone.</p>
                 <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
-                    <button
-                        class="cta"
-                        @click="setRoomState({currentStep: { name: 'trial_1_intro' }})"
-                    >
+                    <button class="cta" @click="restartExperience()">
                         <div class="outerCircle">
                             <div class="innerCircle"></div>
                         </div>
@@ -375,6 +372,10 @@ export default {
         },
         getVictoriousIcon() {
             return `assets/img/${this.iconSrc}`;
+        },
+        restartExperience(){
+            console.log("Restart xp")
+            this.setRoomState({currentStep: { name: 'trial_1_intro' }})
         }
     },
     watch: {
@@ -383,8 +384,7 @@ export default {
                 // Show good UI relative to current step
                 // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
-                    this.audioFunctions.transitionNuages();
-
+                    
                     // this.canShowUIGlobale = false;
 
                     this.canShowUIGlobale = false;
@@ -392,6 +392,10 @@ export default {
                     this.canShowUIStep = false;
                     this.canShowUIEnd = false;
                     this.canShowUIGlobaleEnd = false;
+
+                    setTimeout(()=>{
+                        this.audioFunctions.transitionNuages()
+                    }, 4000)
 
                     setTimeout(() => {
                         // this.canShowUITuto = true;
