@@ -63,3 +63,17 @@ heroku open
 ```
 module.exports = "http://10.137.27.192:5000"
 ```
+
+<!-- SCRCPY ETAPES GAGNANTES -->
+
+<!-- PREZ MEMO -->
+<!-- Mobile -->
+- Désactiver audio
+- Désactiver rotation auto
+- Désactiver sonnerie
+- Désactiver filtre lumière bleue
+- Tristan controle les steps + premier selection / connexion
+
+<!-- Desktop -->
+- Navigation privée ou vider le cache (popup caméra)
+- Plein écran

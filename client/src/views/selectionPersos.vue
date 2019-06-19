@@ -163,8 +163,13 @@ export default {
         display: flex;
         width: 100%;
         justify-content: space-around;
-        max-width: 1800px;
-        margin: 100px auto 0;
+        // Imac
+        // max-width: 1800px;
+        // margin: 100px auto 0;
+        
+        // Projo
+        max-width: 1400px;
+        margin: 50px auto 0;
 
         p {
             opacity: 0;
