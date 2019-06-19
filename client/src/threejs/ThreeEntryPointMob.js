@@ -20,8 +20,8 @@ function ThreeEntryPointMob(canvas) {
     loader.load("/assets/models/home/persosLights.glb", "persosLights", [
         "scene"
     ])
-    loader.load("/assets/models/home/lamarRigged.fbx", "lamarRigged")
-    loader.load("/assets/models/home/zanitRigged.fbx", "zanitRigged")
+    loader.load("/assets/models/home/lamarRigged2.fbx", "lamarRigged")
+    loader.load("/assets/models/home/zanitRigged2.fbx", "zanitRigged")
     loader.load(
         "/assets/models/home/lamarReadyAnimation2.fbx",
         "lamarReadyAnimation"
