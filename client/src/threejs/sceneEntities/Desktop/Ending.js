@@ -142,7 +142,7 @@ function Ending(scene, camera, assets, timeVars) {
             winnerStr === "egalite" ||
             winnerStr === "loose"
         ) {
-            loseAnimation(6)
+            loseAnimation(11)
         } else if (winnerStr === "team") {
             winAnimation(11)
         }

@@ -55,7 +55,7 @@ export default {
             audioFunctions: {
                 startAmbient(){
                     const ambient = new Audio("/assets/audio/ambient.mp3");
-                    ambient.volume = 0.04
+                    ambient.volume = 0.1
                     ambient.loop = true
                     ambient.play();
                 },
@@ -84,10 +84,16 @@ export default {
                 separationIles(){
                     const separationAudio = new Audio("/assets/audio/separation-iles.mp3");
                     separationAudio.play();
+                    separationAudio.volume = 0.3
                 }, 
                 transitionNuages(){
                     const nuagesAudio = new Audio("/assets/audio/transition-nuages.mp3");
                     nuagesAudio.play();
+                    nuagesAudio.volume = 0.5
+                }, 
+                transitionAround(){
+                    const transitionAround = new Audio("/assets/audio/transition-around.mp3");
+                    transitionAround.play();
                 }, 
                 trouReboucheSolo(){
                     const trouSoloAudio = new Audio("/assets/audio/trou-rebouche-solo.mp3");

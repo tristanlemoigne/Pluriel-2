@@ -369,9 +369,15 @@ export default {
                 // UI RECAP TUTO
                 if (currentRoomState.currentStep.name === "trial_1_intro") {
                     this.canShowUIGlobale = false;
+
+                    setTimeout(() => {
+                        this.audioFunctions.transitionAround()
+                    }, this.getTransitionEnd()/2);
+                    
                     setTimeout(() => {
                         this.canShowUITuto = true;
                     }, this.getTransitionEnd());
+
                 }
 
                 // UI XP EN COURS
@@ -389,7 +395,6 @@ export default {
                 if (currentRoomState.currentStep.name === "trial_1_end") {
                     this.canShowUIStep = false;
                     this.victoriousPlayer = this.checkVictoriousPlayer();
-                    console.log("VICTORIOUS PLAYER", this.victoriousPlayer)
                     let color;
 
                     if (this.victoriousPlayer === "lamar") {
@@ -444,12 +449,14 @@ export default {
                     this.canShowUIEnd = false;
 
                     setTimeout(() => {
+                        this.audioFunctions.separationIles()
+                        bus.$emit("trigger ending", this.victoriousPlayer);
+                    }, this.getTransitionEnd());
+
+                    setTimeout(()=>{
                         this.canShowUIGlobale = true;
                         this.canShowUIGlobaleEnd = true;
-                        bus.$emit("trigger ending", this.victoriousPlayer);
-                        this.audioFunctions.separationIles()
-
-                    }, this.getTransitionEnd());
+                    }, this.getTransitionEnd() + 8000) // 11 = animation duration
                 }
             },
             deep: true

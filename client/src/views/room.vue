@@ -161,7 +161,7 @@ export default {
 
             tl.to(this.$refs.dispositif, 2, {
                 opacity: 0,
-                delay: 0.5,
+                delay: 5,
                 ease: Power2.easeIn,
                 onComplete: () => {
                     if (this.$refs.dispositif) {
