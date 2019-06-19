@@ -104,6 +104,8 @@ function Trial1(scene, camera, assets, timeVars) {
             hole.scaleMin = hole.scale.clone()
         })
 
+        // console.log("ARR", holesScaleMax, holesScaleMin)
+
         // scene.add(assets.islands)
 
         // LISTENERS
@@ -344,6 +346,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
                 // Scale the hole
                 hole.progress = hole.cyanValue + hole.pinkValue
+
                 const newScale = hole.scaleMin
                     .clone()
                     .lerp(hole.scaleMax, hole.progress)
@@ -493,7 +496,7 @@ function Trial1(scene, camera, assets, timeVars) {
         // Reset colors tours
 
         // Reset hole progress
-        holesArr.forEach(hole => {
+        holesArr.forEach((hole, index) => {
             hole.cyanValue = 0
             hole.pinkValue = 0
 
@@ -501,9 +504,7 @@ function Trial1(scene, camera, assets, timeVars) {
             hole.progressMax = 1 // 100%
             hole.winner = "None"
 
-            hole.scaleMax = hole.scale.clone()
-            hole.scale.multiplyScalar(0.001)
-            hole.scaleMin = hole.scale.clone()
+            hole.scale.copy(hole.scaleMin)
         })
     }
 
