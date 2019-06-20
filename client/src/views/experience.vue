@@ -194,7 +194,7 @@
                 </p>
                 <p v-bind:class="{ visible: plurielMerged }">
                     Félicitations,
-                    <br>Vous avez crée votre Pluriel
+                    <br>Vous avez créé votre Pluriel
                 </p>
             </div>
         </div>

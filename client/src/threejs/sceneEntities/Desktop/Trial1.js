@@ -36,8 +36,8 @@ function Trial1(scene, camera, assets, timeVars) {
     const spotLightRaycaster = new THREE.Raycaster()
 
     const colors = {
-        cyan: new THREE.Color(0x00ddff),
-        pink: new THREE.Color(0xff0099),
+        cyan: new THREE.Color(0x00c8ff),
+        pink: new THREE.Color(0xff003b),
         blue: new THREE.Color(0x214cff),
         red: new THREE.Color(0xff1b38),
         white: new THREE.Color(0xff99ff),

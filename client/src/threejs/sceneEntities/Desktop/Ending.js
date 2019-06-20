@@ -155,7 +155,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -176,7 +176,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -197,7 +197,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -219,7 +219,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -228,7 +228,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -240,7 +240,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -249,7 +249,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -261,7 +261,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -270,7 +270,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -287,7 +287,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -308,7 +308,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -329,7 +329,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         2,
                         {
                             r: 0,
-                            g: 0.6,
+                            g: 0.45,
                             b: 1,
                             ease: Power1.easeInOut
                         },
@@ -351,7 +351,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -360,7 +360,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -372,7 +372,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -381,7 +381,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -393,7 +393,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         {
                             r: 1,
                             g: 0,
-                            b: 0.2,
+                            b: 0,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -402,7 +402,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -417,9 +417,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreRightMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -428,7 +428,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -438,9 +438,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourRightMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -449,7 +449,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -459,9 +459,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsRightMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -470,7 +470,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsRightMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -480,9 +480,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -491,7 +491,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         pierreLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -501,9 +501,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourLeftMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -512,7 +512,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         tourLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -522,9 +522,9 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsLeftMat.emissive,
                         2,
                         {
-                            r: 0.5,
-                            g: 0.05,
-                            b: 1,
+                            r: 0.34,
+                            g: 0,
+                            b: 0.9,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -533,7 +533,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
                         buildingLightsLeftMat,
                         2,
                         {
-                            emissiveIntensity: 1.9,
+                            emissiveIntensity: 1.7,
                             ease: Power1.easeInOut
                         },
                         "lightup"
@@ -683,7 +683,7 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
     }
 
     function winAnimation(animDuration) {
-        const gradientDivs = document.body.getElementsByClassName("gradient")
+        const gradientDivs = document.body.getElementsByClassName("bgGradient")
         for (let i = 0; i < gradientDivs.length; i++) {
             if (gradientDivs[i].classList.contains("winGradient")) {
                 gradientDivs[
@@ -813,6 +813,22 @@ function Ending(scene, camera, assets, timeVars, glowMaterial) {
         // islandLeft.position.copy(islandLeft.originalPos)
         // islandRight.position.copy(islandRight.originalPos)
         // tourCentrale.position.copy(tourCentrale.originalPos)
+
+        const gradientDivs = document.body.getElementsByClassName("bgGradient")
+        for (let i = 0; i < gradientDivs.length; i++) {
+            if (gradientDivs[i].classList.contains("normalGradient")) {
+                gradientDivs[
+                    i
+                ].style.transition = `opacity ${animDuration}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 1
+                gradientDivs[i].style.zIndex = -1
+            } else {
+                gradientDivs[i].style.transition = `opacity ${animDuration *
+                    2}s ease-in-out` // linear-gradient doesnt support css transitions
+                gradientDivs[i].style.opacity = 0
+                gradientDivs[i].style.zIndex = -2
+            }
+        }
 
         const resetTweens = new TimelineLite()
         resetTweens

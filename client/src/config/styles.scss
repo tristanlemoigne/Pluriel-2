@@ -91,7 +91,7 @@ $cyan: #356bff;
 $pink: #ff1a54;
 $blue: #0000ff;
 $red: #ff0000;
-$purple: #5F00FF;
+$purple: #9900ff;
 
 // Responsive
 // @include mobile { }
@@ -164,7 +164,8 @@ button {
 }
 
 .textGlow {
-    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.7);
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.7),
+        0 0 55px rgba(0, 0, 0, 0.65);
 }
 
 .svgGlow {
