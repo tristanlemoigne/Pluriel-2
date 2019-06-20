@@ -249,7 +249,7 @@ function SceneManager(canvas, assets) {
 
         currentCameraPath = catmullRomCurveFromGeometry(cameraPathGeometry)
         // console.log(currentCameraPath.getLength(), time)
-        currentCameraPath.arcLengthDivisions = time * time * 10 // default is 200, must be very high if the time of the transition / the curve length is long
+        currentCameraPath.arcLengthDivisions = time * time * time * 2.5 // default is 200, must be very high if the time of the transition / the curve length is long
         // currentCameraPathSpacedPoints = currentCameraPath.getSpacedPoints(
         //     time * 60
         // )

@@ -461,7 +461,7 @@ function Trial1(scene, camera, assets, timeVars) {
                             emissiveIntensity: 0
                         },
                         {
-                            emissiveIntensity: 0.15
+                            emissiveIntensity: 0.2
                         }
                     )
                 }

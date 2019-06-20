@@ -235,7 +235,7 @@ module.exports = [
         name: "global_ending",
         cameraTransition: {
             camPos: {
-                path: "NurbsPath05",
+                path: "NurbsPath06",
                 delay: 0,
                 time: 8,
                 easing: ["Power3", "easeInOut"]
