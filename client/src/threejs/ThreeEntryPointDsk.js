@@ -54,9 +54,12 @@ function ThreeEntryPointDsk(canvas) {
     // loader.load("/assets/models/Interaction13.glb", "tour1")
     // loader.load("/assets/campaths/CamPaths.obj", "camPaths")
     loader.load("/assets/campaths/CamPaths_prez.obj", "camPaths")
-    loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [
+    loader.load("/assets/campaths/TargetPoints_prez.glb", "camTargetPoints", [
         "scene"
     ])
+    // loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [
+    //     "scene"
+    // ])
 
     loader.onComplete(assets => {
         sceneManager = SceneManager(canvas, assets)

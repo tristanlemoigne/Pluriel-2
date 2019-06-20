@@ -167,7 +167,7 @@ module.exports = [
             camTarget: {
                 point: "Target04",
                 delay: 0,
-                time: 17,
+                time: 19,
                 easing: ["Sine", "easeInOut"]
             }
         }
@@ -183,9 +183,9 @@ module.exports = [
                 easing: ["Sine", "easeInOut"]
             },
             camTarget: {
-                point: "Target02",
+                point: "Target05",
                 delay: 0,
-                time: 11,
+                time: 12,
                 easing: ["Sine", "easeInOut"]
             }
         }
@@ -197,13 +197,13 @@ module.exports = [
             camPos: {
                 path: "NurbsPath05",
                 delay: 0,
-                time: 15,
+                time: 18,
                 easing: ["Sine", "easeInOut"]
             },
             camTarget: {
                 point: "Target06",
                 delay: 0,
-                time: 15,
+                time: 18,
                 easing: ["Sine", "easeInOut"]
             }
         }
