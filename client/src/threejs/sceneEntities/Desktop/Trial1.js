@@ -41,6 +41,7 @@ function Trial1(scene, camera, assets, timeVars) {
         blue: new THREE.Color(0x214cff),
         red: new THREE.Color(0xff1b38),
         white: new THREE.Color(0xff99ff),
+        grey: new THREE.Color(0x909090),
         purple: new THREE.Color(0x5f00ff)
     }
 
@@ -593,8 +594,8 @@ function Trial1(scene, camera, assets, timeVars) {
         // Reset hole progress
         holesArr.forEach(hole => {
             // Reset colors tours
-            hole.material.color.copy(baseTour.material.color)
-            hole.material.emissive.copy(baseTour.material.color)
+            hole.material.color.copy(colors.grey)
+            hole.material.emissive.copy(colors.grey)
             hole.material.emissiveIntensity = 0
 
             hole.cyanValue = 0

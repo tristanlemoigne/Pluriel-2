@@ -1,14 +1,20 @@
 <template>
     <div class="dioramas" v-if="roomState.currentStep.name.slice(0,7) === 'diorama'">
-        <div class="videoContainer" v-bind:class="{ desktop: !isMobile }" >
-            <video ref="video" v-if="!isMobile" src="/assets/videos/pluriel.mp4" @loadedmetadata="videoLoaded" @timeupdate="onVideoTimeUpdate" autoplay></video>
+        <div class="videoContainer" v-bind:class="{ desktop: !isMobile }">
+            <video
+                ref="video"
+                v-if="!isMobile"
+                src="/assets/videos/pluriel.mp4"
+                @loadedmetadata="videoLoaded"
+                @timeupdate="onVideoTimeUpdate"
+                autoplay
+            ></video>
         </div>
 
         <button class="skip" v-if="!isMobile" @click.once="onSkip">Passer</button>
 
         <div class="interfaceMobile textGlow" v-if="isMobile">
             Histoire
-
             <div class="circleTime">
                 <svg width="200" height="200">
                     <circle
@@ -20,7 +26,7 @@
                         cy="20"
                         r="15.91549431"
                     ></circle>
-                    <circle 
+                    <circle
                         ref="videoProgression"
                         stroke="#fff"
                         stroke-width="1"
@@ -37,8 +43,8 @@
 </template>
 
 <script>
-import { bus } from "@/main"
-import { setTimeout } from 'timers';
+import { bus } from "@/main";
+import { setTimeout } from "timers";
 import socket from "@/socket.js";
 
 export default {
@@ -51,7 +57,7 @@ export default {
         return {
             videoProgress: 0,
             videoDuration: 0
-        }
+        };
     },
     props: {
         roomId: String,
@@ -61,63 +67,65 @@ export default {
     },
     methods: {
         onSkip() {
-            bus.$emit("setRoomState", {currentStep: {name:'NEXT'}})
+            bus.$emit("setRoomState", { currentStep: { name: "NEXT" } });
         },
-        onVideoTimeUpdate(event){
-            if(this.$refs.video){
-                this.videoProgress = (this.$refs.video.currentTime / this.videoDuration) * 100
-                socket.emit("video update", this.videoProgress)
+        onVideoTimeUpdate(event) {
+            if (this.$refs.video) {
+                this.videoProgress =
+                    (this.$refs.video.currentTime / this.videoDuration) * 100;
+                socket.emit("video update", this.videoProgress);
             }
         },
-        videoLoaded(){
-            this.videoDuration = this.$refs.video.duration
+        videoLoaded() {
+            this.videoDuration = this.$refs.video.duration;
         }
     },
     mounted: function() {
-        if(!this.isMobile){
-            this.$refs.video.addEventListener("ended", this.onSkip)
+        if (!this.isMobile) {
+            this.$refs.video.addEventListener("ended", this.onSkip);
+            this.$refs.video.volume = 0.25;
         }
 
         socket.on("video updating", videoProgression => {
-            if(this.isMobile){
+            if (this.isMobile) {
                 this.$refs.videoProgression.style.strokeDasharray = `${videoProgression}, 100`;
             }
-        })
+        });
     }
-}
+};
 </script>
 
 <style scoped lang="scss">
 @import "@/config/styles.scss";
 
 div.dioramas {
-    padding: 0!important;
+    padding: 0 !important;
 
-    .videoContainer{
+    .videoContainer {
         width: 100%;
         height: 100%;
 
-        video{
+        video {
             opacity: 0;
             position: absolute;
             top: 50%;
             left: 50%;
-            -webkit-transform: translate3d(-50%,-50%,0);
-            transform: translate3d(-50%,-50%,0);
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
             width: 100%;
             height: auto;
         }
 
-        &.desktop{
+        &.desktop {
             background-color: $black;
 
-            video{
+            video {
                 opacity: 1;
             }
         }
     }
 
-    .skip{
+    .skip {
         color: $white;
         position: absolute;
         bottom: 30px;
@@ -129,7 +137,7 @@ div.dioramas {
         }
     }
 
-    .interfaceMobile{
+    .interfaceMobile {
         position: absolute;
         top: 50%;
         left: 50%;
