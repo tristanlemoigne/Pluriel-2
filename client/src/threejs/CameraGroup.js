@@ -34,7 +34,7 @@ function buildDefaultCamera() {
     const cameraSettings = {
         ratio: window.innerWidth / window.innerHeight,
         fov: 40,
-        near: 0.1,
+        near: 0.3,
         far: 10000
     }
     const camera = new THREE.PerspectiveCamera(

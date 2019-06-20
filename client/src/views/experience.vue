@@ -2,6 +2,8 @@
     <div>
         <!--Desktop stuff -->
         <div v-if="!isMobile">
+            <div class="fadingWhite" v-bind:class="{ active: isFading }"></div>
+
             <div class="indice textGlow" v-bind:class="{ visible: canShowIndice }">
                 <p>Il est maintenant temps pour vous de&nbsp;changer la&nbsp;destinée de Pluriel.</p>
                 <p>Arriverez-vous à associer vos deux visions afin de lui redonner sa splendeur ?</p>
@@ -265,7 +267,8 @@ export default {
         victoriousText: "Aucun",
         victoriousLegend: "a remporté la première épreuve",
         iconSrc: "icon-stone-looser.png",
-        victoriousPlayer: "Aucun"
+        victoriousPlayer: "Aucun",
+        isFading: false
     }),
     props: {
         roomId: String,
@@ -380,59 +383,72 @@ export default {
         },
         restartExperience() {
             console.log("Restart xp");
-            this.resetExperienceUI()
-            threeBus.$emit("reset trial1")
+            this.isFading = true;
+            setTimeout(() => {
+                this.isFading = false;
+            }, 2500);
+            this.resetExperienceUI();
+            threeBus.$emit("reset trial1");
             this.setRoomState({ currentStep: { name: "trial_1_intro" } });
         },
-        resetExperienceUI(){
-            // Reset datas 
-            this.camIsActive = true
-            this.hasRestart = true
-            this.character = undefined
-            this.canShowIndice = false
-            this.canShowUIGlobale = false
-            this.canShowUITuto = false
-            this.canShowUIStep = false
-            this.canShowUIEnd = false
-            this.canShowUIGlobaleEnd = false
-            this.scoreLamar = 0
-            this.scoreZanit = 0
-            this.scoreTeam = 0
-            this.totalFilledHoles = 0
-            this.totalholes = 9
-            this.victoriousScore = 0
-            this.plurielMerged = false
-            this.victoriousText = "Aucun"
-            this.victoriousLegend = "à remporté la première épreuve"
-            this.iconSrc = "icon-stone-looser.png"
-            this.victoriousPlayer = "Aucun"
+        resetExperienceUI() {
+            // Reset datas
+            this.camIsActive = true;
+            this.hasRestart = true;
+            this.character = undefined;
+            this.canShowIndice = false;
+            this.canShowUIGlobale = false;
+            this.canShowUITuto = false;
+            this.canShowUIStep = false;
+            this.canShowUIEnd = false;
+            this.canShowUIGlobaleEnd = false;
+            this.scoreLamar = 0;
+            this.scoreZanit = 0;
+            this.scoreTeam = 0;
+            this.totalFilledHoles = 0;
+            this.totalholes = 9;
+            this.victoriousScore = 0;
+            this.plurielMerged = false;
+            this.victoriousText = "Aucun";
+            this.victoriousLegend = "à remporté la première épreuve";
+            this.iconSrc = "icon-stone-looser.png";
+            this.victoriousPlayer = "Aucun";
 
             // Reset styles
-            this.$refs.victoriousStep.style.borderColor = "rgba(227, 227, 227, 0.1)"
+            this.$refs.victoriousStep.style.borderColor =
+                "rgba(227, 227, 227, 0.1)";
 
             // Score lamar
             for (let i = 0; i < this.$refs.scoreLamar.children.length; i++) {
-                this.$refs.scoreLamar.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+                this.$refs.scoreLamar.children[i].style.backgroundColor =
+                    "rgba(227, 227, 227, 0.5)";
             }
 
             // Score zanit
             for (let i = 0; i < this.$refs.scoreZanit.children.length; i++) {
-                this.$refs.scoreZanit.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+                this.$refs.scoreZanit.children[i].style.backgroundColor =
+                    "rgba(227, 227, 227, 0.5)";
             }
 
             // Score team
             for (let i = 0; i < this.$refs.scoreTeam.children.length; i++) {
-                this.$refs.scoreTeam.children[i].style.backgroundColor = "rgba(227, 227, 227, 0.5)";
+                this.$refs.scoreTeam.children[i].style.backgroundColor =
+                    "rgba(227, 227, 227, 0.5)";
             }
 
-             // Final score
-            for (let i = 0; i < this.$refs.victoriousScore.children.length; i++) {
-                this.$refs.victoriousScore.children[i].style.background = "none";
+            // Final score
+            for (
+                let i = 0;
+                i < this.$refs.victoriousScore.children.length;
+                i++
+            ) {
+                this.$refs.victoriousScore.children[i].style.background =
+                    "none";
             }
 
             // Hole progression
-            this.$refs.cyanProgression.style.strokeDasharray = "0, 100"
-            this.$refs.pinkProgression.style.strokeDasharray = "0, 100"
+            this.$refs.cyanProgression.style.strokeDasharray = "0, 100";
+            this.$refs.pinkProgression.style.strokeDasharray = "0, 100";
         }
     },
     watch: {
@@ -449,7 +465,6 @@ export default {
 
                     setTimeout(() => {
                         this.canShowUITuto = true;
-
                     }, this.getTransitionEnd());
                 }
 
@@ -461,7 +476,7 @@ export default {
                         this.canShowUIStep = true;
                     }, this.getTransitionEnd());
 
-                    if(!this.hasRestart){
+                    if (!this.hasRestart) {
                         threeBus.$on("holeFilled", this.addHoleWinnerScore);
                         threeBus.$on("holeScaling", this.playerHoleProgress);
                     }
@@ -519,7 +534,6 @@ export default {
 
                     setTimeout(() => {
                         this.canShowUIEnd = true;
-
                     }, this.getTransitionEnd());
                 }
 
@@ -565,6 +579,23 @@ export default {
 
 <style scoped lang="scss">
 @import "@/config/styles.scss";
+
+.fadingWhite {
+    transition: opacity 5s ease-in-out;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    pointer-events: none;
+    background: $white;
+    &.active {
+        transition: opacity 2.5s ease-in-out;
+        opacity: 1;
+    }
+}
 
 div {
     color: #fff;
