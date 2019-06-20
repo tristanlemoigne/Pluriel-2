@@ -143,7 +143,7 @@ module.exports = [
             camPos: {
                 path: "NurbsPath02",
                 delay: 0,
-                time: 4,
+                time: 5,
                 easing: ["Power3", "easeInOut"]
             },
             camTarget: {
@@ -161,30 +161,49 @@ module.exports = [
             camPos: {
                 path: "NurbsPath03",
                 delay: 0,
-                time: 18,
+                time: 17,
                 easing: ["Sine", "easeInOut"]
             },
             camTarget: {
                 point: "Target04",
                 delay: 0,
-                time: 18,
+                time: 17,
                 easing: ["Sine", "easeInOut"]
             }
         }
     },
+
     {
         name: "trial_1_game_2",
         cameraTransition: {
             camPos: {
                 path: "NurbsPath04",
                 delay: 0,
-                time: 32,
+                time: 11,
                 easing: ["Sine", "easeInOut"]
             },
             camTarget: {
-                point: "Target05",
+                point: "Target02",
                 delay: 0,
-                time: 28,
+                time: 11,
+                easing: ["Sine", "easeInOut"]
+            }
+        }
+    },
+
+    {
+        name: "trial_1_game_3",
+        cameraTransition: {
+            camPos: {
+                path: "NurbsPath05",
+                delay: 0,
+                time: 15,
+                easing: ["Sine", "easeInOut"]
+            },
+            camTarget: {
+                point: "Target06",
+                delay: 0,
+                time: 15,
                 easing: ["Sine", "easeInOut"]
             }
         }
@@ -199,7 +218,7 @@ module.exports = [
             //     // Je sais pas ce que je met ici lol mais c'est pour faire apparaitre mon UI
             // },
             camTarget: {
-                point: "Target06",
+                point: "Target07",
                 delay: 0,
                 time: 2,
                 easing: ["Power2", "easeInOut"]

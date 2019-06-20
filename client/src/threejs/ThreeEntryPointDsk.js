@@ -52,7 +52,8 @@ function ThreeEntryPointDsk(canvas) {
 
     // TRIAL 1
     // loader.load("/assets/models/Interaction13.glb", "tour1")
-    loader.load("/assets/campaths/CamPaths.obj", "camPaths")
+    // loader.load("/assets/campaths/CamPaths.obj", "camPaths")
+    loader.load("/assets/campaths/CamPaths_prez.obj", "camPaths")
     loader.load("/assets/campaths/TargetPoints.glb", "camTargetPoints", [
         "scene"
     ])
