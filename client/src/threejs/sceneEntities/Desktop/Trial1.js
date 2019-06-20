@@ -37,7 +37,7 @@ function Trial1(scene, camera, assets, timeVars) {
 
     const colors = {
         cyan: new THREE.Color(0x00ddff),
-        pink: new THREE.Color(0xff00cc),
+        pink: new THREE.Color(0xff0099),
         blue: new THREE.Color(0x214cff),
         red: new THREE.Color(0xff1b38),
         white: new THREE.Color(0xff99ff),
@@ -100,9 +100,9 @@ function Trial1(scene, camera, assets, timeVars) {
             hole.progressMax = 1 // 100%
             hole.winner = "None"
 
-            hole.scaleMax = hole.scale.clone()
-            hole.scale.multiplyScalar(0.001)
-            hole.scaleMin = hole.scale.clone()
+            // hole.scaleMax = hole.scale.clone()
+            // hole.scale.multiplyScalar(0.001)
+            // hole.scaleMin = hole.scale.clone()
         })
 
         // console.log("ARR", holesScaleMax, holesScaleMin)

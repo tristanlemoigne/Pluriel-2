@@ -136,6 +136,13 @@ function SceneManager(canvas, assets) {
                 child.material = glowMaterial
             }
         })
+        assets.islands.traverse(child => {
+            if (child.name.includes("HoleFill")) {
+                child.scaleMax = child.scale.clone()
+                child.scale.multiplyScalar(0.001)
+                child.scaleMin = child.scale.clone()
+            }
+        })
 
         masterScene.add(assets.nuages)
         masterScene.add(assets.nuagesLights)
