@@ -21,18 +21,30 @@
             </p>
 
             <div ref="carousel" class="carousel">
-                <div class="previous" v-bind:class="{ hide: canClickNext }" @click="slidePerso('previous', -10)">
-                    <img src="/assets/img/selectionPrevious.png" alt/><br/>
-                    Précédent
+                <div
+                    class="previous"
+                    v-bind:class="{ hide: canClickNext }"
+                    @click="slidePerso('previous', -10)"
+                >
+                    <img src="/assets/img/selectionPrevious.png" alt>
+                    <br>Précédent
                 </div>
 
-                <div class="next" v-bind:class="{ hide: !canClickNext }" @click="slidePerso('next', 10)">
-                    <img src="/assets/img/selectionNext.png" alt/><br/>
-                    Suivant
+                <div
+                    class="next"
+                    v-bind:class="{ hide: !canClickNext }"
+                    @click="slidePerso('next', 10)"
+                >
+                    <img src="/assets/img/selectionNext.png" alt>
+                    <br>Suivant
                 </div>
             </div>
 
-            <button v-bind:class="{ hide: (!canChooseLamar && canClickNext )|| (!canChooseZanit && !canClickNext ) }" v-if="isMobile" @click.once="choosePerso">Choisir ce personnage</button>
+            <button
+                v-bind:class="{ hide: (!canChooseLamar && canClickNext )|| (!canChooseZanit && !canClickNext ) }"
+                v-if="isMobile"
+                @click.once="choosePerso"
+            >Choisir ce personnage</button>
         </div>
     </div>
 </template>
@@ -53,12 +65,13 @@ export default {
     data: function() {
         return {
             canClickNext: true,
-            player: (this.roomState.player1 === socket.id) ? "Joueur 1" : "Joueur 2",
+            player:
+                this.roomState.player1 === socket.id ? "Joueur 1" : "Joueur 2",
             lamarPlayer: "undefined",
             zanitPlayer: "undefined",
             canChooseLamar: true,
             canChooseZanit: true
-        }
+        };
     },
     computed: {},
     watch: {
@@ -66,26 +79,31 @@ export default {
             handler: function(currentLamar, oldLamar) {
                 if (currentLamar !== oldLamar && currentLamar !== undefined) {
                     threeBus.$emit("animate perso", "lamar");
-                    this.canChooseLamar = false
+                    this.canChooseLamar = false;
 
-                    if(this.isMobile){
-                        if(currentLamar === socket.id){
-                            for (let i = 0; i < this.$refs.carousel.children.length; i++) {
-                                this.$refs.carousel.children[i].classList.add("hide")
+                    if (this.isMobile) {
+                        if (currentLamar === socket.id) {
+                            for (
+                                let i = 0;
+                                i < this.$refs.carousel.children.length;
+                                i++
+                            ) {
+                                this.$refs.carousel.children[i].classList.add(
+                                    "hide"
+                                );
                             }
                         }
                     } else {
-                        if(this.roomState.player1 === currentLamar){
-                            this.lamarPlayer = "Joueur 1"
+                        if (this.roomState.player1 === currentLamar) {
+                            this.lamarPlayer = "Joueur 1";
                         } else {
-                            this.lamarPlayer = "Joueur 2"
+                            this.lamarPlayer = "Joueur 2";
                         }
 
                         this.$refs.lamarPlayer.style.opacity = 1;
-                        this.audioFunctions.persoSelection("lamar")
+                        this.audioFunctions.persoSelection("lamar");
                     }
                 }
-
             },
             deep: true
         },
@@ -93,23 +111,29 @@ export default {
             handler: function(currentZanit, oldZanit) {
                 if (currentZanit !== oldZanit && currentZanit !== undefined) {
                     threeBus.$emit("animate perso", "zanit");
-                    this.canChooseZanit = false
+                    this.canChooseZanit = false;
 
-                    if(this.isMobile){
-                        if(currentZanit === socket.id){
-                            for (let i = 0; i < this.$refs.carousel.children.length; i++) {
-                                this.$refs.carousel.children[i].classList.add("hide")
+                    if (this.isMobile) {
+                        if (currentZanit === socket.id) {
+                            for (
+                                let i = 0;
+                                i < this.$refs.carousel.children.length;
+                                i++
+                            ) {
+                                this.$refs.carousel.children[i].classList.add(
+                                    "hide"
+                                );
                             }
                         }
                     } else {
-                        if(this.roomState.player1 === currentZanit){
-                            this.zanitPlayer = "Joueur 1"
+                        if (this.roomState.player1 === currentZanit) {
+                            this.zanitPlayer = "Joueur 1";
                         } else {
-                            this.zanitPlayer = "Joueur 2"
+                            this.zanitPlayer = "Joueur 2";
                         }
 
                         this.$refs.zanitPlayer.style.opacity = 1;
-                        this.audioFunctions.persoSelection("zanit")
+                        this.audioFunctions.persoSelection("zanit");
                     }
                 }
             },
@@ -131,17 +155,18 @@ export default {
     },
     methods: {
         choosePerso(e) {
-            if (this.canClickNext) { // Perso = Lamar
+            if (this.canClickNext) {
+                // Perso = Lamar
                 this.setRoomState({ lamar: socket.id });
-            } else{
+            } else {
                 this.setRoomState({ zanit: socket.id });
             }
         },
-        slidePerso(slide, slideValue){
-            if(slide === "next"){
-                this.canClickNext = false
-            } else if(slide === "previous"){
-                this.canClickNext = true
+        slidePerso(slide, slideValue) {
+            if (slide === "next") {
+                this.canClickNext = false;
+            } else if (slide === "previous") {
+                this.canClickNext = true;
             }
             threeBus.$emit("slidePerso", slideValue);
         },
@@ -166,10 +191,14 @@ export default {
         // Imac
         // max-width: 1800px;
         // margin: 100px auto 0;
-        
+
         // Projo
-        max-width: 1400px;
-        margin: 50px auto 0;
+        // max-width: 1400px;
+        // margin: 50px auto 0;
+
+        // Video 1920x1080
+        max-width: 1220px;
+        margin: 3px 40px 0px 226px;
 
         p {
             opacity: 0;
@@ -179,16 +208,16 @@ export default {
         }
     }
 
-    .hide{
+    .hide {
         opacity: 0.4;
         pointer-events: none;
     }
 
-    .mobile{
-        p.textContent{
+    .mobile {
+        p.textContent {
             margin-top: 50px;
 
-            span{
+            span {
                 display: block;
                 font-style: italic;
                 font-weight: lighter;
@@ -196,7 +225,7 @@ export default {
             }
         }
 
-        div.carousel{
+        div.carousel {
             // border: solid 1px red;
             display: flex;
             position: absolute;
@@ -209,12 +238,12 @@ export default {
             text-transform: uppercase;
             font-size: 12px;
 
-            img{
+            img {
                 margin-bottom: 8px;
             }
         }
 
-        button{
+        button {
             position: absolute;
             bottom: 50px;
             left: 50%;

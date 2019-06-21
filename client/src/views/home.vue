@@ -3,9 +3,9 @@
         <div v-if="!isMobile" ref="sliderBar" class="sliderBar"></div>
 
         <div v-if="!isMobile" class="titles">
-            <h1>{{title}}</h1>
+            <!-- <h1>{{title}}</h1>
             <Logo/>
-            <h2 class="textGlow">{{subtitle}}</h2>
+            <h2 class="textGlow">{{subtitle}}</h2>-->
         </div>
 
         <!-- Commencer l'expérience Desktop-->
@@ -84,8 +84,8 @@ export default {
             this.$emit("createRoom");
             threeBus.$emit("step creation room");
 
-            this.audioFunctions.startAmbient()
-            this.audioFunctions.clickBtn()
+            this.audioFunctions.startAmbient();
+            this.audioFunctions.clickBtn();
         },
         joinRoom(event) {
             this.$emit("joinRoom", this.$data.requestedRoom);
@@ -173,10 +173,13 @@ export default {
         height: 100%;
         position: absolute;
         background-image: url("/assets/img/HomeMobile.png");
-        background-size: cover;
+        background-position: center -50px;
+        background-size: 120%;
+        // background-size: cover;
         background-repeat: no-repeat;
 
         div.main {
+            display: none;
             position: relative;
             top: 40%;
             transform: translateY(-50%);

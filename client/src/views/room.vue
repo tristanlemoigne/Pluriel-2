@@ -190,6 +190,7 @@ export default {
     color: $white;
     font-size: 24px;
     font-weight: lighter;
+    background: rgba(0, 0, 0, 0.45);
 
     .description {
         margin: 0 auto;
@@ -240,7 +241,7 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: rgba(0, 0, 0, 0.5);
+        // background: rgba(0, 0, 0, 0.5);
 
         .roomId {
             font-size: 100px;

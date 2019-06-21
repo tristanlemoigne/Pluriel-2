@@ -5,17 +5,21 @@
             <div class="fadingWhite" v-bind:class="{ active: isFading }"></div>
 
             <div class="indice textGlow" v-bind:class="{ visible: canShowIndice }">
-                <p>Il est maintenant temps pour vous de&nbsp;changer la&nbsp;destinée de Pluriel.</p>
-                <p>Arriverez-vous à associer vos deux visions afin de lui redonner sa splendeur ?</p>
+                <p>
+                    Il est maintenant temps pour vous de&nbsp;changer
+                    <br>la&nbsp;destinée de Pluriel.
+                </p>
+                <p>Arriverez-vous à associer vos&nbsp;deux visions afin de lui&nbsp;redonner sa splendeur ?</p>
             </div>
 
             <div class="uiGlobale" v-bind:class="{ visible: canShowUIGlobale }">
                 <TrackerVideo :hasStarted="camIsActive" v-show="this.uiDatas.isDebugMode"/>
 
-                <p
-                    class="textGlow"
-                    v-bind:class="{ visible: !canShowUIGlobaleEnd }"
-                >Accédez à la 1ère étape grâce à votre téléphone.</p>
+                <p class="textGlow" v-bind:class="{ visible: !canShowUIGlobaleEnd }">
+                    Accédez à la 1
+                    <sup>ère</sup> étape
+                    <br>grâce à votre téléphone.
+                </p>
                 <p class="textGlow" v-bind:class="{ visible: canShowUIGlobaleEnd }">
                     <button class="cta" @click="restartExperience()">
                         <div class="outerCircle">
@@ -961,7 +965,8 @@ div {
             font-size: 50px;
             opacity: 0;
             display: none;
-            margin-top: 20%;
+            // margin-top: 20%;
+            margin-top: 15.5%;
             transition: opacity 0.5s ease;
         }
     }
