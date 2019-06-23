@@ -3,9 +3,9 @@
         <div v-if="!isMobile" ref="sliderBar" class="sliderBar"></div>
 
         <div v-if="!isMobile" class="titles">
-            <!-- <h1>{{title}}</h1>
+            <h1>{{title}}</h1>
             <Logo/>
-            <h2 class="textGlow">{{subtitle}}</h2>-->
+            <h2 class="textGlow">{{subtitle}}</h2>
         </div>
 
         <!-- Commencer l'expérience Desktop-->
